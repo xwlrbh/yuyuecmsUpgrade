@@ -1,0 +1,57 @@
+{include file="index/header" /}
+<div class="well">
+    <form class="form-inline" role="form" method="get" action="searchuser">
+        <div class="form-group">
+            <label>{:lang('User name or nickname')}：</label>
+            <input type="text" name="user" class="form-control" placeholder="{:lang('User name or nickname')}">
+        </div>
+        <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>&nbsp;{:lang('Search')}</button>
+    </form>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>{:lang('User name')}</th>
+            <th>{:lang('Nickname')}</th>
+            <th>{:lang('Head portrait')}</th>
+            <th>{:lang('E-mail')}</th>
+            <th>{:lang('Registration time')}</th>
+            <th>{:lang('Status')}</th>
+            <th>{:lang('Operation')}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {volist name="catfishcms" id="vo"}
+        <tr>
+            <td>{$vo.yonghu}</td>
+            <td>{$vo.nicheng}</td>
+            <td>{notempty name="$vo.touxiang"}<img src="{$vo.touxiang}" width="50">{/notempty}</td>
+            <td>{$vo.email}</td>
+            <td>{$vo.createtime}</td>
+            <td>
+                {if condition="$vo.status eq 0"}<span class="text-muted">{:lang('Disabled')}</span>
+                {elseif condition="$vo.status eq 1"/}<span class="text-success"><span class="glyphicon glyphicon-ok"></span> {:lang('Normal')}</span>
+                {else /}<span class="text-muted">{:lang('Unverified')}</span>
+                {/if}
+            </td>
+            <td>
+                <input class="hidden" value="{$vo.status}">
+                <a class="lahei{if condition="$vo.status neq 1"} hidden{/if}" href="#!">{:lang('Prohibit')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing.gif" width="16" height="16"></span></a>
+                <a class="qiyong{if condition="$vo.status eq 1"} hidden{/if}" href="#!">{:lang('Enabled')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing.gif" width="16" height="16"></span></a>
+                <input class="hidden" value="{$vo.id}">
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+</div>
+<div class="text-center">
+    <ul class="pagination">
+        {$pages}
+    </ul>
+</div>
+<div class="hidden" id="jinyong">{:lang('Disabled')}</div>
+<div class="hidden" id="zhengchang">{:lang('Normal')}</div>
+<script src="{$domain}public/common/js/general.js"></script>
+{include file="index/footer" /}

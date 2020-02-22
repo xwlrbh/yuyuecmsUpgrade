@@ -1,0 +1,49 @@
+{include file="index/header" /}
+<link href="{$domain}public/common/confirm/jquery-confirm.css" type="text/css" rel="stylesheet">
+<form method="post" action="" id="selflabelingForm">
+    <div class="col-md-12">
+        <div class="form-group">
+            <p class="help-block">{:lang('Self-designed tags can be called in the theme file of the foreground using "$z_tagname"')}</p>
+            <label>{:lang('Label name')}：&nbsp;<b><span class="text-danger">*</span></b></label>
+            <input type="text" class="form-control" name="biaoqian" id="biaoqian" placeholder="{:lang('Label name')}" required autofocus>
+            <p class="help-block">{:lang('Label names can only use letters and numbers')}</p>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Effective position')}：</label>
+            <select class="form-control" name="outpos">
+                <option value="all">{:lang('Full website effective')}</option>
+                <option value="home">{:lang('Only the first page is valid')}</option>
+                <option value="list">{:lang('All list pages are valid')}</option>
+                <option value="newslist">{:lang('News list page is valid')}</option>
+                <option value="productlist">{:lang('Product list page is valid')}</option>
+                <option value="search">{:lang('Search results page is valid')}</option>
+                <option value="content">{:lang('All content pages are valid')}</option>
+                <option value="news">{:lang('Only news content page is valid')}</option>
+                <option value="product">{:lang('Only product content pages are valid')}</option>
+                <option value="page">{:lang('Only a single page is valid')}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Label content')}：</label>
+            <textarea class="form-control hidden" rows="3" id="zhengwen" name="content"></textarea>
+            <p class="help-block">{:lang('Custom labels can set any content')}</p>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Remarks')}：</label>
+            <textarea class="form-control" rows="3" name="remarks"></textarea>
+        </div>
+        <hr>
+        <div class="text-center">
+            <input type="hidden" name="id" id="id" value="">
+            <input type="hidden" name="verification" value="{$verification}">
+            <button type="button" id="baocun" class="btn btn-default">{:lang('Add a custom label')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing.gif" width="16" height="16"></span></button>
+        </div>
+    </div>
+</form>
+<div class="hidden" id="upload_handyeditor_url">{:Url('admin/Index/uploadhandyeditor')}</div>
+<div class="hidden" id="sizeError">{:lang('Cannot upload images larger than 2M')}</div>
+<div class="hidden" id="typeError">{:lang('Can only upload images in gif, png, jpg, jpeg format')}</div>
+<script type="text/javascript" src="{$domain}public/common/HandyEditor/HandyEditor.min.js"></script>
+<script src="{$domain}public/common/confirm/jquery-confirm.js"></script>
+<script src="{$domain}public/common/js/selflabelingadd.js"></script>
+{include file="index/footer" /}

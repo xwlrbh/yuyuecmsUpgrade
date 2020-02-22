@@ -1,0 +1,47 @@
+{include file="index/header" /}
+<link href="{$domain}public/common/confirm/jquery-confirm.css" type="text/css" rel="stylesheet">
+<form method="post" action="">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label>{:lang('Category Name')}：&nbsp;<b><span class="text-danger">*</span></b></label>
+            <input type="text" class="form-control" value="{$catfishItem.catename}" name="fenleim" placeholder="{:lang('Category name')}" required autofocus>
+            <input type="hidden" name="id" id="id" value="{$catfishItem.id}">
+        </div>
+        <div class="form-group">
+            <label>{:lang('Alias')}：</label>
+            <input type="text" class="form-control" placeholder="{:lang('Alias')}" name="alias" id="alias" value="{$catfishItem.alias}">
+            <p class="help-block">{:lang('After setting the alias, you can access it by alias')},&nbsp;{:lang('Aliases can only be composed of letters, numbers and underscores or connecting lines')}</p>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Category parent')}：&nbsp;<b><span class="text-danger">*</span></b></label>
+            <select class="form-control" name="shangji">
+                <option value="0">{:lang('As the first level category')}</option>
+                {volist name="fenlei" id="vo"}
+                <option value="{$vo.id}"{if condition="$catfishItem.parent_id eq $vo.id"} selected{/if}>{$vo.level}{if condition="$vo.level neq ''"}└&nbsp;{/if}{$vo.catename}</option>
+                {/volist}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Binding template')}：</label>
+            <select class="form-control" name="template">
+                <option value="">{:lang('Not bound')}</option>
+                {volist name="muban" id="vo"}
+                <option value="{$vo}"{if condition="$catfishItem.template eq $vo"} selected{/if}>{$vo}</option>
+                {/volist}
+            </select>
+            <p class="help-block">{:lang('Can bind the theme file in the "newslist" directory under the current theme')}</p>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Category description')}</label>
+            <textarea class="form-control" rows="3" name="miaoshu">{$catfishItem.description}</textarea>
+        </div>
+        <hr>
+        <div class="text-center">
+            <input type="hidden" name="verification" value="{$verification}">
+            <button type="submit" class="btn btn-default">{:lang('Modify category')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing.gif" width="16" height="16"></span></button>
+        </div>
+    </div>
+</form>
+<script src="{$domain}public/common/confirm/jquery-confirm.js"></script>
+<script src="{$domain}public/common/js/categoriesnewsadd.js"></script>
+{include file="index/footer" /}

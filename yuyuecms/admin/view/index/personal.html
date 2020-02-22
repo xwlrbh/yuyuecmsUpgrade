@@ -1,0 +1,56 @@
+{include file="index/header" /}
+<link href="{$domain}public/common/uploadify/uploadify.css" type="text/css" rel="stylesheet">
+<link href="{$domain}public/common/datetimepicker/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet">
+<link href="{$domain}public/common/confirm/jquery-confirm.css" type="text/css" rel="stylesheet">
+<div class="col-md-12">
+    <form method="post" action="" id="catfishForm">
+        <div class="form-group">
+            <label>{:lang('Nickname')}：</label>
+            <input type="text" class="form-control" name="nicheng" value="{$catfishItem.nicheng}" placeholder="{:lang('Nickname')}">
+        </div>
+        <div class="form-group">
+            <label>{:lang('Gender')}：</label>
+            <select class="form-control" name="xingbie">
+                <option value="0"{if condition="$catfishItem.xingbie eq 0"} selected{/if}>{:lang('Secrecy')}</option>
+                <option value="1"{if condition="$catfishItem.xingbie eq 1"} selected{/if}>{:lang('Male')}</option>
+                <option value="2"{if condition="$catfishItem.xingbie eq 2"} selected{/if}>{:lang('Female')}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Birthday')}：</label>
+            <input type="text" class="form-control" name="shengri" value="{$catfishItem.shengri}" id="datepicker">
+        </div>
+        <div class="form-group">
+            <label>{:lang('E-mail')}：&nbsp;<b><span class="text-danger">*</span></b></label>
+            <input type="email" class="form-control" name="email" value="{$catfishItem.email}" placeholder="{:lang('E-mail')}">
+        </div>
+        <div class="form-group">
+            <label>{:lang('Personal URL')}：</label>
+            <input type="text" class="form-control" name="url" value="{$catfishItem.url}" placeholder="http://">
+        </div>
+        <div class="form-group">
+            <label>{:lang('Phone')}：</label>
+            <input type="text" class="form-control" maxlength="20" name="shouji" value="{$catfishItem.shouji}">
+        </div>
+        <div class="form-group">
+            <label>{:lang('Signature')}：</label>
+            <textarea class="form-control" name="qianming" rows="3">{$catfishItem.qianming}</textarea>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Head portrait')}：</label>
+            <img src="{$domain}public/common/images/headicon_128.png" class="img-thumbnail" id="avatarImg" width="140">
+            <input type="hidden" value="{$catfishItem.touxiang}" name="touxiang" id="avatar">
+            <div id="upload"></div>
+        </div>
+        <div class="text-center">
+            <input type="hidden" name="verification" value="{$verification}">
+            <button type="button" id="baocun" class="btn btn-default">{:lang('Save')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing.gif" width="16" height="16"></span></button>
+        </div>
+    </form>
+</div>
+<div class="hidden" id="buttonText">{:lang('Select Image')}</div>
+<script type="text/javascript" src="{$domain}public/common/uploadify/jquery.uploadify.js"></script>
+<script type="text/javascript" src="{$domain}public/common/datetimepicker/js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
+<script src="{$domain}public/common/confirm/jquery-confirm.js"></script>
+<script src="{$domain}public/common/js/personal.js"></script>
+{include file="index/footer" /}

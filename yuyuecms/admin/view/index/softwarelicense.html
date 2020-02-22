@@ -1,0 +1,13 @@
+{include file="index/header" /}
+<form method="post" action="">
+    <div class="form-group">
+        <label>{:lang('Authorization code')}：</label>
+        <input type="text" class="form-control" name="authorization" value="{$authorization}" placeholder="{:lang('Authorization code')}" required>
+        <p class="help-block">{:lang('Authorization code, please apply to the ')}<a href="http://www.yuyue-cms.com" target="_blank">{:lang('YUYUE CMS')}</a>{:lang(' official website')}</p>
+    </div>
+    <div class="text-center">
+        <input type="hidden" name="verification" value="{$verification}">
+        <button type="submit" class="btn btn-default">{:lang('Save')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing.gif" width="16" height="16"></span></button>
+    </div>
+</form>
+{include file="index/footer" /}

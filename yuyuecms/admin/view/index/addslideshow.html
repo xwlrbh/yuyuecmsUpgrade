@@ -1,0 +1,53 @@
+{include file="index/header" /}
+<link href="{$domain}public/common/confirm/jquery-confirm.css" type="text/css" rel="stylesheet">
+<link href="{$domain}public/common/uploadify/uploadify.css" type="text/css" rel="stylesheet">
+<div class="col-md-12">
+    <form method="post" action="" id="slideForm">
+        <div class="form-group">
+            <label>{:lang('Slide grouping')}：&nbsp;<b><span class="text-danger">*</span></b></label>
+            <select class="form-control" name="slidegrouping" id="slidegrouping" autofocus>
+                <option value="">{:lang('Please select a slide grouping')}</option>
+                {volist name="catfishcms" id="vo"}
+                <option value="{$vo.id}">{$vo.catename}</option>
+                {/volist}
+            </select>
+            <p class="help-block">{:lang('Upload a slideshow image after selecting a slide group')}</p>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Slide name')}：</label>
+            <input type="text" class="form-control" name="mingcheng" placeholder="{:lang('Slide name')}">
+            <p class="help-block">{:lang('The slideshow name will be displayed, and if it is not required, leave it blank')}</p>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Slide description')}：</label>
+            <input type="text" class="form-control" name="miaoshu" placeholder="{:lang('Slide description')}">
+            <p class="help-block">{:lang('The slideshow description will be displayed and leave blank if no display is required')}</p>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Slide link')}：</label>
+            <input type="text" class="form-control" name="lianjie" placeholder="http://">
+            <p class="help-block">{:lang('The page that will be accessed after clicking the slide')}</p>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Slide picture')}：&nbsp;<b><span class="text-danger">*</span></b></label>
+            <img src="{$domain}public/common/images/default-thumbnail.png" class="img-thumbnail img-responsive" id="slideshowImg">
+            <input type="hidden" value="" name="slideshow" id="slideshow">
+            <div class="hidden" id="uploadiv">
+                <p class="help-block">{:lang('Width × Height = ')}<span id="kuandu">{$slideshowWidth}</span>×<span id="gaodu">{$slideshowHeight}</span></p>
+                <div id="upload"></div>
+            </div>
+        </div>
+        <div class="text-center">
+            <input type="hidden" name="verification" value="{$verification}">
+            <button type="button" class="btn btn-default" id="baocun">{:lang('Add to')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing.gif" width="16" height="16"></span></button>
+        </div>
+    </form>
+</div>
+<div class="hidden" id="buttonText">{:lang('Select Image')}</div>
+<script src="{$domain}public/common/confirm/jquery-confirm.js"></script>
+<script type="text/javascript" src="{$domain}public/common/uploadify/jquery.uploadify.js"></script>
+<script>
+    var catfishslide = {$catfishslide};
+</script>
+<script src="{$domain}public/common/js/addslideshow.js"></script>
+{include file="index/footer" /}

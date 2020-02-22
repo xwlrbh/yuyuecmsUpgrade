@@ -1,0 +1,142 @@
+{include file="index/header" /}
+<link href="{$domain}public/common/uploadify/uploadify.css" type="text/css" rel="stylesheet">
+<link href="{$domain}public/common/confirm/jquery-confirm.css" type="text/css" rel="stylesheet">
+<div class="col-md-12">
+    <form method="post" action="">
+        <div class="form-group">
+            <label>{:lang('Site title')}：</label>
+            <input type="text" class="form-control" name="title" value="{$catfishItem.title}" placeholder="{:lang('Site title')}">
+        </div>
+        <div class="form-group">
+            <label>{:lang('Subtitle')}：</label>
+            <input type="text" class="form-control" name="subtitle" value="{$catfishItem.subtitle}" placeholder="{:lang('Subtitle')}">
+        </div>
+        <div class="form-group">
+            <label>{:lang('Site domain name')}：</label>
+            <input type="text" class="form-control" id="domainid" name="domain" value="{$catfishItem.domain}">
+            <p class="help-block">{:lang('The domain name should start with "http://" or "https://" and end with "/".')}</p>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Site keywords')}：</label>
+            <input type="text" class="form-control" name="keyword" value="{$catfishItem.keyword}">
+        </div>
+        <div class="form-group">
+            <label>{:lang('Site description')}：</label>
+            <textarea class="form-control" name="description" rows="3">{$catfishItem.description}</textarea>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Webmaster E-mail')}：</label>
+            <input type="email" class="form-control" name="email" value="{$catfishItem.email}" placeholder="{:lang('Webmaster E-mail')}">
+        </div>
+        <div class="form-group">
+            <label>{:lang('Review whether the audit')}：</label>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="pinglun"{if condition="$catfishItem.comment eq 1"} checked{/if}> {:lang('Comments need to be audited')}
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>{:lang('User name filtering')}：</label>
+            <input type="text" class="form-control" name="guolv" value="{$catfishItem.filtername}">
+            <p class="help-block">{:lang('You can set the user names that are not allowed to be registered, separated by a comma ","')}</p>
+        </div>
+        <div class="form-group">
+            <label>{:lang('The number of records displayed per page')}：</label>
+            <input type="number" class="form-control" name="everyPageShows" value="{$catfishItem.everyPageShows}">
+            <p class="help-block">{:lang('You can set the number of displays in the category page')}</p>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Whether to close the slide')}：</label>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="closeSlide"{if condition="$catfishItem.closeSlide eq 1"} checked{/if}> {:lang('Close the slide')}
+                </label>
+            </div>
+            <p class="help-block">{:lang('Shutting down slides requires theme support')}</p>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Whether to close the message')}：</label>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="openMessage"{if condition="$catfishItem.openMessage eq 1"} checked{/if}> {:lang('Allow message')}
+                </label>
+            </div>
+            <p class="help-block">{:lang('Close message requires subject support')}</p>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Whether to close the comment')}：</label>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="closeComment"{if condition="$catfishItem.closeComment eq 1"} checked{/if}> {:lang('Close the comment')}
+                </label>
+            </div>
+            <p class="help-block">{:lang('After closing the comment, setting a comment when editing the content will be invalidated')}</p>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Whether to allow registration')}：</label>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="allowLogin"{if condition="$catfishItem.allowLogin eq 1"} checked{/if}> {:lang('Registration is allowed')}
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Login requires a verification code?')}：</label>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="yanzheng"{if condition="$catfishItem.captcha eq 1"} checked{/if}> {:lang('Login requires a verification code')}
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Whether to enable short address mode')}：</label>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="rewrite"{if condition="$catfishItem.rewrite eq 1"} checked{/if}> {:lang('Enable short addresses')}
+                </label>
+            </div>
+            <p class="help-block">{:lang('Enable short address need to open rewrite, check before you make sure your web environment to run a rewrite')}</p>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Site logo')}：</label>
+            <div id="upload"></div>
+            <div style="width: 200px;">
+                <img src="{$domain}public/common/images/default-thumbnail.png" class="img-thumbnail img-responsive" id="tubiaoImg">
+            </div>
+            <input type="hidden" value="{$catfishItem.logo}" name="tubiao" id="tubiao">
+        </div>
+        <div class="form-group">
+            <label>{:lang('Website icon')}：</label>
+            <div id="upload_ico"></div>
+            <div style="width: 200px;">
+                <img src="{$domain}public/common/images/favicon.ico" class="img-thumbnail img-responsive" id="icotubiaoIco">
+            </div>
+            <input type="hidden" value="{$catfishItem.icon}" name="icon" id="icotubiao">
+            <p class="help-block">{:lang('Please upload the "ico" icon file')}</p>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Archival information')}：</label>
+            <input type="text" class="form-control" name="record" value='{$catfishItem.record}'>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Copyright Information')}：</label>
+            <textarea class="form-control" name="copyright" rows="3">{$catfishItem.copyright}</textarea>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Statistical code')}：</label>
+            <textarea class="form-control" name="statistics" rows="3">{$catfishItem.statistics}</textarea>
+        </div>
+        <div class="text-center">
+            <input type="hidden" name="verification" value="{$verification}">
+            <button type="submit" id="submitid" class="btn btn-default">{:lang('Save')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing.gif" width="16" height="16"></span></button>
+        </div>
+    </form>
+</div>
+<div class="hidden" id="buttonText">{:lang('Select Image')}</div>
+<div class="hidden" id="icobuttonText">{:lang('Select the icon')}</div>
+<div class="hidden" id="yumingtishi">{:lang('The domain name should start with "http://" or "https://" and end with "/".')}</div>
+<script type="text/javascript" src="{$domain}public/common/uploadify/jquery.uploadify.js"></script>
+<script src="{$domain}public/common/confirm/jquery-confirm.js"></script>
+<script src="{$domain}public/common/js/web.js"></script>
+{include file="index/footer" /}

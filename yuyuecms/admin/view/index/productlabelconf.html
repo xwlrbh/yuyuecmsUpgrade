@@ -1,0 +1,50 @@
+{include file="index/header" /}
+<link href="{$domain}public/common/confirm/jquery-confirm.css" type="text/css" rel="stylesheet">
+<div><a class="btn btn-default" href="{:Url('admin/Index/productlabelconfadd')}" role="button">{:lang('Add template label')}</a></div><br>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>{:lang('Label name')}</th>
+            <th>{:lang('Title')}</th>
+            <th>{:lang('Display quantity')}</th>
+            <th>{:lang('Display method')}</th>
+            <th>{:lang('Effective position')}</th>
+            <th>{:lang('Whether with thumbnails')}</th>
+            <th>{:lang('Category name')}</th>
+            <th>{:lang('Remarks')}</th>
+            <th>{:lang('Operation')}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {volist name="catfishcms" id="vo"}
+        <tr>
+            <td>{$vo.biaoqian}</td>
+            <td>{$vo.biaoti}</td>
+            <td>{$vo.quantity}</td>
+            <td>{$vo.method}</td>
+            <td>{$vo.outpos}</td>
+            <td>{$vo.isthumb}</td>
+            <td>{$vo.catename}</td>
+            <td>{$vo.remarks}</td>
+            <td>
+                <a href="{:Url('admin/Index/productlabelconfedit')}?c={$vo.id}">{:lang('Edit')}</a>
+                &nbsp;|&nbsp;
+                <a class="twitter" data-title="{:lang('Confirm to delete?')}" href="#!">{:lang('Delete')}</a>
+                <input type="hidden" value="{$vo.id}">
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+</div>
+<div class="text-center">
+    <ul class="pagination">
+        {$pages}
+    </ul>
+</div>
+<div class="hidden" id="quedingshanchu">{:lang('Confirm to delete?')}</div>
+<div class="hidden" id="bukehuifu">{:lang('Are you sure you want to delete the template label? It cannot be recovered after deletion!')}</div>
+<script src="{$domain}public/common/confirm/jquery-confirm.js"></script>
+<script src="{$domain}public/common/js/productlabelconf.js"></script>
+{include file="index/footer" /}

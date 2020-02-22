@@ -1,0 +1,12 @@
+{include file="index/header" /}
+<link href="{$domain}public/common/uploadify/uploadify.css" type="text/css" rel="stylesheet">
+<div class="form-group">
+    <label>{:lang('Head portrait')}：</label>
+    <img src="{$domain}public/common/images/headicon_128.png" class="img-thumbnail" id="avatarImg" width="140">
+    <input type="hidden" value="{$catfishItem.touxiang}" name="touxiang" id="avatar">
+    <div id="upload"></div>
+</div>
+<div class="d-none" id="buttonText">{:lang('Select Image')}</div>
+<script type="text/javascript" src="{$domain}public/common/uploadify/jquery.uploadify.js"></script>
+<script src="{$domain}public/common/js/user/editavatar.js"></script>
+{include file="index/footer" /}

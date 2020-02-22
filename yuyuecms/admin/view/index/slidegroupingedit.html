@@ -1,0 +1,28 @@
+{include file="index/header" /}
+<form method="post" action="">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label>{:lang('Slide group name')}：&nbsp;<b><span class="text-danger">*</span></b></label>
+            <input type="text" class="form-control input-lg" value="{$catfishItem.catename}" name="catename" placeholder="{:lang('Slide group name')}" required autofocus>
+            <input type="hidden" name="id" id="id" value="{$catfishItem.id}">
+        </div>
+        <div class="form-group">
+            <label>{:lang('Width')}：&nbsp;<b><span class="text-danger">*</span></b></label>
+            <input type="number" min="1" step="1" class="form-control input-lg" placeholder="{:lang('Width')}" value="{$catfishItem.width}" name="width">
+        </div>
+        <div class="form-group">
+            <label>{:lang('Height')}：&nbsp;<b><span class="text-danger">*</span></b></label>
+            <input type="number" min="1" step="1" class="form-control input-lg" placeholder="{:lang('Height')}" value="{$catfishItem.height}" name="height">
+        </div>
+        <div class="form-group">
+            <label>{:lang('Slide group description')}</label>
+            <textarea class="form-control" rows="5" name="description">{$catfishItem.description}</textarea>
+        </div>
+        <hr>
+        <div class="text-center">
+            <input type="hidden" name="verification" value="{$verification}">
+            <button type="submit" class="btn btn-default">{:lang('Modify')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing.gif" width="16" height="16"></span></button>
+        </div>
+    </div>
+</form>
+{include file="index/footer" /}

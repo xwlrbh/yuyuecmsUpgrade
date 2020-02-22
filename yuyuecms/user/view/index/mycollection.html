@@ -1,0 +1,29 @@
+{include file="index/header" /}
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>{:lang('Title')}</th>
+            <th>{:lang('Description')}</th>
+            <th>{:lang('Collection time')}</th>
+            <th>{:lang('Operation')}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {volist name="catfishcms" id="vo"}
+        <tr>
+            <td><a href="{$vo.url}" target="_blank">{$vo.title}</a></td>
+            <td>{$vo.description}</td>
+            <td>{$vo.createtime}</td>
+            <td>
+                <input type="hidden" value="{$vo.id}">
+                <a href="#!" class="shanchu">{:lang('Delete')}</a>
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+</div>
+<div class="text-center">{$pages}</div>
+<script src="{$domain}public/common/js/user/mycollection.js"></script>
+{include file="index/footer" /}

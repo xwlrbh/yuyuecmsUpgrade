@@ -1,0 +1,42 @@
+{include file="index/header" /}
+<p class="text-muted">{:lang('Welcome to the ')}<a href="http://www.yuyue-cms.com" target="_blank">{:lang('YUYUE CMS')}</a>，{:lang('The YUYUE CMS is a content management system developed exclusively by ')}<a href="http://www.catfish-cms.com" target="_blank">{:lang('Catfish CMS')}</a>{:lang(' for enterprise applications.')}{:lang('The version you are currently using: ')}{$catfishver}</p>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">{:lang('Quick operation')}</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row text-center">
+            <div class="col-md-3">
+                <div><a href="{:Url('admin/Index/writenews')}" title="{:lang('Editing news')}" style="text-decoration: none"><i class="icon-pencil" style="font-size: 60px"></i></a></div>
+                <div>{:lang('Editing news')}</div>
+            </div>
+            <div class="col-md-3">
+                <div><a href="{:Url('admin/Index/editproduct')}" title="{:lang('Edit product')}" style="text-decoration: none"><i class="icon-edit" style="font-size: 60px"></i></a></div>
+                <div>{:lang('Edit product')}</div>
+            </div>
+            <div class="col-md-3">
+                <div><a href="{:Url('admin/Index/editpage')}" title="{:lang('Edit single page')}" style="text-decoration: none"><i class="icon-file-alt" style="font-size: 60px"></i></a></div>
+                <div>{:lang('Edit single page')}</div>
+            </div>
+            <div class="col-md-3">
+                <div><a href="{:Url('admin/Index/corporatehistoryadd')}" title="{:lang('Add company history')}" style="text-decoration: none"><i class="icon-list" style="font-size: 60px"></i></a></div>
+                <div>{:lang('Add company history')}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">{:lang('Latest message')}&nbsp;<small>[<a href="{:Url('admin/Index/messages')}">{:lang('All messages')}</a>]</small></h3>
+    </div>
+    <div class="panel-body">
+        {volist name="catfishcms" id="vo"}
+        <div>
+            <h4>{$vo.title}</h4>
+            <h5>{$vo.msg}</h5>
+            <p>{:lang('Message time')}：{$vo.createtime}</p>
+        </div>
+        {/volist}
+    </div>
+</div>
+{include file="index/footer" /}

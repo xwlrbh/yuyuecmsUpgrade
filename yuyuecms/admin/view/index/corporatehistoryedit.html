@@ -1,0 +1,27 @@
+{include file="index/header" /}
+<link href="{$domain}public/common/datetimepicker/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet">
+<form method="post" action="">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label>{:lang('Title')}：&nbsp;<b><span class="text-danger">*</span></b></label>
+            <input type="text" class="form-control input-lg" value="{$catfishItem.biaoti}" name="biaoti" placeholder="{:lang('Title')}" required autofocus>
+            <input type="hidden" name="id" id="id" value="{$catfishItem.id}">
+        </div>
+        <div class="form-group">
+            <label>{:lang('Event time')}：</label>
+            <input type="text" class="form-control input-lg" value="{$catfishItem.shijian}" id="shijian" name="shijian" placeholder="{:lang('Event time')}">
+        </div>
+        <div class="form-group">
+            <label>{:lang('Detailed description')}</label>
+            <textarea class="form-control" rows="8" name="xiangqing">{$catfishItem.xiangqing}</textarea>
+        </div>
+        <hr>
+        <div class="text-center">
+            <input type="hidden" name="verification" value="{$verification}">
+            <button type="submit" class="btn btn-default">{:lang('Add to')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing.gif" width="16" height="16"></span></button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="{$domain}public/common/datetimepicker/js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
+<script src="{$domain}public/common/js/corporatehistoryadd.js"></script>
+{include file="index/footer" /}

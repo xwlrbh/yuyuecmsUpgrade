@@ -1,0 +1,74 @@
+{include file="index/header" /}
+<link href="{$domain}public/common/confirm/jquery-confirm.css" type="text/css" rel="stylesheet">
+<div>
+    <p>
+        <label>{:lang('Batch operation')}：</label>
+        <button type="button" id="phuanyuan" class="btn btn-primary btn-sm">{:lang('Reduction')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing_bai.gif" width="14" height="14"></span></button>
+        <button type="button" id="pshanchu" class="btn btn-primary btn-sm">{:lang('Remove completely')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing_bai.gif" width="14" height="14"></span></button>
+    </p>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>
+                <input type="checkbox" id="zxuan">
+            </th>
+            <th>{:lang('Title')}</th>
+            <th>{:lang('Click volume')}</th>
+            <th>{:lang('Comments volume')}</th>
+            <th>{:lang('Author')}</th>
+            <th>{:lang('Release time')}</th>
+            <th>{:lang('Status')}</th>
+            <th>{:lang('Operation')}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {volist name="data" id="vo"}
+        <tr>
+            <td>
+                <input class="gouxuan" type="checkbox" value="{$vo.id}">
+            </td>
+            <td>{if condition="$vo.suolvetu neq ''"}<img src="{$vo.suolvetu}" width="50">&nbsp;{/if}<a href="#!" class="text-muted">{$vo.biaoti}</a></td>
+            <td>{$vo.yuedu}</td>
+            <td>{$vo.pinglunshu}</td>
+            <td>{$vo.yonghu}</td>
+            <td>{$vo.fabushijian}</td>
+            <td>
+                {if condition="($vo.review == 1)"} <h5>{:lang('Audited')}</h5>
+                {else /} <h5>{:lang('Not audited')}</h5>
+                {/if}
+                {if condition="($vo.istop == 1)"} <h5>{:lang('Topped')}</h5>
+                {else /} <h5>{:lang('Not top')}</h5>
+                {/if}
+                {if condition="($vo.recommended == 1)"} <h5>{:lang('Recommended')}</h5>
+                {else /} <h5>{:lang('Not recommended')}</h5>
+                {/if}
+            </td>
+            <td>
+                <a class="twhy" href="#!">{:lang('Reduction')}</a><input type="hidden" value="{$vo.id}">
+                &nbsp;|&nbsp;
+                <a class="twitter" data-title="{:lang('Confirm to delete?')}" href="#!">{:lang('Remove completely')}</a>
+                <input type="hidden" value="{$vo.id}">
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+</div>
+<div class="text-center">
+    <ul class="pagination">
+        {$pages}
+    </ul>
+</div>
+<div class="hidden" id="quedingshanchu">{:lang('Confirm to delete?')}</div>
+<div class="hidden" id="bukehuifu">{:lang('Are you sure you want to delete it completely?')}</div>
+<div class="hidden" id="quedinghuanyuan">{:lang('Are you sure to restore?')}</div>
+<div class="hidden" id="huanyuan">{:lang('Are you sure you want to restore it?')}</div>
+<div class="hidden" id="huanyuanxuanzhong">{:lang('Are you sure you want to restore all selected items?')}</div>
+<div class="hidden" id="shanchuxuanzhong">{:lang('Are you sure you want to completely remove all selected items?')}</div>
+<div class="hidden" id="jinggao">{:lang('Warning!')}</div>
+<div class="hidden" id="zhishaoxuanyixiang">{:lang('Please select at least one!')}</div>
+<script src="{$domain}public/common/confirm/jquery-confirm.js"></script>
+<script src="{$domain}public/common/js/newsrecycle.js"></script>
+{include file="index/footer" /}

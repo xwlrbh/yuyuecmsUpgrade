@@ -1,0 +1,156 @@
+{include file="index/header" /}
+<link href="{$domain}public/common/uploadify/uploadify.css" type="text/css" rel="stylesheet">
+<link href="{$domain}public/common/confirm/jquery-confirm.css" type="text/css" rel="stylesheet">
+<form method="post" action="" id="catfishForm">
+    <div class="col-md-9">
+        <div class="form-group">
+            <label>{:lang('Menu category')}：&nbsp;<b><span class="text-danger">*</span></b></label>
+            <select class="form-control" name="caidanfenlei" id="caidanfenlei">
+                <option value="">{:lang('Please select menu category')}</option>
+                {volist name="catfishcms" id="vo"}
+                <option value="{$vo.id}"{if condition="$vo.current eq 1"} selected{/if}>{$vo.nav_name}</option>
+                {/volist}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Father')}：&nbsp;<b><span class="text-danger">*</span></b><span class="hidden" id="carriedout">&nbsp;<img src="{$domain}public/common/images/zhixing.gif" width="16" height="16"></span></label>
+            <select class="form-control" name="fuji" id="fuji">
+                <option value="0">{:lang('As a first-level menu')}</option>
+                {volist name="caidan" id="vo"}
+                <option value="{$vo.id}"{if condition="$vo.current eq 1"} selected{/if}>{$vo.level}{if condition="$vo.level neq ''"}└&nbsp;{/if}{$vo.label}</option>
+                {/volist}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>{:lang('The name of the menu')}：&nbsp;<b><span class="text-danger">*</span></b></label>
+            <input type="text" class="form-control" name="caidanming" placeholder="{:lang('The name of the menu')}" required>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Link')}：&nbsp;<b><span class="text-danger">*</span></b>({:lang('If you need to link to a custom URL, please fill out the following "Custom link"')})</label>
+            <select class="form-control" name="lianjie">
+                <option value="">{:lang('Custom link')}</option>
+                <option value="index/Index/index">{:lang('Home')}</option>
+                <option class="text-muted" disabled>[{:lang('News Center')}]</option>
+                <option value="index/Index/newslist">{:lang('All categories')}</option>
+                {volist name="news" id="vo"}
+                <option value="index/Index/newslist/find/{$vo.id}">{$vo.level}{if condition="$vo.level neq ''"}└&nbsp;{/if}{$vo.catename}</option>
+                {/volist}
+                <option class="text-muted" disabled>[{:lang('Product center')}]</option>
+                <option value="index/Index/productlist">{:lang('All categories')}</option>
+                {volist name="product" id="vo"}
+                <option value="index/Index/productlist/find/{$vo.id}">{$vo.level}{if condition="$vo.level neq ''"}└&nbsp;{/if}{$vo.catename}</option>
+                {/volist}
+                {notempty name="page"}
+                <option class="text-muted" disabled>[{:lang('Pages')}]</option>
+                {volist name="page" id="vo"}
+                <option value="index/Index/page/find/{$vo.id}">{$vo.biaoti}</option>
+                {/volist}
+                {/notempty}
+            </select>
+            <p class="help-block">{:lang('Custom link')}：</p>
+            <input type="text" class="form-control" name="zidingyi" placeholder="http://">
+        </div>
+        <div class="form-group">
+            <label>{:lang('Open mode')}：</label>
+            <select class="form-control" name="dakaifangshi">
+                <option value="_self">{:lang('The original window opens')}</option>
+                <option value="_blank">{:lang('Opens as a new window')}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Icon')}：</label>
+            <input type="text" class="form-control" name="tubiao">
+            <p class="help-block">{:lang('The icon can be filled in with the icon code. Please fill in the icon code according to the icon system used by the theme.')}</p>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Status')}：</label>
+            <select class="form-control" name="zhuangtai">
+                <option value="1">{:lang('Display')}</option>
+                <option value="0">{:lang('Hide')}</option>
+            </select>
+        </div>
+        {notempty name="menu_append"}
+        {$menu_append}
+        {/notempty}
+        <div class="text-center"><br>
+            <input type="hidden" name="id" id="id" value="">
+            <input type="hidden" name="verification" value="{$verification}">
+            <button type="button" class="btn btn-default" id="baocun">{:lang('Add a menu')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing.gif" width="16" height="16"></span></button>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">{:lang('Thumbnail')}</div>
+            <input type="hidden" id="slt" name="suolvetu" value="">
+            <div class="panel-body" id="suolvetu">
+                <img src="{$domain}public/common/images/default-thumbnail.png" class="img-responsive center-block" alt="{:lang('Thumbnail')}">
+            </div>
+            <div class="panel-footer">
+                <button type="button" id="shangchuantu" class="btn btn-default btn-block" data-toggle="modal" data-target="#myModal">
+                    {:lang('Upload image')}
+                </button>
+                <button type="button" id="quxiaotu" class="btn btn-default btn-block hidden">
+                    {:lang('Cancel upload image')}
+                </button>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">{:lang('Menu description')}</div>
+            <div class="panel-body" style="padding: 0px">
+                <textarea class="form-control" style="border: 0" rows="8" name="miaoshu"></textarea>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">{:lang('Upload image')}</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" id="xuanbendi" class="active"><a href="#bendi" role="tab" data-toggle="tab">{:lang('Local image')}</a></li>
+                    <li role="presentation" id="xuanwangluo"><a href="#wangluo" role="tab" data-toggle="tab">{:lang('Network picture')}</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="bendi">
+                        <div class="container-fluid">
+                            <div class="row"><br>
+                                <label>{:lang('Please select Upload image')}</label>
+                                <div id="upload"></div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-body" style="min-height: 199px;">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="wangluo">
+                        <div class="form-group"><br>
+                            <label>{:lang('Image address')}</label>
+                            <input type="text" class="form-control" id="wangluodizhi" placeholder="http://" value="http://">
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-body" style="min-height: 200px;">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                <button type="button" class="btn btn-primary" id="queding">{:lang('Ok')}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="hidden" id="buttonText">{:lang('Select Image')}</div>
+<div class="hidden" id="yijicaidan">{:lang('As a first-level menu')}</div>
+<script type="text/javascript" src="{$domain}public/common/uploadify/jquery.uploadify.js"></script>
+<script src="{$domain}public/common/confirm/jquery-confirm.js"></script>
+<script src="{$domain}public/common/js/addmenu.js"></script>
+{include file="index/footer" /}

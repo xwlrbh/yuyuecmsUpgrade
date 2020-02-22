@@ -1,0 +1,30 @@
+{include file="index/header" /}
+<link href="{$domain}public/common/confirm/jquery-confirm.css" type="text/css" rel="stylesheet">
+<form method="post" action="">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label>{:lang('Attribute template name')}：&nbsp;<b><span class="text-danger">*</span></b></label>
+            <input type="text" class="form-control" value="{$catfishItem.protemp}" id="protemp" name="protemp" placeholder="{:lang('Attribute template name')}" required autofocus>
+            <input type="hidden" name="id" id="id" value="{$catfishItem.id}">
+        </div>
+        <div class="form-group">
+            <label>{:lang('Attribute template description')}</label>
+            <textarea class="form-control" rows="3" name="description">{$catfishItem.description}</textarea>
+        </div>
+        <div class="form-group">
+            <label>{:lang('Add attribute')}：&nbsp;<b><span class="text-danger">*</span></b></label>
+            <div id="addpropdiv"></div>
+            <input type="text" class="form-control" placeholder="{:lang('Please enter a property name')}">
+            <a class="btn btn-default" href="#!" id="addprop">{:lang('Add attribute')}</a>
+            <input type="hidden" value="{$catfishItem.propname}" class="form-control" id="propname" name="propname">
+        </div>
+        <hr>
+        <div class="text-center">
+            <input type="hidden" name="verification" value="{$verification}">
+            <button type="submit" class="btn btn-default">{:lang('Modify')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing.gif" width="16" height="16"></span></button>
+        </div>
+    </div>
+</form>
+<script src="{$domain}public/common/confirm/jquery-confirm.js"></script>
+<script src="{$domain}public/common/js/attributetemplateedit.js"></script>
+{include file="index/footer" /}

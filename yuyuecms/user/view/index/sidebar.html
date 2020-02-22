@@ -1,0 +1,15 @@
+<li class="nav-item">
+    <a href="{:Url('user/Index/index')}" class="nav-link{if condition="$current eq 'welcome'"} active{else /} bg-light{/if}">{:lang('Welcome page')}</a>
+</li>
+<li class="nav-item">
+    <a href="{:Url('user/Index/editprofile')}" class="nav-link{if condition="$current eq 'editprofile'"} active{else /} bg-light{/if}">{:lang('Edit my profile')}</a>
+</li>
+<li class="nav-item">
+    <a href="{:Url('user/Index/editavatar')}" class="nav-link{if condition="$current eq 'editavatar'"} active{else /} bg-light{/if}">{:lang('Edit avatar')}</a>
+</li>
+<li class="nav-item">
+    <a href="{:Url('user/Index/changepassword')}" class="nav-link{if condition="$current eq 'changepassword'"} active{else /} bg-light{/if}">{:lang('Change password')}</a>
+</li>
+<li class="nav-item">
+    <a href="{:Url('user/Index/mycollection')}" class="nav-link{if condition="$current eq 'mycollection'"} active{else /} bg-light{/if}">{:lang('My collection')}</a>
+</li>
