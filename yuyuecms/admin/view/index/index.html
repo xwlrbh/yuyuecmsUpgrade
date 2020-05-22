@@ -1,5 +1,5 @@
 {include file="index/header" /}
-<p class="text-muted">{:lang('Welcome to the ')}<a href="http://www.yuyue-cms.com" target="_blank">{:lang('YUYUE CMS')}</a>，{:lang('The YUYUE CMS is a content management system developed exclusively by ')}<a href="http://www.catfish-cms.com" target="_blank">{:lang('Catfish CMS')}</a>{:lang(' for enterprise applications.')}{:lang('The version you are currently using: ')}{$catfishver}</p>
+{if $ihd == ''}<p class="text-muted">{:lang('Welcome to the ')}<a href="http://www.yuyue-cms.com" target="_blank">{:lang('YUYUE CMS')}</a>，{:lang('The YUYUE CMS is a content management system developed exclusively by ')}<a href="http://www.catfish-cms.com" target="_blank">{:lang('Catfish CMS')}</a>{:lang(' for enterprise applications.')}{:lang('The version you are currently using: ')}{$catfishver}</p>{/if}
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">{:lang('Quick operation')}</h3>

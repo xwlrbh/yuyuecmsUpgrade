@@ -151,7 +151,7 @@ class Index extends CatfishCMS
                 return false;
             }
             $create_date = Catfish::now();
-            $rmd = md5($create_date);
+            $rmd = md5($create_date . '_' . rand());
             Catfish::db('users')->insert([
                 'yonghu' => $data['user'],
                 'password' => md5($data['pwd'].$rmd),

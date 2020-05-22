@@ -39,13 +39,14 @@ class CatfishCMS
     }
     protected function show($menuname = '', $current = '', $star = false, $template = null)
     {
+        $dn = Catfish::rtmt()?Catfish::bd('IGQtbm9uZQ=='):'';
         Catfish::allot('menuname', $menuname);
         Catfish::allot('current', $current);
         Catfish::allot('star', $star);
         Catfish::allot('user', Catfish::getSession('user'));
         Catfish::allot('tuichu', Catfish::url('login/Index/quit'));
         Catfish::allot('verification', Catfish::verifyCode());
-        Catfish::allot('yuyuecms', '<a href="'.base64_decode('aHR0cDovL3d3dy55dXl1ZS1jbXMuY29t').'" class="text-muted" target="_blank">'.base64_decode('6bG86LeDQ01T').'</a>');
+        Catfish::allot('yuyuecms', '<a href="'.base64_decode('aHR0cDovL3d3dy55dXl1ZS1jbXMuY29t').'" class="text-muted'.$dn.'" target="_blank">'.base64_decode('6bG86LeDQ01T').'</a>');
         return Catfish::output($template);
     }
     private function options()
@@ -58,8 +59,8 @@ class CatfishCMS
                 Catfish::allot($val['name'], unserialize($val['value']));
             }
             elseif($val['name'] == 'domain'){
-                Catfish::allot($val['name'], $val['value']);
-                $root = $val['value'];
+                $root = Catfish::domainAmend($val['value']);
+                Catfish::allot($val['name'], $root);
                 $dm = Catfish::url('/');
                 if(strpos($dm,'/index.php') !== false)
                 {

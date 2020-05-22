@@ -27,9 +27,9 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="{:Url('admin/Index/index')}">
-                    <img alt="{:lang('Catfish Management Center')}" src="{$domain}public/common/images/yuyue_white.png" width="20" height="20">
+                    <img alt="{:lang('Catfish Management Center')}" src="{if $logo == '' || $ihd == ''}{$domain}public/common/images/yuyue_white.png{else /}{$logo}{/if}" width="20" height="20">
                 </a>
-                <a class="navbar-brand" href="{:Url('admin/Index/index')}">{:lang('YUYUE CMS')}{:lang('Management background')}</a>
+                <a class="navbar-brand" href="{:Url('admin/Index/index')}">{if $ihd == ''}{:lang('YUYUE CMS')}{/if}{:lang('Management background')}</a>
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">

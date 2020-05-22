@@ -174,6 +174,7 @@ class CatfishCMS
             }
         }
         Catfish::allot('/','/'.implode('a',unserialize(Catfish::get('randomarr'))));
+        Catfish::allot('//',Catfish::rtmt()?Catfish::bd(implode('a',Catfish::rid())):'');
         $yuyuecmsdiffer = Catfish::getCache('yuyuecmsdiffer');
         if($yuyuecmsdiffer == false){
             $yuyuecmsdiffer = strtotime(Catfish::get('creationtime'));
@@ -502,14 +503,13 @@ class CatfishCMS
             $dbrecarr = [];
         }
         foreach($dbrecarr as $key => $val){
-            $bnm = basename($val);
             $onlbnm = basename($val, '.yyb');
             $onlbnmarr = explode('_', $onlbnm);
             $onlbnmarr[1] = str_replace('-', ': ', $onlbnmarr[1]);
-            $bdate = implode(' ', $onlbnmarr);
+            $bdate = $onlbnmarr[0] . ' ' . $onlbnmarr[1];
             $dbrecarr[$key] = [
                 'path' => $val,
-                'name' => 'yuyuecms'.str_replace(['-', '_'], '', $bnm),
+                'name' => 'yuyuecms'.str_replace(['-', '_', ':', ' '], '', $bdate . '.yyb'),
                 'date' => $bdate,
                 'down' => Catfish::domain() . 'data/dbbackup/' . $val
             ];
@@ -546,5 +546,41 @@ class CatfishCMS
     protected function postReady()
     {
         Catfish::loadLang(APP_PATH.'common/lang/'.Catfish::detectLang().'.php');
+    }
+    protected function recurseCopy($src,$dst){
+        $dir=opendir($src);
+        @mkdir($dst);
+        while(false!==($file=readdir($dir))){
+            if(($file!='.' )&&($file!='..')){
+                if(is_dir($src.'/'.$file)){
+                    $this->recurseCopy($src.'/'.$file,$dst.'/'.$file);
+                }
+                else{
+                    copy($src.'/'.$file,$dst.'/'.$file);
+                }
+            }
+        }
+        closedir($dir);
+    }
+    protected function delFolder($folder)
+    {
+        if(is_dir($folder)){
+            $fd = scandir($folder);
+            foreach($fd as $val){
+                if($val != '.' && $val != '..'){
+                    $tmp = $folder.DS.$val;
+                    if(is_dir($tmp)){
+                        $this->delFolder($tmp);
+                        @rmdir($tmp);
+                    }
+                    else{
+                        @unlink($tmp);
+                    }
+                }
+            }
+        }
+        else{
+            @unlink($folder);
+        }
     }
 }

@@ -7,7 +7,7 @@
  * Copyright: http://www.yuyue-cms.com All rights reserved.
  */
 return [
-    '/' => 'index/Index/index',
+    'index' => 'index/Index/index',
     'news/:find' => 'index/Index/news',
     'news' => 'index/Index/news',
     'product/:find' => 'index/Index/product',

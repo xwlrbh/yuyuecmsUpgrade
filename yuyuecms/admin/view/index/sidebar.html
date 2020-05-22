@@ -239,6 +239,11 @@
                             {:lang('Personal information')}
                             </button>
                         </a>
+                        <a href="{:Url('admin/Index/change')}">
+                            <button type="button" class="btn btn-default btn-block{eq name="option" value="change"} btn-primary{/eq}">
+                            {:lang('Change password')}
+                            </button>
+                        </a>
                         <a href="{:Url('admin/Index/mycollection')}">
                             <button type="button" class="btn btn-default btn-block{eq name="option" value="mycollection"} btn-primary{/eq}">
                             {:lang('My collection')}
@@ -267,11 +272,6 @@
                             {:lang('Themes')}
                             </button>
                         </a>
-                        <a href="{:Url('admin/Index/change')}">
-                            <button type="button" class="btn btn-default btn-block{eq name="option" value="change"} btn-primary{/eq}">
-                                {:lang('Change password')}
-                            </button>
-                        </a>
                         <a href="{:Url('admin/Index/clearcache')}">
                             <button type="button" class="btn btn-default btn-block{eq name="option" value="clearcache"} btn-primary{/eq}">
                                 {:lang('Clear cache')}
@@ -285,6 +285,11 @@
                         <a href="{:Url('admin/Index/smtpsettings')}">
                             <button type="button" class="btn btn-default btn-block{eq name="option" value="smtpsettings"} btn-primary{/eq}">
                             {:lang('SMTP settings')}
+                            </button>
+                        </a>
+                        <a href="{:Url('admin/Index/systemupgrade')}">
+                            <button type="button" class="btn btn-default btn-block{eq name="option" value="systemupgrade"} btn-primary{/eq}">
+                            {:lang('System Upgrade')}
                             </button>
                         </a>
                         <a href="{:Url('admin/Index/softwarelicense')}">

@@ -3127,7 +3127,7 @@ class Index extends CatfishCMS
                     ]);
             }
         }
-        return $this->show(Catfish::lang('Change password'), 'xitong', 'change', true);
+        return $this->show(Catfish::lang('Change password'), 'yonghu', 'change', true);
     }
     public function clearcache()
     {
@@ -3198,7 +3198,7 @@ class Index extends CatfishCMS
             }
             $bkstr = '-- 鱼跃CMS数据库备份' . PHP_EOL . '-- 生成日期：' . date('Y-m-d H: i: s') . PHP_EOL . '-- Table prefix: ' . $dbPrefix . PHP_EOL . $bkstr;
             $bkpath = date('Ymd');
-            $bkname = date('Y-m-d_H-i-s');
+            $bkname = date('Y-m-d_H-i-s') . '_' . md5(Catfish::getRandom() . ' ' . time() . ' ' . rand());
             $bk = ROOT_PATH . 'data' . DS . 'dbbackup' . DS . $bkpath;
             if(!is_dir($bk)){
                 mkdir($bk, 0777, true);
@@ -3224,12 +3224,17 @@ class Index extends CatfishCMS
     {
         if(Catfish::isPost()){
             $fn = Catfish::getPost('fn');
-            $dbrec = ',' . Catfish::get('dbbackup');
-            $dbrec = str_replace(',' . $fn, '', $dbrec);
-            $dbrec = empty($dbrec) ? '' : substr($dbrec, 1);
-            Catfish::set('dbbackup', $dbrec);
-            $this->deletefile('data/dbbackup/' . $fn);
-            echo 'ok';
+            if(strpos($fn, '..') === false){
+                $dbrec = ',' . Catfish::get('dbbackup');
+                $dbrec = str_replace(',' . $fn, '', $dbrec);
+                $dbrec = empty($dbrec) ? '' : substr($dbrec, 1);
+                Catfish::set('dbbackup', $dbrec);
+                $this->deletefile('data/dbbackup/' . $fn);
+                echo 'ok';
+            }
+            else{
+                echo Catfish::lang('Error');
+            }
             exit();
         }
     }
@@ -3326,6 +3331,49 @@ class Index extends CatfishCMS
             exit();
         }
     }
+    public function systemupgrade()
+    {
+        $this->checkUser();
+        $version = Catfish::getConfig('catfishCMS.version');
+        $lastv = Catfish::version();
+        Catfish::set('systemupgrade_currentversion', $version);
+        if(version_compare($version, $lastv) >= 0){
+            $needupgrade = 0;
+        }
+        else{
+            $needupgrade = 1;
+        }
+        $sjbdz = Catfish::sjbdz();
+        $au = isset($sjbdz['au']) ? $sjbdz['au'] : 0;
+        $directly = 0;
+        $directlystr = '';
+        $address = [];
+        if(isset($sjbdz['address'])){
+            if(isset($sjbdz['address']['directly']) && !empty($sjbdz['address']['directly'])){
+                $directlystr = $sjbdz['address']['directly'];
+            }
+            Catfish::set('systemupgrade_directly', $directlystr);
+            if(isset($sjbdz['address']['manually']) && !empty($sjbdz['address']['manually'])){
+                $tmp_addr = explode(',', $sjbdz['address']['manually']);
+                foreach($tmp_addr as $val){
+                    array_push($address, $val);
+                }
+            }
+            if(isset($sjbdz['address']['official']) && !empty($sjbdz['address']['official'])){
+                $tmp_addr = explode(',', $sjbdz['address']['official']);
+                foreach($tmp_addr as $val){
+                    array_push($address, $val);
+                }
+            }
+        }
+        if(!empty($directlystr) && $au == 1){
+            $directly = 1;
+        }
+        Catfish::allot('needupgrade', $needupgrade);
+        Catfish::allot('directly', $directly);
+        Catfish::allot('address', $address);
+        return $this->show(Catfish::lang('System Upgrade'), 'xitong', 'systemupgrade');
+    }
     public function softwarelicense()
     {
         $this->checkUser();
@@ -3371,18 +3419,7 @@ class Index extends CatfishCMS
     public function prompt()
     {
         if(Catfish::isPost()){
-            $yuyuecmsprompt = Catfish::getCache('yuyuecmsprompt');
-            if($yuyuecmsprompt == false){
-                $serial = Catfish::get('serial');
-                if(empty($serial)){
-                    $yuyuecmsprompt = 0;
-                }
-                else{
-                    $yuyuecmsprompt = Catfish::curl('http://www.yuyue-cms.com/prompt/?dm='.Catfish::get('domain').'&tl='.urlencode(Catfish::get('title')).'&ct='.strtotime(Catfish::get('creationtime')).'&se='.md5($serial).'&vr='.urlencode(Catfish::getConfig('catfishCMS.version')).'&nm='.urlencode(Catfish::getConfig('catfishCMS.name')));
-                }
-                Catfish::setCache('yuyuecmsprompt',$yuyuecmsprompt,360000);
-            }
-            echo $yuyuecmsprompt;
+            echo Catfish::rtmt();
             exit();
         }
     }
@@ -3391,12 +3428,7 @@ class Index extends CatfishCMS
         if(Catfish::isPost()){
             $dom = Catfish::get('domain');
             if(Catfish::isDomain($dom)){
-                $yuyuecmsversion = Catfish::getCache('yuyuecmsversion');
-                if($yuyuecmsversion == false){
-                    $yuyuecmsversion = Catfish::curl('http://www.yuyue-cms.com/version/?dm='.$dom.'&tl='.urlencode(Catfish::get('title')).'&ct='.strtotime(Catfish::get('creationtime')).'&vr='.urlencode(Catfish::getConfig('catfishCMS.version')).'&nm='.urlencode(Catfish::getConfig('catfishCMS.name')));
-                    Catfish::setCache('yuyuecmsversion',$yuyuecmsversion,172800);
-                }
-                echo $yuyuecmsversion;
+                echo Catfish::version();
             }
             else{
                 echo '';
@@ -3587,5 +3619,152 @@ class Index extends CatfishCMS
             echo 'ok';
         }
         exit();
+    }
+    public function remotepackage()
+    {
+        if(Catfish::isPost()){
+            ini_set('max_execution_time', 0);
+            ini_set('memory_limit', -1);
+            $directly = Catfish::get('systemupgrade_directly');
+            $directlyarr = explode(',', $directly);
+            if(count($directlyarr) > 1){
+                $key = rand(0, count($directlyarr) - 1);
+                $directly = $directlyarr[$key];
+            }
+            $path = ROOT_PATH . 'data' . DS . 'package';
+            if(!is_dir($path)){
+                mkdir($path, 0777, true);
+            }
+            $file = $path . DS . 'yuyuecms.zip';
+            Catfish::set('upgradepackagefilename', 'yuyuecms.zip');
+            Catfish::getFile($directly, $file);
+            echo 'ok';
+            exit();
+        }
+        else{
+            echo Catfish::lang('Your operation is illegal');
+            exit();
+        }
+    }
+    public function upgradepackage()
+    {
+        if(Catfish::isPost()){
+            ini_set('max_execution_time', 0);
+            ini_set('memory_limit', -1);
+            $file = request()->file('file');
+            $validate = [
+                'ext' => 'zip'
+            ];
+            $info = $file->validate($validate)->move(ROOT_PATH . 'data' . DS . 'package', false);
+            if($info){
+                Catfish::set('upgradepackagefilename', $info->getSaveName());
+                echo 'ok';
+            }else{
+                echo $file->getError();
+            }
+            exit();
+        }
+        else{
+            echo Catfish::lang('Your operation is illegal');
+            exit();
+        }
+    }
+    public function upgrading()
+    {
+        if(Catfish::isPost(1)){
+            ini_set('max_execution_time', 0);
+            ini_set('memory_limit', -1);
+            $tempdir = ROOT_PATH . 'data' . DS . 'temp';
+            $auto = Catfish::getPost('auto');
+            if($auto == 1){
+                $tempfolder = $tempdir . DS . 'autoupgrade';
+            }
+            else{
+                $tempfolder = $tempdir . DS . 'upgrade';
+            }
+            if(!is_dir($tempfolder)){
+                mkdir($tempfolder, 0777, true);
+            }
+            $upgradingfile = ROOT_PATH . 'data' . DS . 'package' . DS . Catfish::get('upgradepackagefilename');
+            if(is_file($upgradingfile)){
+                $needspace = filesize($upgradingfile) * 5;
+                if($needspace < disk_free_space($tempfolder)){
+                    Catfish::clearCache();
+                    try{
+                        $zip = new \ZipArchive();
+                        if($zip->open($upgradingfile) === true){
+                            $zip->extractTo($tempfolder);
+                            $zip->close();
+                            $this->upgradFile($tempfolder);
+                            @unlink($upgradingfile);
+                            $this->delFolder($tempfolder);
+                            $this->upgradedb();
+                            Catfish::curl(Catfish::domain());
+                            echo 'ok';
+                        }
+                        else{
+                            echo Catfish::lang('Upgrade package is not available');
+                        }
+                    }
+                    catch(\Exception $e){
+                        echo Catfish::lang('Upgrade unsuccessful');
+                    }
+                }
+                else{
+                    echo Catfish::lang('Not enough space');
+                }
+            }
+            else{
+                echo Catfish::lang('Upgrade package not found');
+            }
+            exit();
+        }
+        else{
+            echo Catfish::lang('Your operation is illegal');
+            exit();
+        }
+    }
+    private function upgradedb()
+    {
+        $upgradedbfile = ROOT_PATH . 'yuyuecms' . DS . 'install' . DS . 'upgrade';
+        $sqlfiles = glob($upgradedbfile . DS . '*.sql');
+        if(count($sqlfiles) > 0){
+            $currentversion = Catfish::get('systemupgrade_currentversion');
+            foreach($sqlfiles as $file){
+                $ver = basename($file, '.sql');
+                if(version_compare($ver, $currentversion) > 0){
+                    $sql = Catfish::fgc($file);
+                    $sql = str_replace([" `catfish_", " `yuyuecms_"], " `" . Catfish::prefix(), $sql);
+                    $sql = str_replace("\r", "\n", $sql);
+                    $sqlarr = explode(";\n", $sql);
+                    foreach ($sqlarr as $item) {
+                        $item = trim($item);
+                        if(empty($item)) continue;
+                        try{
+                            Catfish::dbExecute($item);
+                        }
+                        catch(\Exception $e){
+                            continue;
+                        }
+                    }
+                }
+                @unlink($file);
+            }
+        }
+    }
+    private function upgradFile($folder)
+    {
+        $cfolder = 1;
+        while($cfolder == 1){
+            $farr = glob($folder . DS . '*', GLOB_ONLYDIR);
+            $cfolder = count($farr);
+            if($cfolder == 1){
+                $folder = $farr[0];
+            }
+            else{
+                break;
+            }
+        }
+        $this->recurseCopy($folder, ROOT_PATH);
     }
 }

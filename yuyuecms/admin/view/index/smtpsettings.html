@@ -13,8 +13,8 @@
         <div class="form-group">
             <label>{:lang('Encryption')}：&nbsp;<b><span class="text-danger">*</span></b></label>
             <select class="form-control" name="secure">
-                <option value="0"{if condition="$catfishItem.secure eq 'tls'"} selected{/if}>tls</option>
-                <option value="1"{if condition="$catfishItem.secure eq 'ssl'"} selected{/if}>ssl</option>
+                <option value="tls"{if condition="$catfishItem.secure eq 'tls'"} selected{/if}>tls</option>
+                <option value="ssl"{if condition="$catfishItem.secure eq 'ssl'"} selected{/if}>ssl</option>
             </select>
         </div>
         <div class="form-group">

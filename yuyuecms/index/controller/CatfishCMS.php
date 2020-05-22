@@ -1865,8 +1865,8 @@ class CatfishCMS
                 Catfish::allot($val['name'], unserialize($val['value']));
             }
             elseif($val['name'] == 'domain'){
-                Catfish::allot($val['name'], $val['value']);
-                $root = $val['value'];
+                $root = Catfish::domainAmend($val['value']);
+                Catfish::allot($val['name'], $root);
                 $dm = Catfish::url('/');
                 if(strpos($dm,'/index.php') !== false)
                 {
