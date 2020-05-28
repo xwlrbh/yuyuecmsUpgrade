@@ -3687,31 +3687,32 @@ class Index extends CatfishCMS
             }
             $upgradingfile = ROOT_PATH . 'data' . DS . 'package' . DS . Catfish::get('upgradepackagefilename');
             if(is_file($upgradingfile)){
-                $needspace = filesize($upgradingfile) * 5;
-                if($needspace < disk_free_space($tempfolder)){
-                    Catfish::clearCache();
-                    try{
-                        $zip = new \ZipArchive();
-                        if($zip->open($upgradingfile) === true){
-                            $zip->extractTo($tempfolder);
-                            $zip->close();
-                            $this->upgradFile($tempfolder);
-                            @unlink($upgradingfile);
-                            $this->delFolder($tempfolder);
-                            $this->upgradedb();
-                            Catfish::curl(Catfish::domain());
-                            echo 'ok';
-                        }
-                        else{
-                            echo Catfish::lang('Upgrade package is not available');
-                        }
-                    }
-                    catch(\Exception $e){
-                        echo Catfish::lang('Upgrade unsuccessful');
+                if(function_exists('disk_free_space')){
+                    $needspace = filesize($upgradingfile) * 5;
+                    if($needspace > disk_free_space($tempfolder)){
+                        echo Catfish::lang('Not enough space');
+                        exit();
                     }
                 }
-                else{
-                    echo Catfish::lang('Not enough space');
+                Catfish::clearCache();
+                try{
+                    $zip = new \ZipArchive();
+                    if($zip->open($upgradingfile) === true){
+                        $zip->extractTo($tempfolder);
+                        $zip->close();
+                        $this->upgradFile($tempfolder);
+                        @unlink($upgradingfile);
+                        $this->delFolder($tempfolder);
+                        $this->upgradedb();
+                        Catfish::curl(Catfish::domain());
+                        echo 'ok';
+                    }
+                    else{
+                        echo Catfish::lang('Upgrade package is not available');
+                    }
+                }
+                catch(\Exception $e){
+                    echo Catfish::lang('Upgrade unsuccessful');
                 }
             }
             else{

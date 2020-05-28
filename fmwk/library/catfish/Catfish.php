@@ -905,7 +905,7 @@ class Catfish
                 $sjbdz = [];
             }
             else{
-                $sjbdz = json_decode($sjbdz);
+                $sjbdz = json_decode($sjbdz, true);
             }
             self::setCache('yuyuecmssjbdz',$sjbdz,172800);
         }
