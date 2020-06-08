@@ -3735,7 +3735,7 @@ class Index extends CatfishCMS
                 $ver = basename($file, '.sql');
                 if(version_compare($ver, $currentversion) > 0){
                     $sql = Catfish::fgc($file);
-                    $sql = str_replace([" `catfish_", " `yuyuecms_"], " `" . Catfish::prefix(), $sql);
+                    $sql = str_replace([" `catfish_", " `yuyuecms_", " `yuyue_"], " `" . Catfish::prefix(), $sql);
                     $sql = str_replace("\r", "\n", $sql);
                     $sqlarr = explode(";\n", $sql);
                     foreach ($sqlarr as $item) {

@@ -57,7 +57,7 @@ class CatfishCMS
         $rule = [
             'fenleim' => 'require',
             'shangji' => 'require',
-            'alias' => 'alphaDash|regex:[\d_\-]*[A-Za-z]+[\d_\-]*'
+            'alias' => 'alphaDash|regex:[A-Za-z\d_\-]*[A-Za-z]+[A-Za-z\d_\-]*'
         ];
         $msg = [
             'fenleim.require' => Catfish::lang('The category name must be filled in'),
@@ -77,7 +77,7 @@ class CatfishCMS
         $rule = [
             'biaoti' => 'require',
             'zhengwen' => 'require',
-            'alias' => 'alphaDash|regex:[\d_\-]*[A-Za-z]+[\d_\-]*'
+            'alias' => 'alphaDash|regex:[A-Za-z\d_\-]*[A-Za-z]+[A-Za-z\d_\-]*'
         ];
         $msg = [
             'biaoti.require' => Catfish::lang('The title must be filled in'),
@@ -250,7 +250,7 @@ class CatfishCMS
         $rule = [
             'biaoti' => 'require',
             'zhengwen' => 'require',
-            'alias' => 'alphaDash|regex:[\d_\-]*[A-Za-z]+[\d_\-]*',
+            'alias' => 'alphaDash|regex:[A-Za-z\d_\-]*[A-Za-z]+[A-Za-z\d_\-]*',
             'yuanjia' => 'number',
             'xianjia' => 'number'
         ];

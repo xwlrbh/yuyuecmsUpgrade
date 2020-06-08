@@ -219,13 +219,34 @@ class CatfishCMS
         else{
             $chkc = Catfish::get('comment');
             $status = $chkc == 1 ? 0 : 1;
-            Catfish::db($ctb.'_comments')->insert([
+            $pid = Catfish::getPost('pid');
+            if($pid === false){
+                $pid = 0;
+            }
+            else{
+                $pid = intval($pid);
+            }
+            $topid = 0;
+            if($pid != 0){
+                $top = Catfish::db($ctb.'_comments')->where('id', $pid)->field('topid')->find();
+                $topid = $top['topid'];
+            }
+            $id = Catfish::db($ctb.'_comments')->insertGetId([
                 'stid' => Catfish::getPost('id'),
                 'uid' => Catfish::getSession('user_id'),
                 'createtime' => Catfish::now(),
                 'content' => Catfish::filterJs(Catfish::getPost('pinglun', false)),
+                'parent_id' => $pid,
                 'status' => $status
             ]);
+            if($topid == 0){
+                $topid = $id;
+            }
+            Catfish::db($ctb.'_comments')
+                ->where('id', $id)
+                ->update([
+                    'topid' => $topid
+                ]);
             Catfish::db($ctb)
                 ->where('id', Catfish::getPost('id'))
                 ->setInc('pinglunshu');
@@ -422,17 +443,39 @@ class CatfishCMS
         }
         $catfishcms['hou'] = $catfishdown;
         $catfishcms['yuedu']++;
-        $catfishcomment = Catfish::view('product_comments','id,createtime as pinglunshijian,content as pinglunneirong')
+        $catfishcomment = Catfish::view('product_comments','id,createtime as pinglunshijian,content as pinglunneirong,parent_id')
             ->view('users','nicheng,touxiang','users.id=product_comments.uid')
             ->where('product_comments.stid','=',$catfishcms['id'])
+            ->where('product_comments.parent_id','=',0)
             ->where('product_comments.status','=',1)
             ->order('product_comments.createtime desc')
             ->paginate($this->everyPageShows);
         $catfishcms['pinglun'] = $catfishcomment->items();
+        $idStr = '';
         $now = time();
         foreach($catfishcms['pinglun'] as $key => $val){
             $catfishcms['pinglun'][$key]['shijian'] = $this->timedif($val['pinglunshijian'], $now);
             $catfishcms['pinglun'][$key]['pinglunshijian'] = $this->decompositiontime($val['pinglunshijian']);
+            $idStr .= empty($idStr) ? $val['id'] : ',' . $val['id'];
+        }
+        if(!empty($idStr)){
+            $catfishsubcomment = Catfish::view('product_comments','id,createtime as pinglunshijian,content as pinglunneirong,parent_id')
+                ->view('users','nicheng,touxiang','users.id=product_comments.uid')
+                ->where('product_comments.topid','in',$idStr)
+                ->where('product_comments.status','=',1)
+                ->order('product_comments.id asc')
+                ->select();
+            if(is_array($catfishsubcomment) && count($catfishsubcomment) > 0){
+                $idArr = explode(',', $idStr);
+                foreach($catfishsubcomment as $ckey => $cval){
+                    if(!in_array($cval['id'], $idArr)){
+                        $cval['shijian'] = $this->timedif($cval['pinglunshijian'], $now);
+                        $cval['pinglunshijian'] = $this->decompositiontime($cval['pinglunshijian']);
+                        $catfishcms['pinglun'][] = $cval;
+                    }
+                }
+                $catfishcms['pinglun'] = Catfish::tree($catfishcms['pinglun']);
+            }
         }
         Catfish::allot('pages', $catfishcomment->render());
         Catfish::allot('yy', $catfishcms);
@@ -527,17 +570,39 @@ class CatfishCMS
         }
         $catfishcms['hou'] = $catfishdown;
         $catfishcms['yuedu']++;
-        $catfishcomment = Catfish::view('page_comments','id,createtime as pinglunshijian,content as pinglunneirong')
+        $catfishcomment = Catfish::view('page_comments','id,createtime as pinglunshijian,content as pinglunneirong,parent_id')
             ->view('users','nicheng,touxiang','users.id=page_comments.uid')
             ->where('page_comments.stid','=',$catfishcms['id'])
+            ->where('page_comments.parent_id','=',0)
             ->where('page_comments.status','=',1)
             ->order('page_comments.createtime desc')
             ->paginate($this->everyPageShows);
         $catfishcms['pinglun'] = $catfishcomment->items();
+        $idStr = '';
         $now = time();
         foreach($catfishcms['pinglun'] as $key => $val){
             $catfishcms['pinglun'][$key]['shijian'] = $this->timedif($val['pinglunshijian'], $now);
             $catfishcms['pinglun'][$key]['pinglunshijian'] = $this->decompositiontime($val['pinglunshijian']);
+            $idStr .= empty($idStr) ? $val['id'] : ',' . $val['id'];
+        }
+        if(!empty($idStr)){
+            $catfishsubcomment = Catfish::view('page_comments','id,createtime as pinglunshijian,content as pinglunneirong,parent_id')
+                ->view('users','nicheng,touxiang','users.id=page_comments.uid')
+                ->where('page_comments.topid','in',$idStr)
+                ->where('page_comments.status','=',1)
+                ->order('page_comments.id asc')
+                ->select();
+            if(is_array($catfishsubcomment) && count($catfishsubcomment) > 0){
+                $idArr = explode(',', $idStr);
+                foreach($catfishsubcomment as $ckey => $cval){
+                    if(!in_array($cval['id'], $idArr)){
+                        $cval['shijian'] = $this->timedif($cval['pinglunshijian'], $now);
+                        $cval['pinglunshijian'] = $this->decompositiontime($cval['pinglunshijian']);
+                        $catfishcms['pinglun'][] = $cval;
+                    }
+                }
+                $catfishcms['pinglun'] = Catfish::tree($catfishcms['pinglun']);
+            }
         }
         Catfish::allot('pages', $catfishcomment->render());
         Catfish::allot('yy', $catfishcms);
@@ -633,17 +698,39 @@ class CatfishCMS
         }
         $catfishcms['hou'] = $catfishdown;
         $catfishcms['yuedu']++;
-        $catfishcomment = Catfish::view('news_comments','id,createtime as pinglunshijian,content as pinglunneirong')
+        $catfishcomment = Catfish::view('news_comments','id,createtime as pinglunshijian,content as pinglunneirong,parent_id')
             ->view('users','nicheng,touxiang','users.id=news_comments.uid')
             ->where('news_comments.stid','=',$catfishcms['id'])
+            ->where('news_comments.parent_id','=',0)
             ->where('news_comments.status','=',1)
             ->order('news_comments.createtime desc')
             ->paginate($this->everyPageShows);
         $catfishcms['pinglun'] = $catfishcomment->items();
+        $idStr = '';
         $now = time();
         foreach($catfishcms['pinglun'] as $key => $val){
             $catfishcms['pinglun'][$key]['shijian'] = $this->timedif($val['pinglunshijian'], $now);
             $catfishcms['pinglun'][$key]['pinglunshijian'] = $this->decompositiontime($val['pinglunshijian']);
+            $idStr .= empty($idStr) ? $val['id'] : ',' . $val['id'];
+        }
+        if(!empty($idStr)){
+            $catfishsubcomment = Catfish::view('news_comments','id,createtime as pinglunshijian,content as pinglunneirong,parent_id')
+                ->view('users','nicheng,touxiang','users.id=news_comments.uid')
+                ->where('news_comments.topid','in',$idStr)
+                ->where('news_comments.status','=',1)
+                ->order('news_comments.id asc')
+                ->select();
+            if(is_array($catfishsubcomment) && count($catfishsubcomment) > 0){
+                $idArr = explode(',', $idStr);
+                foreach($catfishsubcomment as $ckey => $cval){
+                    if(!in_array($cval['id'], $idArr)){
+                        $cval['shijian'] = $this->timedif($cval['pinglunshijian'], $now);
+                        $cval['pinglunshijian'] = $this->decompositiontime($cval['pinglunshijian']);
+                        $catfishcms['pinglun'][] = $cval;
+                    }
+                }
+                $catfishcms['pinglun'] = Catfish::tree($catfishcms['pinglun']);
+            }
         }
         Catfish::allot('pages', $catfishcomment->render());
         Catfish::allot('yy', $catfishcms);
