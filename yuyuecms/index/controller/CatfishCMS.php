@@ -38,7 +38,7 @@ class CatfishCMS
             $template .= '.html';
         }
         $show = Catfish::getCache('show_'.$cachstr);
-        if($show == false){
+        if($show === false){
             $caidan = $this->getMenu();
             $navigation = [];
             $mbx = [];
@@ -117,7 +117,13 @@ class CatfishCMS
                 }
             }
             $show['navigation'] = $navigation;
+            if(empty($submenu) || count($submenu) == 0){
+                $submenu = ['caidan1' => []];
+            }
             $show['submenu'] = $submenu;
+            if(empty($caidan) || count($caidan) == 0){
+                $caidan = ['caidan1' => []];
+            }
             $show['caidan'] = $caidan;
             Catfish::setCache('show_'.$cachstr,$show,$this->time);
         }
@@ -739,7 +745,7 @@ class CatfishCMS
     protected function sousuo($find)
     {
         $sousuo = Catfish::getCache('sousuo');
-        if($sousuo == false){
+        if($sousuo === false){
             $sousuo = Catfish::db('mlabel')
                 ->field('id,biaoqian,quantity,method')
                 ->where('outpos', 'search')
@@ -781,7 +787,7 @@ class CatfishCMS
     {
         $find = urldecode($find);
         $sousuo = Catfish::getCache('sousuo');
-        if($sousuo == false){
+        if($sousuo === false){
             $sousuo = Catfish::db('mlabel')
                 ->field('id,biaoqian,quantity,method')
                 ->where('outpos', 'search')
@@ -822,7 +828,7 @@ class CatfishCMS
     protected function chanpinliebiao($find)
     {
         $chanpinliebiao = Catfish::getCache('chanpinliebiao');
-        if($chanpinliebiao == false){
+        if($chanpinliebiao === false){
             $chanpinliebiao = Catfish::db('mlabel')
                 ->field('id,biaoqian,quantity,method')
                 ->where('outpos', 'productlist')
@@ -832,7 +838,7 @@ class CatfishCMS
         $page = Catfish::getGet('page');
         $cachename = 'chanpinliebiao_'.$chanpinliebiao['method'].'_'.$find.'_'.$page;
         $catfishcms = Catfish::getCache($cachename);
-        if($catfishcms == false){
+        if($catfishcms === false){
             $ps = $this->everyPageShows;
             if(!empty($chanpinliebiao['quantity'])){
                 $ps = $chanpinliebiao['quantity'];
@@ -897,7 +903,7 @@ class CatfishCMS
     protected function xinwenliebiao($find)
     {
         $xinwenliebiao = Catfish::getCache('xinwenliebiao');
-        if($xinwenliebiao == false){
+        if($xinwenliebiao === false){
             $xinwenliebiao = Catfish::db('mlabel')
                 ->field('id,biaoqian,quantity,method')
                 ->where('outpos', 'newslist')
@@ -907,7 +913,7 @@ class CatfishCMS
         $page = Catfish::getGet('page');
         $cachename = 'xinwenliebiao_'.$xinwenliebiao['method'].'_'.$find.'_'.$page;
         $catfishcms = Catfish::getCache($cachename);
-        if($catfishcms == false){
+        if($catfishcms === false){
             $ps = $this->everyPageShows;
             if(!empty($xinwenliebiao['quantity'])){
                 $ps = $xinwenliebiao['quantity'];
@@ -972,7 +978,7 @@ class CatfishCMS
     protected function shouye()
     {
         $shouye = Catfish::getCache('shouye');
-        if($shouye == false){
+        if($shouye === false){
             $shouye = Catfish::db('mlabel')
                 ->field('id,biaoqian,quantity,method,homeout')
                 ->where('outpos', 'home')
@@ -982,7 +988,7 @@ class CatfishCMS
         $page = Catfish::getGet('page');
         $cachename = 'shouye_'.$shouye['method'].'_'.$shouye['homeout'].'_'.$page;
         $catfishcms = Catfish::getCache($cachename);
-        if($catfishcms == false){
+        if($catfishcms === false){
             $ps = $this->everyPageShows;
             if(!empty($shouye['quantity'])){
                 $ps = $shouye['quantity'];
@@ -1056,7 +1062,7 @@ class CatfishCMS
         Catfish::allot('yy', $sy);
         Catfish::allot('pages', $catfishcms['pages']);
         $shouyezhanshi = Catfish::getCache('shouyezhanshi');
-        if($shouyezhanshi == false){
+        if($shouyezhanshi === false){
             $shouyezhanshi = Catfish::db('home')->where('id',1)->field('biaoti,zhengwen,tu as zhanshitu,shipin,zutu')->find();
             if(empty($shouyezhanshi)){
                 $shouyezhanshi = [
@@ -1111,7 +1117,7 @@ class CatfishCMS
     private function getlabel($page)
     {
         $label = Catfish::getCache('label');
-        if($label == false){
+        if($label === false){
             $news = Catfish::view('config','id,biaoqian,aims,outpos,isthumb')
                 ->view('news_config','biaoti,quantity,method,cateid','news_config.conid=config.id')
                 ->select();
@@ -1132,7 +1138,7 @@ class CatfishCMS
             $page = 'home';
         }
         $labelsub = Catfish::getCache('label_'.$page);
-        if($labelsub == false){
+        if($labelsub === false){
             $labelsub = [];
             $catfish = [];
             if(isset($label['all'])){
@@ -1175,7 +1181,7 @@ class CatfishCMS
     private function getselflabel($page)
     {
         $selflabels = Catfish::getCache('selflabels');
-        if($selflabels == false){
+        if($selflabels === false){
             $selflabels = [];
             $labels = Catfish::db('label')->field('id,biaoqian,outpos,content')->select();
             foreach($labels as $key => $val){
@@ -1189,7 +1195,7 @@ class CatfishCMS
             $page = 'home';
         }
         $selflabelsub = Catfish::getCache('selflabels_'.$page);
-        if($selflabelsub == false){
+        if($selflabelsub === false){
             $selflabelsub = [];
             $catfish = [];
             if(isset($selflabels['all'])){
@@ -1218,7 +1224,7 @@ class CatfishCMS
     private function getRecommend($page)
     {
         $getRecommend = Catfish::getCache('recommend_'.$page);
-        if($getRecommend == false){
+        if($getRecommend === false){
             $table = 'all';
             switch($page){
                 case 'news':
@@ -1573,7 +1579,7 @@ class CatfishCMS
     private function getintroduction()
     {
         $qiye = Catfish::getCache('qiye');
-        if($qiye == false){
+        if($qiye === false){
             $qiye = Catfish::db('company')
                 ->field('mingcheng,dizhi,dianhua,chuanzhen,wangzhi,email,jianjie')
                 ->where('status',1)
@@ -1586,7 +1592,7 @@ class CatfishCMS
     private function gethistory()
     {
         $lishi = Catfish::getCache('lishi');
-        if($lishi == false){
+        if($lishi === false){
             $lishi = Catfish::db('history')
                 ->field('shijian,biaoti,xiangqing')
                 ->where('status',1)
@@ -1609,6 +1615,8 @@ class CatfishCMS
             $lishi[$key]['miao'] = $nyr['miao'];
         }
         Catfish::allot('lishi', $lishi);
+        $reverse = array_reverse($lishi);
+        Catfish::allot('lishir', $reverse);
     }
     private function decompositiontime($time)
     {
@@ -1646,7 +1654,7 @@ class CatfishCMS
     private function getlinks($page)
     {
         $youlian = Catfish::getCache('youlian');
-        if($youlian == false){
+        if($youlian === false){
             $youlian = Catfish::db('links')
                 ->field('id,dizhi,mingcheng,tubiao,target,miaoshu,shouye')
                 ->where('status',1)
@@ -1665,7 +1673,7 @@ class CatfishCMS
     private function getSlide()
     {
         $huandeng = Catfish::getCache('huandeng');
-        if($huandeng == false){
+        if($huandeng === false){
             $huandeng = [];
             $huandeng['huandeng1'] = [];
             $catfish = Catfish::db('slide_cate')
@@ -1693,7 +1701,7 @@ class CatfishCMS
     private function getMenu()
     {
         $caidan = Catfish::getCache('caidan');
-        if($caidan == false){
+        if($caidan === false){
             $caidan = [];
             $catfish = Catfish::db('navcat')
                 ->field('id')
@@ -1941,7 +1949,7 @@ class CatfishCMS
     private function options()
     {
         $data_options = Catfish::getCache('options');
-        if($data_options == false){
+        if($data_options === false){
             $data_options = Catfish::autoload();
             Catfish::setCache('options',$data_options,$this->time);
         }
