@@ -333,7 +333,12 @@ class Catfish
         $nickname = self::getCache('nickname');
         if($nickname == false){
             $nickname = Db::name('users')->where('id',self::getSession('user_id'))->field('nicheng')->find();
-            $nickname = $nickname['nicheng'];
+            if(isset($nickname['nicheng'])){
+                $nickname = $nickname['nicheng'];
+            }
+            else{
+                $nickname = '';
+            }
             self::setCache('nickname', $nickname, 600);
         }
         return $nickname;

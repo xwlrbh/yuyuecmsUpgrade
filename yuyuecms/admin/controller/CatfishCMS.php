@@ -57,7 +57,7 @@ class CatfishCMS
         $rule = [
             'fenleim' => 'require',
             'shangji' => 'require',
-            'alias' => 'alphaDash|regex:[A-Za-z\d_\-]*[A-Za-z]+[A-Za-z\d_\-]*'
+            'alias' => 'alphaDash|regex:[\d_\-]*[A-Za-z]+[\d_\-]*'
         ];
         $msg = [
             'fenleim.require' => Catfish::lang('The category name must be filled in'),

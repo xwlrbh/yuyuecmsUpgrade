@@ -116,6 +116,9 @@ class CatfishCMS
                     unset($submenu[$key][$skey]['parent_id']);
                 }
             }
+            if(empty($navigation) || count($navigation) == 0){
+                $navigation = ['caidan1' => []];
+            }
             $show['navigation'] = $navigation;
             if(empty($submenu) || count($submenu) == 0){
                 $submenu = ['caidan1' => []];
@@ -2038,23 +2041,28 @@ class CatfishCMS
     protected function getCate($tbl, $id)
     {
         $catfish = Catfish::db($tbl.'_cate_relationships')->where('stid',$id)->field('cateid')->find();
-        $catfishcms = Catfish::db($tbl.'_cate')->where('id',$catfish['cateid'])->field('alias,parent_id')->find();
-        $url = $catfish['cateid'];
-        if(!empty($catfishcms['alias'])){
-            $url = $catfishcms['alias'];
-        }
-        if($catfishcms['parent_id'] == 0){
-            $re = [Catfish::url('index/Index/'.$tbl.'list',['find'=>$url])];
+        if(isset($catfish['cateid'])){
+            $catfishcms = Catfish::db($tbl.'_cate')->where('id',$catfish['cateid'])->field('alias,parent_id')->find();
+            $url = $catfish['cateid'];
+            if(!empty($catfishcms['alias'])){
+                $url = $catfishcms['alias'];
+            }
+            if($catfishcms['parent_id'] == 0){
+                $re = [Catfish::url('index/Index/'.$tbl.'list',['find'=>$url])];
+            }
+            else{
+                $urlp = $catfishcms['parent_id'];
+                $catfishp = Catfish::db($tbl.'_cate')->where('id',$catfishcms['parent_id'])->field('alias')->find();
+                if(!empty($catfishp['alias'])){
+                    $urlp = $catfishp['alias'];
+                }
+                $re = [Catfish::url('index/Index/'.$tbl.'list',['find'=>$url]),Catfish::url('index/Index/'.$tbl.'list',['find'=>$urlp])];
+            }
+            return $re;
         }
         else{
-            $urlp = $catfishcms['parent_id'];
-            $catfishp = Catfish::db($tbl.'_cate')->where('id',$catfishcms['parent_id'])->field('alias')->find();
-            if(!empty($catfishp['alias'])){
-                $urlp = $catfishp['alias'];
-            }
-            $re = [Catfish::url('index/Index/'.$tbl.'list',['find'=>$url]),Catfish::url('index/Index/'.$tbl.'list',['find'=>$urlp])];
+            return [];
         }
-        return $re;
     }
     private function prevLast($ostr, $rep, $str)
     {
