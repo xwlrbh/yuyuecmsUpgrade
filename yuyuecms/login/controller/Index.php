@@ -103,7 +103,7 @@ class Index extends CatfishCMS
     public function register()
     {
         $this->checkUser();
-        if(Catfish::getPost('user') !== false)
+        if(Catfish::getPost('user') !== false && $this->allowLogin == 1)
         {
             $rule = [
                 'user' => 'require',
@@ -162,6 +162,10 @@ class Index extends CatfishCMS
                 'utype' => 'visitor'
             ]);
             Catfish::success(Catfish::lang('User registration is successful'), Catfish::url('login/Index/index'));
+        }
+        if($this->allowLogin == 0){
+            Catfish::redirect('index/Index/error');
+            exit();
         }
         $view = Catfish::output();
         return $view;

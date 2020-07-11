@@ -319,12 +319,12 @@ class Catfish
     {
         return Request::instance()->isAjax($ajax);
     }
-    public static function autoload()
+    public static function autoload($time = 600)
     {
         $options = self::getCache('options');
         if($options == false){
             $options = Db::name('options')->where('autoload',1)->field('option_name as name,option_value as value')->select();
-            self::setCache('options', $options, 600);
+            self::setCache('options', $options, $time);
         }
         return $options;
     }

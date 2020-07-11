@@ -1951,11 +1951,7 @@ class CatfishCMS
     }
     private function options()
     {
-        $data_options = Catfish::getCache('options');
-        if($data_options === false){
-            $data_options = Catfish::autoload();
-            Catfish::setCache('options',$data_options,$this->time);
-        }
+        $data_options = Catfish::autoload($this->time);
         foreach($data_options as $key => $val)
         {
             if($val['name'] == 'copyright' || $val['name'] == 'statistics')

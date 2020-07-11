@@ -12,6 +12,7 @@ use catfishcms\Catfish;
 
 class CatfishCMS
 {
+    protected $allowLogin = 1;
     protected function checkUser()
     {
         if(!is_file(APP_PATH . 'database.php')){
@@ -42,6 +43,10 @@ class CatfishCMS
             if($val['name'] == 'copyright' || $val['name'] == 'statistics')
             {
                 Catfish::allot($val['name'], unserialize($val['value']));
+            }
+            elseif($val['name'] == 'allowLogin'){
+                $this->allowLogin = $val['value'];
+                Catfish::allot($val['name'], $val['value']);
             }
             else
             {

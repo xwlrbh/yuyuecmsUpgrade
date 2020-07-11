@@ -3017,6 +3017,7 @@ class Index extends CatfishCMS
                     'option_value' => $closeComment
                 ]);
             Catfish::removeCache('options');
+            Catfish::removeCache('yuyuecms_options_captcha');
         }
         $catfish = Catfish::db('options')->where('id','<',27)->field('option_name,option_value')->select();
         $catfishItem = [];
