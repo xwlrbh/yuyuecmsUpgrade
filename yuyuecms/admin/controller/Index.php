@@ -2883,8 +2883,14 @@ class Index extends CatfishCMS
             ->field('id,yonghu,nicheng,email,touxiang,createtime,status')
             ->order('id desc')
             ->paginate(20);
-        Catfish::allot('catfishcms', $catfish->items());
         Catfish::allot('pages', $catfish->render());
+        $catfishcms = $catfish->items();
+        foreach($catfishcms as $key => $val){
+            if(!empty($val['touxiang'])){
+                $catfishcms[$key]['touxiang'] = Catfish::domain() . $val['touxiang'];
+            }
+        }
+        Catfish::allot('catfishcms', $catfishcms);
         return $this->show(Catfish::lang('General users'), 'yonghu', 'general');
     }
     public function laheiqiyong()

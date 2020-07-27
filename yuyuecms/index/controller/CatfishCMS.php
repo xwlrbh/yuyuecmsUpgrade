@@ -460,6 +460,11 @@ class CatfishCMS
             ->order('product_comments.createtime desc')
             ->paginate($this->everyPageShows);
         $catfishcms['pinglun'] = $catfishcomment->items();
+        foreach($catfishcms['pinglun'] as $key => $val){
+            if(!empty($val['touxiang']) && substr($val['touxiang'], 0, 5) == 'data/'){
+                $catfishcms['pinglun'][$key]['touxiang'] = Catfish::domain() . $val['touxiang'];
+            }
+        }
         $idStr = '';
         $now = time();
         foreach($catfishcms['pinglun'] as $key => $val){
@@ -480,6 +485,9 @@ class CatfishCMS
                     if(!in_array($cval['id'], $idArr)){
                         $cval['shijian'] = $this->timedif($cval['pinglunshijian'], $now);
                         $cval['pinglunshijian'] = $this->decompositiontime($cval['pinglunshijian']);
+                        if(!empty($cval['touxiang']) && substr($cval['touxiang'], 0, 5) == 'data/'){
+                            $cval['touxiang'] = Catfish::domain() . $cval['touxiang'];
+                        }
                         $catfishcms['pinglun'][] = $cval;
                     }
                 }
@@ -587,6 +595,11 @@ class CatfishCMS
             ->order('page_comments.createtime desc')
             ->paginate($this->everyPageShows);
         $catfishcms['pinglun'] = $catfishcomment->items();
+        foreach($catfishcms['pinglun'] as $key => $val){
+            if(!empty($val['touxiang']) && substr($val['touxiang'], 0, 5) == 'data/'){
+                $catfishcms['pinglun'][$key]['touxiang'] = Catfish::domain() . $val['touxiang'];
+            }
+        }
         $idStr = '';
         $now = time();
         foreach($catfishcms['pinglun'] as $key => $val){
@@ -607,6 +620,9 @@ class CatfishCMS
                     if(!in_array($cval['id'], $idArr)){
                         $cval['shijian'] = $this->timedif($cval['pinglunshijian'], $now);
                         $cval['pinglunshijian'] = $this->decompositiontime($cval['pinglunshijian']);
+                        if(!empty($cval['touxiang']) && substr($cval['touxiang'], 0, 5) == 'data/'){
+                            $cval['touxiang'] = Catfish::domain() . $cval['touxiang'];
+                        }
                         $catfishcms['pinglun'][] = $cval;
                     }
                 }
@@ -715,6 +731,11 @@ class CatfishCMS
             ->order('news_comments.createtime desc')
             ->paginate($this->everyPageShows);
         $catfishcms['pinglun'] = $catfishcomment->items();
+        foreach($catfishcms['pinglun'] as $key => $val){
+            if(!empty($val['touxiang']) && substr($val['touxiang'], 0, 5) == 'data/'){
+                $catfishcms['pinglun'][$key]['touxiang'] = Catfish::domain() . $val['touxiang'];
+            }
+        }
         $idStr = '';
         $now = time();
         foreach($catfishcms['pinglun'] as $key => $val){
@@ -735,6 +756,9 @@ class CatfishCMS
                     if(!in_array($cval['id'], $idArr)){
                         $cval['shijian'] = $this->timedif($cval['pinglunshijian'], $now);
                         $cval['pinglunshijian'] = $this->decompositiontime($cval['pinglunshijian']);
+                        if(!empty($cval['touxiang']) && substr($cval['touxiang'], 0, 5) == 'data/'){
+                            $cval['touxiang'] = Catfish::domain() . $cval['touxiang'];
+                        }
                         $catfishcms['pinglun'][] = $cval;
                     }
                 }
@@ -1367,6 +1391,11 @@ class CatfishCMS
                 ->limit($config['quantity'])
                 ->select();
         }
+        foreach($catfishcms as $key => $val){
+            if(!empty($val['touxiang']) && substr($val['touxiang'], 0, 5) == 'data/'){
+                $catfishcms[$key]['touxiang'] = Catfish::domain() . $val['touxiang'];
+            }
+        }
         return $this->convert($catfishcms, $config['aims']);
     }
     private function convertfirst(&$catfishcms)
@@ -1509,7 +1538,7 @@ class CatfishCMS
                 $catfishcms[$key]['xiaotu'] = '';
             }
             $domain = Catfish::domain();
-            if(!empty($catfishcms[$key]['shipin']) && substr($catfishcms['shipin'], 0, 5) == 'data/'){
+            if(!empty($catfishcms[$key]['shipin']) && substr($catfishcms[$key]['shipin'], 0, 5) == 'data/'){
                 $catfishcms[$key]['shipinExt'] = Catfish::getExtension($val['shipin']);
                 $catfishcms[$key]['shipin'] = $domain.$val['shipin'];
             }
