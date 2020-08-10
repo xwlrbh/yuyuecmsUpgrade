@@ -210,7 +210,7 @@ class Index extends CatfishCMS
     public function newslist()
     {
         $this->checkUser();
-        $data = Catfish::view('news','id,fabushijian,biaoti,review,pinglunshu,suolvetu,yuedu,istop,recommended')
+        $data = Catfish::view('news','id,fabushijian,biaoti,review,pinglunshu,suolvetu,shipin,zutu,wenjianzu,yuedu,istop,recommended')
             ->view('users','yonghu','users.id=news.uid')
             ->where('news.status','=',1)
             ->order('news.id desc')
@@ -897,7 +897,7 @@ class Index extends CatfishCMS
     public function productlist()
     {
         $this->checkUser();
-        $data = Catfish::view('product','id,fabushijian,biaoti,review,pinglunshu,suolvetu,yuedu,istop,recommended')
+        $data = Catfish::view('product','id,fabushijian,biaoti,review,pinglunshu,suolvetu,shipin,zutu,wenjianzu,yuedu,istop,recommended')
             ->view('users','yonghu','users.id=product.uid')
             ->where('product.status','=',1)
             ->order('product.id desc')
@@ -1651,7 +1651,7 @@ class Index extends CatfishCMS
     public function singlelist()
     {
         $this->checkUser();
-        $data = Catfish::view('page','id,fabushijian,biaoti,review,pinglunshu,suolvetu,yuedu')
+        $data = Catfish::view('page','id,fabushijian,biaoti,review,pinglunshu,suolvetu,shipin,zutu,wenjianzu,yuedu')
             ->view('users','yonghu','users.id=page.uid')
             ->where('page.status','=',1)
             ->order('page.id desc')

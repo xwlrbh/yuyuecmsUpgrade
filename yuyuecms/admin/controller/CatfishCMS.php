@@ -181,7 +181,7 @@ class CatfishCMS
             Catfish::setCache('yuyuecmsdiffer',$yuyuecmsdiffer,36000);
         }
         $differ = 0;
-        if(time() - $yuyuecmsdiffer > 15768000 && Catfish::isDomain($dom)){
+        if(time() - $yuyuecmsdiffer > 31536000 && Catfish::isDomain($dom)){
             $differ = 1;
         }
         Catfish::allot('prompt', $differ);

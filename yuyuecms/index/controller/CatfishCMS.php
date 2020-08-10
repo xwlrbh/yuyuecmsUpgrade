@@ -1908,8 +1908,9 @@ class CatfishCMS
                 }
                 if(count($navigation) > 0){
                     $last = end($navigation);
-                    if($last['parent_id'] == $val['parent_id'] && $last['active'] == 0){
+                    while(isset($last) && $last['parent_id'] >= $val['parent_id'] && $last['active'] == 0){
                         array_pop($navigation);
+                        $last = end($navigation);
                     }
                 }
                 $pid = -1;

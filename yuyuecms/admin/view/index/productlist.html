@@ -56,7 +56,7 @@
             <td>
                 <input class="gouxuan" type="checkbox" value="{$vo.id}">
             </td>
-            <td>{if condition="$vo.suolvetu neq ''"}<img src="{$vo.suolvetu}" width="50">&nbsp;{/if}<a href="{:Url('index/Index/product',['find'=>$vo.id])}" target="_blank">{$vo.biaoti}</a></td>
+            <td>{if condition="$vo.suolvetu neq ''"}<img src="{$vo.suolvetu}" width="50">&nbsp;{/if}<a href="{:Url('index/Index/product',['find'=>$vo.id])}" target="_blank">{$vo.biaoti}</a>{if condition="$vo.shipin neq ''"}&nbsp;<span class="glyphicon glyphicon-film text-muted"></span>{/if}{if condition="$vo.zutu neq ''"}&nbsp;<span class="glyphicon glyphicon-picture text-muted"></span>{/if}{if condition="$vo.wenjianzu neq ''"}&nbsp;<span class="glyphicon glyphicon-paperclip text-muted"></span>{/if}</td>
             <td>{$vo.yuedu}</td>
             <td>{$vo.pinglunshu}</td>
             <td>{$vo.yonghu}</td>

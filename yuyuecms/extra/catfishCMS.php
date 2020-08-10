@@ -7,7 +7,7 @@
  * Copyright: http://www.yuyue-cms.com All rights reserved.
  */
 return [
-    'version' => '1.4.15',
+    'version' => '1.4.18',
     'name' => '鱼跃CMS',
     'description' => 'Catfish(鲶鱼) CMS官方开发的专注于企业应用的高品质内容管理系统',
     'official' => 'yuyue-cms.com'
