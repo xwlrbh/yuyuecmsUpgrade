@@ -596,8 +596,14 @@ class Index extends CatfishCMS
             ->view('users','yonghu,email,touxiang','users.id=news_comments.uid')
             ->order('news_comments.createtime desc')
             ->paginate(20);
-        Catfish::allot('catfishcms', $catfish->items());
         Catfish::allot('pages', $catfish->render());
+        $catfishcms = $catfish->items();
+        foreach($catfishcms as $key => $val){
+            if(!empty($val['touxiang']) && substr($val['touxiang'], 0, 5) == 'data/'){
+                $catfishcms[$key]['touxiang'] = Catfish::domain() . $val['touxiang'];
+            }
+        }
+        Catfish::allot('catfishcms', $catfishcms);
         return $this->show(Catfish::lang('All comments'), 'news', 'newscomments');
     }
     public function newsshenhepinglun()
@@ -1478,8 +1484,14 @@ class Index extends CatfishCMS
             ->view('users','yonghu,email,touxiang','users.id=product_comments.uid')
             ->order('product_comments.createtime desc')
             ->paginate(20);
-        Catfish::allot('catfishcms', $catfish->items());
         Catfish::allot('pages', $catfish->render());
+        $catfishcms = $catfish->items();
+        foreach($catfishcms as $key => $val){
+            if(!empty($val['touxiang']) && substr($val['touxiang'], 0, 5) == 'data/'){
+                $catfishcms[$key]['touxiang'] = Catfish::domain() . $val['touxiang'];
+            }
+        }
+        Catfish::allot('catfishcms', $catfishcms);
         return $this->show(Catfish::lang('All comments'), 'product', 'productcomments');
     }
     public function productshenhepinglun()
@@ -1795,8 +1807,14 @@ class Index extends CatfishCMS
             ->view('users','yonghu,email,touxiang','users.id=page_comments.uid')
             ->order('page_comments.createtime desc')
             ->paginate(20);
-        Catfish::allot('catfishcms', $catfish->items());
         Catfish::allot('pages', $catfish->render());
+        $catfishcms = $catfish->items();
+        foreach($catfishcms as $key => $val){
+            if(!empty($val['touxiang']) && substr($val['touxiang'], 0, 5) == 'data/'){
+                $catfishcms[$key]['touxiang'] = Catfish::domain() . $val['touxiang'];
+            }
+        }
+        Catfish::allot('catfishcms', $catfishcms);
         return $this->show(Catfish::lang('All comments'), 'page', 'singlecomments');
     }
     public function pageshenhepinglun()
@@ -2886,7 +2904,7 @@ class Index extends CatfishCMS
         Catfish::allot('pages', $catfish->render());
         $catfishcms = $catfish->items();
         foreach($catfishcms as $key => $val){
-            if(!empty($val['touxiang'])){
+            if(!empty($val['touxiang']) && substr($val['touxiang'], 0, 5) == 'data/'){
                 $catfishcms[$key]['touxiang'] = Catfish::domain() . $val['touxiang'];
             }
         }

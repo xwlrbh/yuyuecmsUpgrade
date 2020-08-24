@@ -22,6 +22,7 @@ return [
     'search/:find' => 'index/Index/search',
     'search' => 'index/Index/search',
     'liuyan' => 'index/Index/liuyan',
+    'ask' => 'index/Index/ask',
     'error' => 'index/Index/error',
     'denglu' => 'login/Index/index',
     'tuichu' => 'login/Index/quit',

