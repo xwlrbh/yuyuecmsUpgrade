@@ -246,7 +246,7 @@ class Index extends CatfishCMS
             $end = $tmp;
         }
         if($fenlei != 0){
-            $data = Catfish::view('news','id,fabushijian,biaoti,review,pinglunshu,suolvetu,yuedu,istop,recommended')
+            $data = Catfish::view('news','id,fabushijian,biaoti,review,pinglunshu,suolvetu,shipin,zutu,wenjianzu,yuedu,istop,recommended')
                 ->view('news_cate_relationships','cateid','news_cate_relationships.stid=news.id')
                 ->view('users','yonghu','users.id=news.uid')
                 ->where('news.status','=',1)
@@ -264,7 +264,7 @@ class Index extends CatfishCMS
                 ]);
         }
         else{
-            $data = Catfish::view('news','id,fabushijian,biaoti,review,pinglunshu,suolvetu,yuedu,istop,recommended')
+            $data = Catfish::view('news','id,fabushijian,biaoti,review,pinglunshu,suolvetu,shipin,zutu,wenjianzu,yuedu,istop,recommended')
                 ->view('users','yonghu','users.id=news.uid')
                 ->where('news.status','=',1)
                 ->whereTime('news.fabushijian', 'between', [$start, $end])
@@ -995,7 +995,7 @@ class Index extends CatfishCMS
             $end = $tmp;
         }
         if($fenlei != 0){
-            $data = Catfish::view('product','id,fabushijian,biaoti,review,pinglunshu,suolvetu,yuedu,istop,recommended')
+            $data = Catfish::view('product','id,fabushijian,biaoti,review,pinglunshu,suolvetu,shipin,zutu,wenjianzu,yuedu,istop,recommended')
                 ->view('product_cate_relationships','cateid','product_cate_relationships.stid=product.id')
                 ->view('users','yonghu','users.id=product.uid')
                 ->where('product.status','=',1)
@@ -1013,7 +1013,7 @@ class Index extends CatfishCMS
                 ]);
         }
         else{
-            $data = Catfish::view('product','id,fabushijian,biaoti,review,pinglunshu,suolvetu,yuedu,istop,recommended')
+            $data = Catfish::view('product','id,fabushijian,biaoti,review,pinglunshu,suolvetu,shipin,zutu,wenjianzu,yuedu,istop,recommended')
                 ->view('users','yonghu','users.id=product.uid')
                 ->where('product.status','=',1)
                 ->whereTime('product.fabushijian', 'between', [$start, $end])
@@ -1700,7 +1700,7 @@ class Index extends CatfishCMS
             $start = $end;
             $end = $tmp;
         }
-        $data = Catfish::view('page','id,fabushijian,biaoti,review,pinglunshu,suolvetu,yuedu')
+        $data = Catfish::view('page','id,fabushijian,biaoti,review,pinglunshu,suolvetu,shipin,zutu,wenjianzu,yuedu')
             ->view('users','yonghu','users.id=page.uid')
             ->where('page.status','=',1)
             ->whereTime('page.fabushijian', 'between', [$start, $end])
@@ -3224,10 +3224,10 @@ class Index extends CatfishCMS
             $bkstr = '-- 鱼跃CMS数据库备份' . PHP_EOL . '-- 生成日期：' . date('Y-m-d H: i: s') . PHP_EOL . '-- Table prefix: ' . $dbPrefix . PHP_EOL . $bkstr;
             $bkpath = date('Ymd');
             $bkname = date('Y-m-d_H-i-s') . '_' . md5(Catfish::getRandom() . ' ' . time() . ' ' . rand());
-            $bk = ROOT_PATH . 'data' . DS . 'dbbackup' . DS . $bkpath;
-            if(!is_dir($bk)){
-                mkdir($bk, 0777, true);
-            }
+            $bk = ROOT_PATH . 'data' . DS . 'dbbackup';
+            Catfish::addIndex($bk, true);
+            $bk = $bk . DS . $bkpath;
+            Catfish::addIndex($bk, true);
             $sqlf = $bkname.'.yyb';
             file_put_contents($bk.DS.$sqlf, gzcompress($bkstr));
             $dbrec = Catfish::get('dbbackup');
