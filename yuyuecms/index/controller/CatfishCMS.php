@@ -24,9 +24,21 @@ class CatfishCMS
         }
         if($loadoptions){
             $this->options();
-            if(is_file(ROOT_PATH.'public/theme/'.$this->template.'/lang/'.Catfish::detectLang().'.php')){
-                Catfish::loadLang(ROOT_PATH.'public/theme/'.$this->template.'/lang/'.Catfish::detectLang().'.php');
+            $lang = Catfish::detectLang();
+            if(is_file(ROOT_PATH.'public/theme/'.$this->template.'/lang/'.$lang.'.php')){
+                Catfish::loadLang(ROOT_PATH.'public/theme/'.$this->template.'/lang/'.$lang.'.php');
             }
+            Catfish::allot('lang', $lang);
+            $iscn = 0;
+            if(substr($lang, 0, 2) == 'zh'){
+                $iscn = 1;
+            }
+            Catfish::allot('iscn', $iscn);
+            $isen = 0;
+            if(substr($lang, 0, 2) == 'en'){
+                $isen = 1;
+            }
+            Catfish::allot('isen', $isen);
         }
         $this->autologin();
         Catfish::setConfig('paginate.type', 'bootstrap4');
