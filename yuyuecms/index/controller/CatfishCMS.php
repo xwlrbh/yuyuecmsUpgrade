@@ -1638,13 +1638,24 @@ class CatfishCMS
         $lishi = Catfish::getCache('lishi');
         if($lishi === false){
             $lishi = Catfish::db('history')
-                ->field('shijian,biaoti,xiangqing')
+                ->field('shijian,tu,shipin,biaoti,xiangqing')
                 ->where('status',1)
                 ->order('shijian asc')
                 ->select();
+            $domain = Catfish::domain();
             foreach($lishi as $key => $val){
                 if($val['shijian'] == '2000-01-01 00:00:00'){
                     $lishi[$key]['shijian'] = '';
+                }
+                if(!empty($val['tu']) && substr($val['tu'], 0, 5) == 'data/'){
+                    $lishi[$key]['tu'] = $domain.$val['tu'];
+                }
+                if(!empty($val['shipin']) && substr($val['shipin'], 0, 5) == 'data/'){
+                    $lishi[$key]['shipinExt'] = Catfish::getExtension($val['shipin']);
+                    $lishi[$key]['shipin'] = $domain.$val['shipin'];
+                }
+                else{
+                    $lishi[$key]['shipinExt'] = '';
                 }
             }
             Catfish::setCache('lishi',$lishi,$this->time);

@@ -14,7 +14,7 @@
         <tbody>
         {volist name="catfishcms" id="vo"}
         <tr>
-            <td>{$vo.biaoti}</td>
+            <td>{$vo.biaoti}{if condition="$vo.tu neq ''"}&nbsp;<span class="glyphicon glyphicon-picture text-muted"></span>{/if}{if condition="$vo.shipin neq ''"}&nbsp;<span class="glyphicon glyphicon-film text-muted"></span>{/if}</td>
             <td>{$vo.xiangqing}</td>
             <td>{$vo.shijian}</td>
             <td>

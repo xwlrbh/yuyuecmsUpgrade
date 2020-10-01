@@ -2478,7 +2478,7 @@ class Index extends CatfishCMS
     {
         $this->checkUser();
         $catfish = Catfish::db('history')
-            ->field('id,shijian,biaoti,xiangqing')
+            ->field('id,shijian,tu,shipin,biaoti,xiangqing')
             ->order('shijian desc')
             ->paginate(20);
         $catfishitems = $catfish->items();
@@ -2506,8 +2506,10 @@ class Index extends CatfishCMS
             }
             else{
                 Catfish::db('history')->insert([
-                    'biaoti' => $data['biaoti'],
                     'shijian' => $shijian,
+                    'tu' => Catfish::getPost('zstu'),
+                    'shipin' => Catfish::getPost('shipin'),
+                    'biaoti' => $data['biaoti'],
                     'xiangqing' => Catfish::getPost('xiangqing')
                 ]);
                 Catfish::removeCache('lishi');
@@ -2532,15 +2534,17 @@ class Index extends CatfishCMS
                 Catfish::db('history')
                     ->where('id', Catfish::getPost('id'))
                     ->update([
-                        'biaoti' => $data['biaoti'],
                         'shijian' => $shijian,
+                        'tu' => Catfish::getPost('zstu'),
+                        'shipin' => Catfish::getPost('shipin'),
+                        'biaoti' => $data['biaoti'],
                         'xiangqing' => Catfish::getPost('xiangqing')
                     ]);
                 Catfish::removeCache('lishi');
             }
         }
         $catfishID = Catfish::getGet('catfish');
-        $catfishItem = Catfish::db('history')->where('id',$catfishID)->field('id,shijian,biaoti,xiangqing')->find();
+        $catfishItem = Catfish::db('history')->where('id',$catfishID)->field('id,shijian,tu,shipin,biaoti,xiangqing')->find();
         if($catfishItem['shijian'] == '2000-01-01 00:00:00'){
             $catfishItem['shijian'] = '';
         }

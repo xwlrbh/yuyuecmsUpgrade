@@ -1,5 +1,7 @@
 {include file="index/header" /}
 <link href="{$domain}public/common/datetimepicker/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet">
+<link href="{$domain}public/common/uploadify/uploadify.css" type="text/css" rel="stylesheet">
+<link href="{$domain}public/common/confirm/jquery-confirm.css" type="text/css" rel="stylesheet">
 <form method="post" action="">
     <div class="col-md-12">
         <div class="form-group">
@@ -14,6 +16,24 @@
             <label>{:lang('Detailed description')}</label>
             <textarea class="form-control" rows="8" name="xiangqing"></textarea>
         </div>
+        <div class="form-group">
+            <label>{:lang('Displayed picture')}：</label>
+            <div class="col-md-12">
+                <div id="zstudiv"></div>
+                <div><a href="#!" class="hidden" id="quxiaozstu">{:lang('Cancel image')}</a></div>
+            </div>
+            <div id="zstuupload"></div>
+            <input type="hidden" value="" name="zstu" id="zstu">
+        </div>
+        <div class="form-group">
+            <label>{:lang('Video')}：</label>
+            <div class="col-md-12">
+                <div id="videodiv"></div>
+                <div><a href="#!" class="hidden" id="quxiaoshipin">{:lang('Cancel video')}</a></div>
+            </div>
+            <div id="videoupload"></div>
+            <input type="hidden" value="" name="shipin" id="shipin">
+        </div>
         <hr>
         <div class="text-center">
             <input type="hidden" name="verification" value="{$verification}">
@@ -21,6 +41,14 @@
         </div>
     </div>
 </form>
+<div class="hidden" id="buttonText">{:lang('Select Image')}</div>
+<div class="hidden" id="upload_image_url">{:Url('admin/Index/uploadimage')}</div>
+<div class="hidden" id="alertitle">{:lang('Upload error')}</div>
+<div class="hidden" id="upload_delfile_url">{:Url('admin/Index/delfile')}</div>
+<div class="hidden" id="buttonText_video">{:lang('Upload video')}</div>
+<div class="hidden" id="upload_video_url">{:Url('admin/Index/uploadvideo')}</div>
 <script type="text/javascript" src="{$domain}public/common/datetimepicker/js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="{$domain}public/common/uploadify/jquery.uploadify.js"></script>
+<script src="{$domain}public/common/confirm/jquery-confirm.js"></script>
 <script src="{$domain}public/common/js/corporatehistoryadd.js"></script>
 {include file="index/footer" /}
