@@ -332,6 +332,7 @@ class Index extends CatfishCMS
                     'alias' => $data['alias'],
                     'description' => Catfish::getPost('miaoshu'),
                     'template' => Catfish::getPost('template'),
+                    'tu' => Catfish::getPost('zstu'),
                     'parent_id' => $data['shangji']
                 ]);
             }
@@ -369,6 +370,7 @@ class Index extends CatfishCMS
                     'alias' => $data['alias'],
                     'description' => Catfish::getPost('miaoshu'),
                     'template' => Catfish::getPost('template'),
+                    'tu' => Catfish::getPost('zstu'),
                     'parent_id' => $data['shangji']
                 ]);
             }
@@ -402,6 +404,7 @@ class Index extends CatfishCMS
                         'alias' => $data['alias'],
                         'description' => Catfish::getPost('miaoshu'),
                         'template' => Catfish::getPost('template'),
+                        'tu' => Catfish::getPost('zstu'),
                         'parent_id' => $data['shangji']
                     ]);
             }
@@ -1091,6 +1094,7 @@ class Index extends CatfishCMS
                     'alias' => $data['alias'],
                     'description' => Catfish::getPost('miaoshu'),
                     'template' => Catfish::getPost('template'),
+                    'tu' => Catfish::getPost('zstu'),
                     'parent_id' => $data['shangji']
                 ]);
             }
@@ -1128,6 +1132,7 @@ class Index extends CatfishCMS
                     'alias' => $data['alias'],
                     'description' => Catfish::getPost('miaoshu'),
                     'template' => Catfish::getPost('template'),
+                    'tu' => Catfish::getPost('zstu'),
                     'parent_id' => $data['shangji']
                 ]);
             }
@@ -1161,6 +1166,7 @@ class Index extends CatfishCMS
                         'alias' => $data['alias'],
                         'description' => Catfish::getPost('miaoshu'),
                         'template' => Catfish::getPost('template'),
+                        'tu' => Catfish::getPost('zstu'),
                         'parent_id' => $data['shangji']
                     ]);
             }

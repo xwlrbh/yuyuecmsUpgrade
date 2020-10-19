@@ -911,7 +911,9 @@ class CatfishCMS
             }
             else{
                 $order = $this->getorder($chanpinliebiao['method']);
-                $product_cate = [];
+                $product_cate = [
+                    'tu' => ''
+                ];
                 $catfish = Catfish::view('product','id,'.$field)
                     ->view('users','nicheng','users.id=product.uid')
                     ->where('product.status','=',1)
@@ -921,10 +923,18 @@ class CatfishCMS
             }
             $catfishcms[$chanpinliebiao['biaoqian']] = $this->convert($catfish->items(),'product');
             $catfishcms['pages'] = $catfish->render();
+            if(empty($catfishcms['pages'])){
+                $catfishcms['pages'] = '';
+            }
+            if(!empty($product_cate['tu']) && substr($product_cate['tu'], 0, 5) == 'data/'){
+                $domain = Catfish::domain();
+                $product_cate['tu'] = $domain.$product_cate['tu'];
+            }
             $catfishcms['related'] = $product_cate;
             Catfish::setCache($cachename,$catfishcms,$this->time);
         }
         $sy['neirong'] = $catfishcms[$chanpinliebiao['biaoqian']];
+        $sy['tu'] = $catfishcms['related']['tu'];
         Catfish::allot('yy', $sy);
         Catfish::allot('pages', $catfishcms['pages']);
         $biaoti = isset($catfishcms['related']['catename']) ? $catfishcms['related']['catename'] : Catfish::lang('Product list');
@@ -986,7 +996,9 @@ class CatfishCMS
             }
             else{
                 $order = $this->getorder($xinwenliebiao['method']);
-                $news_cate = [];
+                $news_cate = [
+                    'tu' => ''
+                ];
                 $catfish = Catfish::view('news','id,'.$field)
                     ->view('users','nicheng','users.id=news.uid')
                     ->where('news.status','=',1)
@@ -996,10 +1008,18 @@ class CatfishCMS
             }
             $catfishcms[$xinwenliebiao['biaoqian']] = $this->convert($catfish->items(),'news');
             $catfishcms['pages'] = $catfish->render();
+            if(empty($catfishcms['pages'])){
+                $catfishcms['pages'] = '';
+            }
+            if(!empty($news_cate['tu']) && substr($news_cate['tu'], 0, 5) == 'data/'){
+                $domain = Catfish::domain();
+                $news_cate['tu'] = $domain.$news_cate['tu'];
+            }
             $catfishcms['related'] = $news_cate;
             Catfish::setCache($cachename,$catfishcms,$this->time);
         }
         $sy['neirong'] = $catfishcms[$xinwenliebiao['biaoqian']];
+        $sy['tu'] = $catfishcms['related']['tu'];
         Catfish::allot('yy', $sy);
         Catfish::allot('pages', $catfishcms['pages']);
         $biaoti = isset($catfishcms['related']['catename']) ? $catfishcms['related']['catename'] : Catfish::lang('News list');
@@ -1095,6 +1115,9 @@ class CatfishCMS
             }
             $catfishcms[$shouye['biaoqian']] = $this->convert($catfish->items(),$tn);
             $catfishcms['pages'] = $catfish->render();
+            if(empty($catfishcms['pages'])){
+                $catfishcms['pages'] = '';
+            }
             Catfish::setCache($cachename,$catfishcms,$this->time);
         }
         $sy['neirong'] = $catfishcms[$shouye['biaoqian']];

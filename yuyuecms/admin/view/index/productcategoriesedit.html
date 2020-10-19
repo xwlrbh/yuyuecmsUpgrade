@@ -1,4 +1,5 @@
 {include file="index/header" /}
+<link href="{$domain}public/common/uploadify/uploadify.css" type="text/css" rel="stylesheet">
 <link href="{$domain}public/common/confirm/jquery-confirm.css" type="text/css" rel="stylesheet">
 <form method="post" action="">
     <div class="col-md-12">
@@ -35,6 +36,15 @@
             <label>{:lang('Category description')}</label>
             <textarea class="form-control" rows="3" name="miaoshu">{$catfishItem.description}</textarea>
         </div>
+        <div class="form-group">
+            <label>{:lang('Displayed picture')}：</label>
+            <div class="col-md-12">
+                <div id="zstudiv"></div>
+                <div><a href="#!" class="hidden" id="quxiaozstu">{:lang('Cancel image')}</a></div>
+            </div>
+            <div id="zstuupload"></div>
+            <input type="hidden" value="{$catfishItem.tu}" name="zstu" id="zstu">
+        </div>
         <hr>
         <div class="text-center">
             <input type="hidden" name="verification" value="{$verification}">
@@ -42,6 +52,11 @@
         </div>
     </div>
 </form>
+<div class="hidden" id="buttonText">{:lang('Select Image')}</div>
+<div class="hidden" id="upload_image_url">{:Url('admin/Index/uploadimage')}</div>
+<div class="hidden" id="alertitle">{:lang('Upload error')}</div>
+<div class="hidden" id="upload_delfile_url">{:Url('admin/Index/delfile')}</div>
+<script type="text/javascript" src="{$domain}public/common/uploadify/jquery.uploadify.js"></script>
 <script src="{$domain}public/common/confirm/jquery-confirm.js"></script>
 <script src="{$domain}public/common/js/productcategoriesadd.js"></script>
 {include file="index/footer" /}
