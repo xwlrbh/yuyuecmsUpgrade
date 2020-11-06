@@ -911,9 +911,16 @@ class CatfishCMS
             }
             else{
                 $order = $this->getorder($chanpinliebiao['method']);
-                $product_cate = [
-                    'tu' => ''
-                ];
+                $product_cate = Catfish::db('product_all')->where('id',1)->field('yeming as catename,guanjianzi,description,template,tu')->find();
+                if(empty($product_cate)){
+                    $product_cate = [
+                        'catename' => '',
+                        'guanjianzi' => '',
+                        'description' => '',
+                        'template' => '',
+                        'tu' => ''
+                    ];
+                }
                 $catfish = Catfish::view('product','id,'.$field)
                     ->view('users','nicheng','users.id=product.uid')
                     ->where('product.status','=',1)
@@ -996,9 +1003,16 @@ class CatfishCMS
             }
             else{
                 $order = $this->getorder($xinwenliebiao['method']);
-                $news_cate = [
-                    'tu' => ''
-                ];
+                $news_cate = Catfish::db('news_all')->where('id',1)->field('yeming as catename,guanjianzi,description,template,tu')->find();
+                if(empty($news_cate)){
+                    $news_cate = [
+                        'catename' => '',
+                        'guanjianzi' => '',
+                        'description' => '',
+                        'template' => '',
+                        'tu' => ''
+                    ];
+                }
                 $catfish = Catfish::view('news','id,'.$field)
                     ->view('users','nicheng','users.id=news.uid')
                     ->where('news.status','=',1)

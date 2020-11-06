@@ -69,4 +69,6 @@ return [
     'Upgrade unsuccessful' => '升级失败',
     'Upload upgrade package and upgrade system' => '上传升级包并升级系统',
     'Your operation is illegal' => '您的操作非法',
+    'All category page settings' => '所有分类页设置',
+    'Category page name' => '分类页名称',
 ];

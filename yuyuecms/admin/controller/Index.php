@@ -310,6 +310,44 @@ class Index extends CatfishCMS
         Catfish::allot('fenlei', Catfish::getSort('news','id,catename,description,template,parent_id','&#12288;'));
         return $this->show(Catfish::lang('Categories of news'), 'news', 'categoriesnews');
     }
+    public function categoriesnewsall()
+    {
+        $this->checkUser();
+        if(Catfish::isPost()){
+            $cate = Catfish::db('news_all')->where('id',1)->field('id')->find();
+            if(empty($cate)){
+                Catfish::db('news_all')->insert([
+                    'id' => 1,
+                    'yeming' => Catfish::getPost('yeming'),
+                    'description' => Catfish::getPost('miaoshu'),
+                    'template' => Catfish::getPost('template'),
+                    'tu' => Catfish::getPost('zstu')
+                ]);
+            }
+            else{
+                Catfish::db('news_all')
+                    ->where('id', 1)
+                    ->update([
+                        'yeming' => Catfish::getPost('yeming'),
+                        'description' => Catfish::getPost('miaoshu'),
+                        'template' => Catfish::getPost('template'),
+                        'tu' => Catfish::getPost('zstu')
+                    ]);
+            }
+        }
+        Catfish::allot('muban', Catfish::getTemplate('newslist'));
+        $cateall = Catfish::db('news_all')->where('id',1)->find();
+        if(empty($cateall)){
+            $cateall = [
+                'yeming' => '',
+                'description' => '',
+                'template' => '',
+                'tu' => ''
+            ];
+        }
+        Catfish::allot('catfishItem', $cateall);
+        return $this->show(Catfish::lang('All category page settings'), 'news', 'categoriesnews');
+    }
     public function categoriesnewsadd()
     {
         $this->checkUser();
@@ -1071,6 +1109,44 @@ class Index extends CatfishCMS
         }
         Catfish::allot('fenlei', Catfish::getSort('product','id,catename,description,template,parent_id','&#12288;'));
         return $this->show(Catfish::lang('Product Categories'), 'product', 'productcategories');
+    }
+    public function productcategoriesall()
+    {
+        $this->checkUser();
+        if(Catfish::isPost()){
+            $cate = Catfish::db('product_all')->where('id',1)->field('id')->find();
+            if(empty($cate)){
+                Catfish::db('product_all')->insert([
+                    'id' => 1,
+                    'yeming' => Catfish::getPost('yeming'),
+                    'description' => Catfish::getPost('miaoshu'),
+                    'template' => Catfish::getPost('template'),
+                    'tu' => Catfish::getPost('zstu')
+                ]);
+            }
+            else{
+                Catfish::db('product_all')
+                    ->where('id', 1)
+                    ->update([
+                        'yeming' => Catfish::getPost('yeming'),
+                        'description' => Catfish::getPost('miaoshu'),
+                        'template' => Catfish::getPost('template'),
+                        'tu' => Catfish::getPost('zstu')
+                    ]);
+            }
+        }
+        Catfish::allot('muban', Catfish::getTemplate('productlist'));
+        $cateall = Catfish::db('product_all')->where('id',1)->find();
+        if(empty($cateall)){
+            $cateall = [
+                'yeming' => '',
+                'description' => '',
+                'template' => '',
+                'tu' => ''
+            ];
+        }
+        Catfish::allot('catfishItem', $cateall);
+        return $this->show(Catfish::lang('All category page settings'), 'product', 'productcategories');
     }
     public function productcategoriesadd()
     {
