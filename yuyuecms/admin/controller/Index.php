@@ -319,6 +319,7 @@ class Index extends CatfishCMS
                 Catfish::db('news_all')->insert([
                     'id' => 1,
                     'yeming' => Catfish::getPost('yeming'),
+                    'guanjianzi' => str_replace('，', ',', Catfish::getPost('guanjianzi')),
                     'description' => Catfish::getPost('miaoshu'),
                     'template' => Catfish::getPost('template'),
                     'tu' => Catfish::getPost('zstu')
@@ -329,6 +330,7 @@ class Index extends CatfishCMS
                     ->where('id', 1)
                     ->update([
                         'yeming' => Catfish::getPost('yeming'),
+                        'guanjianzi' => str_replace('，', ',', Catfish::getPost('guanjianzi')),
                         'description' => Catfish::getPost('miaoshu'),
                         'template' => Catfish::getPost('template'),
                         'tu' => Catfish::getPost('zstu')
@@ -340,6 +342,7 @@ class Index extends CatfishCMS
         if(empty($cateall)){
             $cateall = [
                 'yeming' => '',
+                'guanjianzi' => '',
                 'description' => '',
                 'template' => '',
                 'tu' => ''
@@ -368,6 +371,7 @@ class Index extends CatfishCMS
                 Catfish::db('news_cate')->insert([
                     'catename' => $data['fenleim'],
                     'alias' => $data['alias'],
+                    'guanjianzi' => str_replace('，', ',', Catfish::getPost('guanjianzi')),
                     'description' => Catfish::getPost('miaoshu'),
                     'template' => Catfish::getPost('template'),
                     'tu' => Catfish::getPost('zstu'),
@@ -406,6 +410,7 @@ class Index extends CatfishCMS
                 Catfish::db('news_cate')->insert([
                     'catename' => $data['fenleim'],
                     'alias' => $data['alias'],
+                    'guanjianzi' => str_replace('，', ',', Catfish::getPost('guanjianzi')),
                     'description' => Catfish::getPost('miaoshu'),
                     'template' => Catfish::getPost('template'),
                     'tu' => Catfish::getPost('zstu'),
@@ -440,6 +445,7 @@ class Index extends CatfishCMS
                     ->update([
                         'catename' => $data['fenleim'],
                         'alias' => $data['alias'],
+                        'guanjianzi' => str_replace('，', ',', Catfish::getPost('guanjianzi')),
                         'description' => Catfish::getPost('miaoshu'),
                         'template' => Catfish::getPost('template'),
                         'tu' => Catfish::getPost('zstu'),
@@ -1119,6 +1125,7 @@ class Index extends CatfishCMS
                 Catfish::db('product_all')->insert([
                     'id' => 1,
                     'yeming' => Catfish::getPost('yeming'),
+                    'guanjianzi' => str_replace('，', ',', Catfish::getPost('guanjianzi')),
                     'description' => Catfish::getPost('miaoshu'),
                     'template' => Catfish::getPost('template'),
                     'tu' => Catfish::getPost('zstu')
@@ -1129,6 +1136,7 @@ class Index extends CatfishCMS
                     ->where('id', 1)
                     ->update([
                         'yeming' => Catfish::getPost('yeming'),
+                        'guanjianzi' => str_replace('，', ',', Catfish::getPost('guanjianzi')),
                         'description' => Catfish::getPost('miaoshu'),
                         'template' => Catfish::getPost('template'),
                         'tu' => Catfish::getPost('zstu')
@@ -1140,6 +1148,7 @@ class Index extends CatfishCMS
         if(empty($cateall)){
             $cateall = [
                 'yeming' => '',
+                'guanjianzi' => '',
                 'description' => '',
                 'template' => '',
                 'tu' => ''
@@ -1168,6 +1177,7 @@ class Index extends CatfishCMS
                 Catfish::db('product_cate')->insert([
                     'catename' => $data['fenleim'],
                     'alias' => $data['alias'],
+                    'guanjianzi' => str_replace('，', ',', Catfish::getPost('guanjianzi')),
                     'description' => Catfish::getPost('miaoshu'),
                     'template' => Catfish::getPost('template'),
                     'tu' => Catfish::getPost('zstu'),
@@ -1206,6 +1216,7 @@ class Index extends CatfishCMS
                 Catfish::db('product_cate')->insert([
                     'catename' => $data['fenleim'],
                     'alias' => $data['alias'],
+                    'guanjianzi' => str_replace('，', ',', Catfish::getPost('guanjianzi')),
                     'description' => Catfish::getPost('miaoshu'),
                     'template' => Catfish::getPost('template'),
                     'tu' => Catfish::getPost('zstu'),
@@ -1240,6 +1251,7 @@ class Index extends CatfishCMS
                     ->update([
                         'catename' => $data['fenleim'],
                         'alias' => $data['alias'],
+                        'guanjianzi' => str_replace('，', ',', Catfish::getPost('guanjianzi')),
                         'description' => Catfish::getPost('miaoshu'),
                         'template' => Catfish::getPost('template'),
                         'tu' => Catfish::getPost('zstu'),
