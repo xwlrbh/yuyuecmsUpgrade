@@ -375,7 +375,7 @@ class CatfishCMS
             Catfish::redirect('index/Index/productlist');
             exit();
         }
-        $field = 'id,uid,guanjianzi,laiyuan,fabushijian,zhengwen,biaoti,zhaiyao,yuanjia,xianjia,comment_status,gengxinshijian,pinglunshu,suolvetu,shipin,zutu,wenjianzu,template,yuedu,zan';
+        $field = 'id,uid,guanjianzi,laiyuan,fabushijian,zhengwen,biaoti,zhaiyao,yuanjia,xianjia,comment_status,gengxinshijian,pinglunshu,suolvetu,tu as zhanshitu,shipin,zutu,wenjianzu,template,yuedu,zan';
         if(!preg_match("/^[1-9][0-9]*$/", $find)){
             $catfishcms = Catfish::db('product')
                 ->where('alias',$find)
@@ -434,7 +434,7 @@ class CatfishCMS
         $this->convertone($catfishcms);
         $template = $catfishcms['template'];
         unset($catfishcms['template']);
-        $field = 'id,guanjianzi,laiyuan,fabushijian,alias,zhengwen,biaoti,zhaiyao,yuanjia,xianjia,gengxinshijian,pinglunshu,suolvetu,shipin,zutu,yuedu,zan';
+        $field = 'id,guanjianzi,laiyuan,fabushijian,alias,zhengwen,biaoti,zhaiyao,yuanjia,xianjia,gengxinshijian,pinglunshu,suolvetu,tu as zhanshitu,shipin,zutu,yuedu,zan';
         $catfishup = Catfish::db('product')
             ->where('id','<',$catfishcms['id'])
             ->where('status','=',1)
@@ -516,7 +516,7 @@ class CatfishCMS
             Catfish::redirect('index/Index/error');
             exit();
         }
-        $field = 'id,uid,guanjianzi,fabushijian,zhengwen,biaoti,zhaiyao,comment_status,gengxinshijian,pinglunshu,suolvetu,shipin,zutu,wenjianzu,template,yuedu,zan';
+        $field = 'id,uid,guanjianzi,fabushijian,zhengwen,biaoti,zhaiyao,comment_status,gengxinshijian,pinglunshu,suolvetu,tu as zhanshitu,shipin,zutu,wenjianzu,template,yuedu,zan';
         if(!preg_match("/^[1-9][0-9]*$/", $find)){
             $catfishcms = Catfish::db('page')
                 ->where('alias',$find)
@@ -569,7 +569,7 @@ class CatfishCMS
         $this->convertone($catfishcms);
         $template = $catfishcms['template'];
         unset($catfishcms['template']);
-        $field = 'id,guanjianzi,fabushijian,alias,zhengwen,biaoti,zhaiyao,gengxinshijian,pinglunshu,suolvetu,shipin,zutu,yuedu,zan';
+        $field = 'id,guanjianzi,fabushijian,alias,zhengwen,biaoti,zhaiyao,gengxinshijian,pinglunshu,suolvetu,tu as zhanshitu,shipin,zutu,yuedu,zan';
         $catfishup = Catfish::db('page')
             ->where('id','<',$catfishcms['id'])
             ->where('status','=',1)
@@ -651,7 +651,7 @@ class CatfishCMS
             Catfish::redirect('index/Index/newslist');
             exit();
         }
-        $field = 'id,uid,guanjianzi,laiyuan,fabushijian,zhengwen,biaoti,zhaiyao,comment_status,gengxinshijian,pinglunshu,suolvetu,shipin,zutu,wenjianzu,template,yuedu,zan';
+        $field = 'id,uid,guanjianzi,laiyuan,fabushijian,zhengwen,biaoti,zhaiyao,comment_status,gengxinshijian,pinglunshu,suolvetu,tu as zhanshitu,shipin,zutu,wenjianzu,template,yuedu,zan';
         if(!preg_match("/^[1-9][0-9]*$/", $find)){
             $catfishcms = Catfish::db('news')
                 ->where('alias',$find)
@@ -705,7 +705,7 @@ class CatfishCMS
         $this->convertone($catfishcms);
         $template = $catfishcms['template'];
         unset($catfishcms['template']);
-        $field = 'id,guanjianzi,laiyuan,fabushijian,alias,zhengwen,biaoti,zhaiyao,gengxinshijian,pinglunshu,suolvetu,shipin,zutu,yuedu,zan';
+        $field = 'id,guanjianzi,laiyuan,fabushijian,alias,zhengwen,biaoti,zhaiyao,gengxinshijian,pinglunshu,suolvetu,tu as zhanshitu,shipin,zutu,yuedu,zan';
         $catfishup = Catfish::db('news')
             ->where('id','<',$catfishcms['id'])
             ->where('status','=',1)

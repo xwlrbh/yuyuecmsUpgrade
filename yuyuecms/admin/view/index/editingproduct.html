@@ -55,6 +55,15 @@
             <p class="help-block">{:lang('Can bind the theme file in the "product" directory under the current theme')}</p>
         </div>
         <div class="form-group">
+            <label>{:lang('Displayed picture')}：</label>
+            <div class="col-md-12">
+                <div id="zstudiv"></div>
+                <div><a href="#!" class="hidden" id="quxiaozstu">{:lang('Cancel image')}</a></div>
+            </div>
+            <div id="zstuupload"></div>
+            <input type="hidden" value="{$catfishItem.tu}" name="zstu" id="zstu">
+        </div>
+        <div class="form-group">
             <label>{:lang('Video')}：</label>
             <div class="col-md-12">
                 <div id="videodiv"></div>

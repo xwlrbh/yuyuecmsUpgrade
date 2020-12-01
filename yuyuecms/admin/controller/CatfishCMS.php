@@ -120,7 +120,7 @@ class CatfishCMS
             }
         }
     }
-    protected function deleteResource($suolvetu = '', $shipin = '', $zutu = '', $wenjianzu = '')
+    protected function deleteResource($suolvetu = '', $shipin = '', $zutu = '', $wenjianzu = '', $tu = '')
     {
         if(!empty($suolvetu)){
             $this->deletethumb($suolvetu);
@@ -139,6 +139,9 @@ class CatfishCMS
             foreach($arr as $val){
                 $this->deletefile($val);
             }
+        }
+        if(!empty($tu)){
+            $this->deletefile($tu);
         }
     }
     private function options()

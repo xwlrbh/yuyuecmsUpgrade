@@ -49,6 +49,7 @@ class Index extends CatfishCMS
                     'comment_status' => Catfish::getPost('pinglun'),
                     'gengxinshijian' => Catfish::getPost('fabushijian'),
                     'suolvetu' => Catfish::getPost('suolvetu'),
+                    'tu' => Catfish::getPost('zstu'),
                     'shipin' => Catfish::getPost('shipin'),
                     'zutu' => trim(Catfish::getPost('zutu'),','),
                     'wenjianzu' => trim(Catfish::getPost('wenjianzu'),','),
@@ -109,6 +110,7 @@ class Index extends CatfishCMS
                         'comment_status' => Catfish::getPost('pinglun'),
                         'gengxinshijian' => Catfish::getPost('fabushijian'),
                         'suolvetu' => Catfish::getPost('suolvetu'),
+                        'tu' => Catfish::getPost('zstu'),
                         'shipin' => Catfish::getPost('shipin'),
                         'zutu' => trim(Catfish::getPost('zutu'),','),
                         'wenjianzu' => trim(Catfish::getPost('wenjianzu'),','),
@@ -210,7 +212,7 @@ class Index extends CatfishCMS
     public function newslist()
     {
         $this->checkUser();
-        $data = Catfish::view('news','id,fabushijian,biaoti,review,pinglunshu,suolvetu,shipin,zutu,wenjianzu,yuedu,istop,recommended')
+        $data = Catfish::view('news','id,fabushijian,biaoti,review,pinglunshu,suolvetu,tu,shipin,zutu,wenjianzu,yuedu,istop,recommended')
             ->view('users','yonghu','users.id=news.uid')
             ->where('news.status','=',1)
             ->order('news.id desc')
@@ -246,7 +248,7 @@ class Index extends CatfishCMS
             $end = $tmp;
         }
         if($fenlei != 0){
-            $data = Catfish::view('news','id,fabushijian,biaoti,review,pinglunshu,suolvetu,shipin,zutu,wenjianzu,yuedu,istop,recommended')
+            $data = Catfish::view('news','id,fabushijian,biaoti,review,pinglunshu,suolvetu,tu,shipin,zutu,wenjianzu,yuedu,istop,recommended')
                 ->view('news_cate_relationships','cateid','news_cate_relationships.stid=news.id')
                 ->view('users','yonghu','users.id=news.uid')
                 ->where('news.status','=',1)
@@ -264,7 +266,7 @@ class Index extends CatfishCMS
                 ]);
         }
         else{
-            $data = Catfish::view('news','id,fabushijian,biaoti,review,pinglunshu,suolvetu,shipin,zutu,wenjianzu,yuedu,istop,recommended')
+            $data = Catfish::view('news','id,fabushijian,biaoti,review,pinglunshu,suolvetu,tu,shipin,zutu,wenjianzu,yuedu,istop,recommended')
                 ->view('users','yonghu','users.id=news.uid')
                 ->where('news.status','=',1)
                 ->whereTime('news.fabushijian', 'between', [$start, $end])
@@ -734,7 +736,7 @@ class Index extends CatfishCMS
     {
         if(Catfish::isPost()){
             $id = Catfish::getPost('id');
-            $re = Catfish::db('news')->where('id',$id)->field('suolvetu,shipin,zutu,wenjianzu')->find();
+            $re = Catfish::db('news')->where('id',$id)->field('suolvetu,tu,shipin,zutu,wenjianzu')->find();
             Catfish::db('news')
                 ->where('id', $id)
                 ->delete();
@@ -744,7 +746,7 @@ class Index extends CatfishCMS
             Catfish::db('news_comments')
                 ->where('stid',$id)
                 ->delete();
-            $this->deleteResource($re['suolvetu'], $re['shipin'], $re['zutu'], $re['wenjianzu']);
+            $this->deleteResource($re['suolvetu'], $re['shipin'], $re['zutu'], $re['wenjianzu'], $re['tu']);
             echo 'ok';
             exit();
         }
@@ -762,7 +764,7 @@ class Index extends CatfishCMS
                     break;
                 case 'pshanchu':
                     $id = Catfish::getPost('zcuan');
-                    $re = Catfish::db('news')->field('suolvetu,shipin,zutu,wenjianzu')->where('id','in', $id)->select();
+                    $re = Catfish::db('news')->field('suolvetu,tu,shipin,zutu,wenjianzu')->where('id','in', $id)->select();
                     Catfish::db('news')
                         ->where('id','in', $id)
                         ->delete();
@@ -773,7 +775,7 @@ class Index extends CatfishCMS
                         ->where('stid','in',$id)
                         ->delete();
                     foreach((array)$re as $val){
-                        $this->deleteResource($val['suolvetu'], $val['shipin'], $val['zutu'], $val['wenjianzu']);
+                        $this->deleteResource($val['suolvetu'], $val['shipin'], $val['zutu'], $val['wenjianzu'], $val['tu']);
                     }
                     break;
             }
@@ -809,6 +811,7 @@ class Index extends CatfishCMS
                     'comment_status' => Catfish::getPost('pinglun'),
                     'gengxinshijian' => Catfish::getPost('fabushijian'),
                     'suolvetu' => Catfish::getPost('suolvetu'),
+                    'tu' => Catfish::getPost('zstu'),
                     'shipin' => Catfish::getPost('shipin'),
                     'zutu' => trim(Catfish::getPost('zutu'),','),
                     'wenjianzu' => trim(Catfish::getPost('wenjianzu'),','),
@@ -885,6 +888,7 @@ class Index extends CatfishCMS
                         'comment_status' => Catfish::getPost('pinglun'),
                         'gengxinshijian' => Catfish::getPost('fabushijian'),
                         'suolvetu' => Catfish::getPost('suolvetu'),
+                        'tu' => Catfish::getPost('zstu'),
                         'shipin' => Catfish::getPost('shipin'),
                         'zutu' => trim(Catfish::getPost('zutu'),','),
                         'wenjianzu' => trim(Catfish::getPost('wenjianzu'),','),
@@ -950,7 +954,7 @@ class Index extends CatfishCMS
     public function productlist()
     {
         $this->checkUser();
-        $data = Catfish::view('product','id,fabushijian,biaoti,review,pinglunshu,suolvetu,shipin,zutu,wenjianzu,yuedu,istop,recommended')
+        $data = Catfish::view('product','id,fabushijian,biaoti,review,pinglunshu,suolvetu,tu,shipin,zutu,wenjianzu,yuedu,istop,recommended')
             ->view('users','yonghu','users.id=product.uid')
             ->where('product.status','=',1)
             ->order('product.id desc')
@@ -1042,7 +1046,7 @@ class Index extends CatfishCMS
             $end = $tmp;
         }
         if($fenlei != 0){
-            $data = Catfish::view('product','id,fabushijian,biaoti,review,pinglunshu,suolvetu,shipin,zutu,wenjianzu,yuedu,istop,recommended')
+            $data = Catfish::view('product','id,fabushijian,biaoti,review,pinglunshu,suolvetu,tu,shipin,zutu,wenjianzu,yuedu,istop,recommended')
                 ->view('product_cate_relationships','cateid','product_cate_relationships.stid=product.id')
                 ->view('users','yonghu','users.id=product.uid')
                 ->where('product.status','=',1)
@@ -1060,7 +1064,7 @@ class Index extends CatfishCMS
                 ]);
         }
         else{
-            $data = Catfish::view('product','id,fabushijian,biaoti,review,pinglunshu,suolvetu,shipin,zutu,wenjianzu,yuedu,istop,recommended')
+            $data = Catfish::view('product','id,fabushijian,biaoti,review,pinglunshu,suolvetu,tu,shipin,zutu,wenjianzu,yuedu,istop,recommended')
                 ->view('users','yonghu','users.id=product.uid')
                 ->where('product.status','=',1)
                 ->whereTime('product.fabushijian', 'between', [$start, $end])
@@ -1657,7 +1661,7 @@ class Index extends CatfishCMS
     {
         if(Catfish::isPost()){
             $id = Catfish::getPost('id');
-            $re = Catfish::db('product')->where('id',$id)->field('suolvetu,shipin,zutu')->find();
+            $re = Catfish::db('product')->where('id',$id)->field('suolvetu,tu,shipin,zutu,wenjianzu')->find();
             Catfish::db('product')
                 ->where('id', $id)
                 ->delete();
@@ -1667,7 +1671,7 @@ class Index extends CatfishCMS
             Catfish::db('product_comments')
                 ->where('stid',$id)
                 ->delete();
-            $this->deleteResource($re['suolvetu'], $re['shipin'], $re['zutu']);
+            $this->deleteResource($re['suolvetu'], $re['shipin'], $re['zutu'], $re['wenjianzu'], $re['tu']);
             echo 'ok';
             exit();
         }
@@ -1697,7 +1701,7 @@ class Index extends CatfishCMS
                     break;
                 case 'pshanchu':
                     $id = Catfish::getPost('zcuan');
-                    $re = Catfish::db('product')->field('suolvetu,shipin,zutu')->where('id','in', $id)->select();
+                    $re = Catfish::db('product')->field('suolvetu,tu,shipin,zutu,wenjianzu')->where('id','in', $id)->select();
                     Catfish::db('product')
                         ->where('id','in', $id)
                         ->delete();
@@ -1708,7 +1712,7 @@ class Index extends CatfishCMS
                         ->where('stid','in',$id)
                         ->delete();
                     foreach((array)$re as $val){
-                        $this->deleteResource($val['suolvetu'], $val['shipin'], $val['zutu']);
+                        $this->deleteResource($val['suolvetu'], $val['shipin'], $val['zutu'], $val['wenjianzu'], $val['tu']);
                     }
                     break;
             }
@@ -1742,6 +1746,7 @@ class Index extends CatfishCMS
                     'comment_status' => Catfish::getPost('pinglun'),
                     'gengxinshijian' => Catfish::getPost('fabushijian'),
                     'suolvetu' => Catfish::getPost('suolvetu'),
+                    'tu' => Catfish::getPost('zstu'),
                     'shipin' => Catfish::getPost('shipin'),
                     'zutu' => trim(Catfish::getPost('zutu'),','),
                     'wenjianzu' => trim(Catfish::getPost('wenjianzu'),','),
@@ -1757,7 +1762,7 @@ class Index extends CatfishCMS
     public function singlelist()
     {
         $this->checkUser();
-        $data = Catfish::view('page','id,fabushijian,biaoti,review,pinglunshu,suolvetu,shipin,zutu,wenjianzu,yuedu')
+        $data = Catfish::view('page','id,fabushijian,biaoti,review,pinglunshu,suolvetu,tu,shipin,zutu,wenjianzu,yuedu')
             ->view('users','yonghu','users.id=page.uid')
             ->where('page.status','=',1)
             ->order('page.id desc')
@@ -1794,7 +1799,7 @@ class Index extends CatfishCMS
             $start = $end;
             $end = $tmp;
         }
-        $data = Catfish::view('page','id,fabushijian,biaoti,review,pinglunshu,suolvetu,shipin,zutu,wenjianzu,yuedu')
+        $data = Catfish::view('page','id,fabushijian,biaoti,review,pinglunshu,suolvetu,tu,shipin,zutu,wenjianzu,yuedu')
             ->view('users','yonghu','users.id=page.uid')
             ->where('page.status','=',1)
             ->whereTime('page.fabushijian', 'between', [$start, $end])
@@ -1846,6 +1851,7 @@ class Index extends CatfishCMS
                         'comment_status' => Catfish::getPost('pinglun'),
                         'gengxinshijian' => Catfish::getPost('fabushijian'),
                         'suolvetu' => Catfish::getPost('suolvetu'),
+                        'tu' => Catfish::getPost('zstu'),
                         'shipin' => Catfish::getPost('shipin'),
                         'zutu' => trim(Catfish::getPost('zutu'),','),
                         'wenjianzu' => trim(Catfish::getPost('wenjianzu'),','),
@@ -1980,14 +1986,14 @@ class Index extends CatfishCMS
     {
         if(Catfish::isPost()){
             $id = Catfish::getPost('id');
-            $re = Catfish::db('page')->where('id',$id)->field('suolvetu,shipin,zutu')->find();
+            $re = Catfish::db('page')->where('id',$id)->field('suolvetu,tu,shipin,zutu,wenjianzu')->find();
             Catfish::db('page')
                 ->where('id', $id)
                 ->delete();
             Catfish::db('page_comments')
                 ->where('pageid',$id)
                 ->delete();
-            $this->deleteResource($re['suolvetu'], $re['shipin'], $re['zutu']);
+            $this->deleteResource($re['suolvetu'], $re['shipin'], $re['zutu'], $re['wenjianzu'], $re['tu']);
             echo 'ok';
             exit();
         }
@@ -2017,7 +2023,7 @@ class Index extends CatfishCMS
                     break;
                 case 'pshanchu':
                     $id = Catfish::getPost('zcuan');
-                    $re = Catfish::db('page')->field('suolvetu,shipin,zutu')->where('id','in', $id)->select();
+                    $re = Catfish::db('page')->field('suolvetu,tu,shipin,zutu,wenjianzu')->where('id','in', $id)->select();
                     Catfish::db('page')
                         ->where('id','in', $id)
                         ->delete();
@@ -2025,7 +2031,7 @@ class Index extends CatfishCMS
                         ->where('pageid','in',$id)
                         ->delete();
                     foreach((array)$re as $val){
-                        $this->deleteResource($val['suolvetu'], $val['shipin'], $val['zutu']);
+                        $this->deleteResource($val['suolvetu'], $val['shipin'], $val['zutu'], $val['wenjianzu'], $val['tu']);
                     }
                     break;
             }
