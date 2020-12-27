@@ -7,9 +7,7 @@
  * Copyright: http://www.yuyue-cms.com All rights reserved.
  */
 namespace app\admin\controller;
-
 use catfishcms\Catfish;
-
 class Index extends CatfishCMS
 {
     public function index()
@@ -2110,7 +2108,6 @@ class Index extends CatfishCMS
             if(!empty($instr)){
                 $catfishslide = Catfish::db('slide')->where('id', 'in', $instr)->field('tupian')->select();
             }
-
             Catfish::db('slide_cate')
                 ->where('id', $id)
                 ->delete();
@@ -2552,6 +2549,72 @@ class Index extends CatfishCMS
         }
         Catfish::allot('catfishItem', $catfishItem);
         return $this->show(Catfish::lang('Home show'), 'websiterelated', 'homeshow');
+    }
+    public function alipay()
+    {
+        $this->checkUser();
+        if(Catfish::isPost()){
+            $data = $this->alipayPost();
+            if(!is_array($data)){
+                echo $data;
+                exit();
+            }
+            else{
+                $publickey = Catfish::getPost('publickey', false);
+                $yingyonggongyao = Catfish::getPost('yingyonggongyao');
+                $zhifubaogongyao = Catfish::getPost('zhifubaogongyao');
+                $zhifubaogen = Catfish::getPost('zhifubaogen');
+                if($data['qianming'] == 'gongyao' && empty($publickey)){
+                    echo Catfish::lang('Alipay public key must be filled in');
+                    exit();
+                }
+                elseif($data['qianming'] == 'gongyaozhengshu'){
+                    if(empty($yingyonggongyao)){
+                        echo Catfish::lang('Application public key certificate must be uploaded');
+                        exit();
+                    }
+                    elseif(empty($zhifubaogongyao)){
+                        echo Catfish::lang('Alipay public key certificate must be uploaded');
+                        exit();
+                    }
+                    elseif(empty($zhifubaogen)){
+                        echo Catfish::lang('Alipay root certificate must be uploaded');
+                        exit();
+                    }
+                }
+                $svarr = [
+                    'appid' => $data['appid'],
+                    'merchantuid' => $data['merchantuid'],
+                    'privatekey' => $data['privatekey'],
+                    'qianming' => $data['qianming'],
+                    'publickey' => $publickey,
+                    'yingyonggongyao' => $yingyonggongyao,
+                    'zhifubaogongyao' => $zhifubaogongyao,
+                    'zhifubaogen' => $zhifubaogen
+                ];
+                Catfish::set('alipay_config', serialize($svarr));
+                echo 'ok';
+                exit();
+            }
+        }
+        $catfishItem = Catfish::get('alipay_config');
+        if(!empty($catfishItem)){
+            $catfishItem = unserialize($catfishItem);
+        }
+        else{
+            $catfishItem = [
+                'appid' => '',
+                'merchantuid' => '',
+                'privatekey' => '',
+                'qianming' => 'gongyao',
+                'publickey' => '',
+                'yingyonggongyao' => '',
+                'zhifubaogongyao' => '',
+                'zhifubaogen' => ''
+            ];
+        }
+        Catfish::allot('catfishItem', $catfishItem);
+        return $this->show(Catfish::lang('Alipay'), 'websiterelated', 'alipay', true);
     }
     public function companyprofile()
     {
@@ -3896,5 +3959,24 @@ class Index extends CatfishCMS
             }
         }
         $this->recurseCopy($folder, ROOT_PATH);
+    }
+    public function uploadcertificate()
+    {
+        if(Catfish::isPost()){
+            ini_set('max_execution_time', 0);
+            ini_set('memory_limit', -1);
+            $file = request()->file('file');
+            $validate = [
+                'ext' => 'crt'
+            ];
+            $file->validate($validate);
+            $info = $file->move(ROOT_PATH . 'data' . DS . 'crt', false);
+            if($info){
+                echo 'data/crt/'.str_replace('\\','/',$info->getSaveName());
+            }else{
+                echo $file->getError();
+            }
+        }
+        exit();
     }
 }

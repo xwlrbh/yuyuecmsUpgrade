@@ -27,4 +27,9 @@ return [
     'denglu' => 'login/Index/index',
     'tuichu' => 'login/Index/quit',
     'zhuce' => 'login/Index/register',
+    'pay' => 'pay/Index/index',
+    'payinstall' => 'pay/Index/payinstall',
+    'alipay/:id' => 'pay/Index/alipay',
+    'alinotify' => 'pay/Index/alinotify',
+    'alireturn' => 'pay/Index/alireturn',
 ];

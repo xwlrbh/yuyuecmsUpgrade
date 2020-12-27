@@ -1,0 +1,113 @@
+{include file="index/header" /}
+<link href="{$domain}public/common/uploadify/uploadify.css" type="text/css" rel="stylesheet">
+<link href="{$domain}public/common/confirm/jquery-confirm.css" type="text/css" rel="stylesheet">
+<form method="post" action="" id="alipayForm">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="appid">AppId&nbsp;<b><span class="text-danger">*</span></b></label>
+            <input type="text" class="form-control" value="{$catfishItem.appid}" id="appid" name="appid">
+        </div>
+        <div class="form-group">
+            <label for="appid">{:lang('Merchant UID')}&nbsp;<b><span class="text-danger">*</span></b></label>
+            <input type="text" class="form-control" value="{$catfishItem.merchantuid}" id="merchantuid" name="merchantuid">
+        </div>
+        <div class="form-group">
+            <label for="appid">{:lang('Application private key')}&nbsp;<b><span class="text-danger">*</span></b></label>
+            <textarea class="form-control" rows="8" name="privatekey">{$catfishItem.privatekey}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="appid">{:lang('Signature method')}&nbsp;<b><span class="text-danger">*</span></b></label>
+            <div>
+                <label class="radio-inline">
+                    <input type="radio" name="qianming" id="qianming1" value="gongyao"{if condition="$catfishItem.qianming eq 'gongyao'"} checked{/if}> {:lang('Public key')}
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="qianming" id="qianming2" value="gongyaozhengshu"{if condition="$catfishItem.qianming eq 'gongyaozhengshu'"} checked{/if}> {:lang('Public key certificate')}
+                </label>
+            </div>
+            <div id="qianmingdiv" class="hidden">{$catfishItem.qianming}</div>
+        </div>
+        <div id="gongyaodiv">
+            <div class="form-group">
+                <label for="appid">{:lang('Alipay public key')}&nbsp;<b><span class="text-danger">*</span></b></label>
+                <textarea class="form-control" rows="8" name="publickey">{$catfishItem.publickey}</textarea>
+            </div>
+        </div>
+        <div id="zhengshudiv">
+            <div class="form-group">
+                <label for="zhengshu1">{:lang('Apply public key certificate')}&nbsp;<b><span class="text-danger">*</span></b></label>
+                <input type="hidden" value="{$catfishItem.yingyonggongyao}" name="yingyonggongyao" id="zhengshu1">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div id="upload1"></div>
+                        </div>
+                        <div class="col-md-8">
+                            <div id="zhengshuwenjiandiv1" class="hidden">
+                                <div>
+                                    <b>{:lang('Certificate file')}:</b><span id="zhengshuming1"></span>
+                                </div>
+                                <div>
+                                    <button type="button" id="quxiao1" class="btn btn-default btn-sm hidden_" style="margin-top: 10px;">{:lang('Cancel certificate')}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="zhengshu2">{:lang('Alipay public key certificate')}&nbsp;<b><span class="text-danger">*</span></b></label>
+                <input type="hidden" value="{$catfishItem.zhifubaogongyao}" name="zhifubaogongyao" id="zhengshu2">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div id="upload2"></div>
+                        </div>
+                        <div class="col-md-8">
+                            <div id="zhengshuwenjiandiv2" class="hidden">
+                                <div>
+                                    <b>{:lang('Certificate file')}:</b><span id="zhengshuming2"></span>
+                                </div>
+                                <div>
+                                    <button type="button" id="quxiao2" class="btn btn-default btn-sm hidden_" style="margin-top: 10px;">{:lang('Cancel certificate')}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="zhengshu3">{:lang('Alipay root certificate')}&nbsp;<b><span class="text-danger">*</span></b></label>
+                <input type="hidden" value="{$catfishItem.zhifubaogen}" name="zhifubaogen" id="zhengshu3">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div id="upload3"></div>
+                        </div>
+                        <div class="col-md-8">
+                            <div id="zhengshuwenjiandiv3" class="hidden">
+                                <div>
+                                    <b>{:lang('Certificate file')}:</b><span id="zhengshuming3"></span>
+                                </div>
+                                <div>
+                                    <button type="button" id="quxiao3" class="btn btn-default btn-sm hidden_" style="margin-top: 10px;">{:lang('Cancel certificate')}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <input type="hidden" name="verification" id="verification" value="{$verification}">
+            <button type="button" class="btn btn-default" id="baocun">{:lang('Save')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing.gif" width="16" height="16"></span></button>
+        </div>
+    </div><br><br>
+</form>
+<div class="hidden" id="uploadfiletext">{:lang('Upload certificate file')}</div>
+<div class="hidden" id="upload_certificate_url">{:Url('admin/Index/uploadcertificate')}</div>
+<div class="hidden" id="upload_delfile_url">{:Url('admin/Index/delfile')}</div>
+<script type="text/javascript" src="{$domain}public/common/uploadify/jquery.uploadify.js"></script>
+<script src="{$domain}public/common/confirm/jquery-confirm.js"></script>
+<script src="{$domain}public/common/js/alipay.js"></script>
+{include file="index/footer" /}

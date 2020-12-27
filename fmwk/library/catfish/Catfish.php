@@ -7,7 +7,6 @@
  * Copyright: http://www.yuyue-cms.com All rights reserved.
  */
 namespace catfishcms;
-
 use think\Request;
 use think\Session;
 use think\Cookie;
@@ -23,7 +22,6 @@ use think\response\Redirect;
 use think\exception\HttpResponseException;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-
 class Catfish
 {
     private static $catfishcms;
@@ -754,7 +752,6 @@ class Catfish
         if ('html' == strtolower($type)) {
             $template = Config::get('template');
             $view = Config::get('view_replace_str');
-
             $result = View::instance($template, $view)
                 ->fetch(Config::get('dispatch_success_tmpl'), $result);
         }
@@ -1039,5 +1036,16 @@ class Catfish
         }
         $file = $file . DS . 'index.html';
         file_put_contents($file, $index);
+    }
+    public static function load($files)
+    {
+        if(is_array($files)){
+            foreach($files as $file){
+                require_once $file;
+            }
+        }
+        else{
+            require_once $files;
+        }
     }
 }

@@ -7,9 +7,7 @@
  * Copyright: http://www.yuyue-cms.com All rights reserved.
  */
 namespace app\user\controller;
-
 use catfishcms\Catfish;
-
 class Index extends CatfishCMS
 {
     public function index()

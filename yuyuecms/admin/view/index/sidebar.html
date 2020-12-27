@@ -165,6 +165,13 @@
                             {:lang('Home show')}
                             </button>
                         </a>
+                        {if condition="$openpay == 1"}
+                        <a href="{:Url('admin/Index/alipay')}">
+                            <button type="button" class="btn btn-default btn-block{eq name="option" value="alipay"} btn-primary{/eq}">
+                            {:lang('Alipay')}
+                            </button>
+                        </a>
+                        {/if}
                     </div>
                 </div>
             </div>
