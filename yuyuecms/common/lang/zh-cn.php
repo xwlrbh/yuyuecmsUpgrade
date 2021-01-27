@@ -92,4 +92,5 @@ return [
     'Application public key certificate must be uploaded' => '应用公钥证书必须上传',
     'Alipay public key certificate must be uploaded' => '支付宝公钥证书必须上传',
     'Alipay root certificate must be uploaded' => '支付宝根证书必须上传',
+    'Theme setting' => '主题设置',
 ];

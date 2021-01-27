@@ -7,6 +7,7 @@
  * Copyright: http://www.yuyue-cms.com All rights reserved.
  */
 namespace catfishcms;
+use think\Hook;
 use think\Request;
 use think\Session;
 use think\Cookie;
@@ -1047,5 +1048,28 @@ class Catfish
         else{
             require_once $files;
         }
+    }
+    public static function execHook($class, $tag = '', &$params = null, $extra = null)
+    {
+        return Hook::exec($class, $tag, $params, $extra);
+    }
+    public static function addHook($tag, $behavior, $first = false)
+    {
+        Hook::add($tag, $behavior, $first);
+    }
+    public static function listen($tag, &$params = null, $extra = null, $once = false)
+    {
+        return Hook::listen($tag, $params, $extra, $once);
+    }
+    public static function themeOutput($templateName, $templateFile)
+    {
+        if(substr($templateFile, -5) != '.html'){
+            $templateFile .= '.html';
+        }
+        return self::output(ROOT_PATH . 'public/theme/' . $templateName . '/theme/' . $templateFile);
+    }
+    public static function themeAssign($name, $value = '')
+    {
+        return self::allot('t_' . $name, $value);
     }
 }

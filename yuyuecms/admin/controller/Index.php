@@ -3227,8 +3227,19 @@ class Index extends CatfishCMS
     {
         $this->checkUser();
         if(Catfish::isPost()){
-            Catfish::set('template', Catfish::getPost('themeName'));
+            $template = Catfish::getPost('themeName');
+            Catfish::set('template', $template);
             Catfish::removeCache('options');
+            $params = [
+                'original' => $this->template,
+                'target' => $template
+            ];
+            $this->themeHook('closeTheme', $params, $this->template);
+            $params = [
+                'original' => $this->template,
+                'target' => $template
+            ];
+            $this->themeHook('openTheme', $params, $template);
         }
         $current = Catfish::get('template');
         $catfishThemes = [];
@@ -3242,22 +3253,48 @@ class Index extends CatfishCMS
                 $url = $domain.'public/theme/'.$tmpdir.'/screenshot.jpg';
             }
             if($tmpdir == $current){
+                $setting = 0;
+                if($this->hasThemeSetting($tmpdir)){
+                    $setting = 1;
+                }
                 array_unshift($catfishThemes,[
                     'name' => $tmpdir,
                     'url' => $url,
-                    'open' => 1
+                    'open' => 1,
+                    'setting' => $setting
                 ]);
             }
             else{
                 array_push($catfishThemes,[
                     'name' => $tmpdir,
                     'url' => $url,
-                    'open' => 0
+                    'open' => 0,
+                    'setting' => 0
                 ]);
             }
         }
         Catfish::allot('catfishThemes', $catfishThemes);
         return $this->show(Catfish::lang('Themes'), 'xitong', 'themes');
+    }
+    public function themesetting()
+    {
+        $this->checkUser();
+        $lang = Catfish::detectLang();
+        $langPath = ROOT_PATH.'public/theme/'.$this->template.'/theme/lang/'.$lang.'.php';
+        if(is_file($langPath)){
+            Catfish::loadLang($langPath);
+        }
+        if(Catfish::isPost(false)){
+            $params = Catfish::getPost();
+            $this->themeHook('themeSettingPost', $params);
+        }
+        $params = [
+            'template' => $this->template,
+            'html' => ''
+        ];
+        $this->themeHook('themeSetting', $params);
+        Catfish::allot('themeSetting', $params['html']);
+        return $this->show(Catfish::lang('Theme setting'), 'xitong', 'themesetting');
     }
     public function personal()
     {

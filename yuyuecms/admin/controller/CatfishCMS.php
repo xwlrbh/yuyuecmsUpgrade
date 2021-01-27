@@ -10,6 +10,7 @@ namespace app\admin\controller;
 use catfishcms\Catfish;
 class CatfishCMS
 {
+    protected $template = 'default';
     protected function checkUser()
     {
         if(!Catfish::hasSession('user_id') && Catfish::hasCookie('user_id')){
@@ -168,6 +169,10 @@ class CatfishCMS
                     $root .= 'index.php/';
                 }
                 Catfish::allot('root', $root);
+            }
+            elseif($val['name'] == 'template'){
+                $this->template = $val['value'];
+                Catfish::allot($val['name'], $val['value']);
             }
             else
             {
@@ -606,5 +611,28 @@ class CatfishCMS
             'qianming' => Catfish::getPost('qianming')
         ];
         return $this->validatePost($rule, $msg, $data);
+    }
+    protected function themeHook($hook, &$params = [], $theme = '')
+    {
+        if(empty($theme)){
+            $theme = $this->template;
+        }
+        $uftheme = ucfirst($theme);
+        if(is_file(ROOT_PATH.'public' . DS . 'theme' . DS . $theme . DS . $uftheme .'.php')){
+            return Catfish::execHook('theme\\' . $theme . '\\' . $uftheme, $hook, $params);
+        }
+        return false;
+    }
+    protected function hasThemeSetting($theme)
+    {
+        $uftheme = ucfirst($theme);
+        $themeFile = ROOT_PATH.'public' . DS . 'theme' . DS . $theme . DS . $uftheme .'.php';
+        if(is_file($themeFile)){
+            $themeContent = file_get_contents($themeFile);
+            if(preg_match("/public\s+function\s+themeSetting\s*\(/i", $themeContent)){
+                return true;
+            }
+        }
+        return false;
     }
 }

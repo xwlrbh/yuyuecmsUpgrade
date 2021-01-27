@@ -9,6 +9,9 @@
             <p>
                 {eq name="vo.open" value="1"}
                 <a href="#" class="btn btn-primary" role="button" disabled="disabled">{:lang('Active')}</a>
+                {eq name="vo.setting" value="1"}
+                <a href="{:Url('admin/Index/themesetting')}" class="btn btn-default" role="button">{:lang('Theme setting')}</a>
+                {/eq}
                 {else/}
             <form method="post" action="">
                 <input type="hidden" value="{$vo.name}" name="themeName">
