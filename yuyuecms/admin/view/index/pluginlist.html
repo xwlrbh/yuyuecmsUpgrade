@@ -1,0 +1,59 @@
+{include file="index/header" /}
+<link href="{$domain}public/common/confirm/jquery-confirm.css" type="text/css" rel="stylesheet">
+<form method="post" action="" enctype="multipart/form-data" id="uploadpluginform" class="form-inline pull-right">
+    <div class="form-group hidden">
+        <input type="file" name="file" id="uploadplugininput">
+    </div>
+    <input type="hidden" name="verification" value="{$verification}">
+    <button type="button" class="btn btn-default" id="uploadplugin">{:lang('Upload plugin')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing.gif" width="16" height="16"></span></button>
+</form>
+<div class="clearfix"></div><br>
+<div class="col-md-12">
+    <form class="form-inline" method="post" action="">
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>{:lang('Plug-in')}</th>
+                        <th>{:lang('Plug-in name')}</th>
+                        <th>{:lang('Author')}</th>
+                        <th>{:lang('Version')}</th>
+                        <th>{:lang('Plugin description')}</th>
+                        <th>{:lang('Status')}</th>
+                        <th>{:lang('Operation')}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {volist name="data" id="vo"}
+                    <tr>
+                        <td>{$vo.plugin}</td>
+                        <td>{$vo.name}</td>
+                        <td>{$vo.author}</td>
+                        <td>{$vo.version}</td>
+                        <td>{$vo.description}</td>
+                        <td>
+                            {if condition="$vo.open eq 1"}<span class="text-success"><span class="glyphicon glyphicon-ok"></span> {:lang('Turn on')}</span>
+                            {else /}<span class="text-muted">{:lang('Shut down')}</span>
+                            {/if}
+                        </td>
+                        <td>
+                            <a href="#!" data-plugin="{$vo.plugin}" class="guanbi{if condition="$vo.open neq 1"} hidden{/if}">{:lang('Shut down')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing.gif" width="16" height="16"></span></a>
+                            <a href="#!" data-plugin="{$vo.plugin}" class="qiyong{if condition="$vo.open eq 1"} hidden{/if}">{:lang('Turn on')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing.gif" width="16" height="16"></span></a>
+                            &nbsp;|&nbsp;
+                            <a class="twitter" data-plugin="{$vo.plugin}" data-title="{:lang('Confirm to delete?')}" href="#!">{:lang('Delete')}</a>
+                        </td>
+                    </tr>
+                    {/volist}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="hidden" id="buxianshi">{:lang('Shut down')}</div>
+<div class="hidden" id="xianshi">{:lang('Turn on')}</div>
+<div class="hidden" id="onlyzipfiles">{:lang('Only upload zip files')}</div>
+<script src="{$domain}public/common/confirm/jquery-confirm.js"></script>
+<script src="{$domain}public/common/js/pluginlist.js"></script>
+{include file="index/footer" /}

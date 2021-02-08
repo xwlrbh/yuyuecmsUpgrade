@@ -48,7 +48,6 @@ class CatfishCMS
         Catfish::allot('backstageMenu', $backstageMenu);
         Catfish::allot('option', $option);
         Catfish::allot('star', $star);
-        Catfish::allot('verification', Catfish::verifyCode());
         return Catfish::out($template);
     }
     protected function categoriesnewsPost()
@@ -192,6 +191,35 @@ class CatfishCMS
         }
         Catfish::allot('prompt', $differ);
         Catfish::allot('openpay', Catfish::get('openpay'));
+        $pluginsOpened = Catfish::get('plugins_opened');
+        $pluginItem = [];
+        if(!empty($pluginsOpened)){
+            $pluginsOpened = unserialize($pluginsOpened);
+            foreach($pluginsOpened as $key => $val){
+                $params = [
+                    'pluginName' => $val
+                ];
+                $this->openCloseHook($val, 'addAdminPlugin', $params);
+                if(isset($params['item'])){
+                    $this->getext($params['item'], $pluginItem);
+                }
+            }
+        }
+        $uftheme = ucfirst($this->template);
+        if(is_file(ROOT_PATH.'public' . DS . 'theme' . DS . $this->template . DS . $uftheme .'.php')){
+            $params = [
+                'pluginName' => ''
+            ];
+            $this->themeHook('addAdminPlugin', $params, $this->template);
+            if(isset($params['item'])){
+                $this->getext($params['item'], $pluginItem, $this->template);
+            }
+        }
+        $hasPlugin = count($pluginItem);
+        Catfish::allot('hasPlugin', $hasPlugin);
+        Catfish::allot('pluginItem', $pluginItem);
+        Catfish::allot('numberOfPlugins', count($pluginItem,COUNT_NORMAL));
+        Catfish::allot('verification', Catfish::verifyCode());
     }
     protected function order($table)
     {
@@ -634,5 +662,126 @@ class CatfishCMS
             }
         }
         return false;
+    }
+    protected function openClosePlugin($pluginName, $isopen = true)
+    {
+        $pluginsOpened = Catfish::get('plugins_opened');
+        if(empty($pluginsOpened)){
+            $pluginsOpened = [];
+        }
+        else{
+            $pluginsOpened = unserialize($pluginsOpened);
+        }
+        if($isopen){
+            $pluginFile = ROOT_PATH.'plugins'.DS.$pluginName.DS.ucfirst($pluginName).'.php';
+            if(!in_array($pluginName, $pluginsOpened) && is_file($pluginFile)){
+                $pluginsOpened[] = $pluginName;
+            }
+            $params = [
+                'pluginName' => $pluginName
+            ];
+            $this->openCloseHook($pluginName, 'openPlugin', $params);
+        }
+        else{
+            foreach($pluginsOpened as $key => $val){
+                if($val == $pluginName){
+                    unset($pluginsOpened[$key]);
+                    $params = [
+                        'pluginName' => $pluginName
+                    ];
+                    $this->openCloseHook($pluginName, 'closePlugin', $params);
+                }
+            }
+        }
+        Catfish::set('plugins_opened', serialize($pluginsOpened));
+    }
+    protected function openCloseHook($pluginName, $hook, &$params = [])
+    {
+        $ufpluginName = ucfirst($pluginName);
+        $pluginPath = ROOT_PATH.'plugins' . DS . $pluginName . DS . $ufpluginName .'.php';
+        if(is_file($pluginPath)){
+            return Catfish::execHook('plugin\\' . $pluginName . '\\' . $ufpluginName, $hook, $params);
+        }
+        return false;
+    }
+    protected function deleteFolder($folder)
+    {
+        $this->delFolder($folder);
+        if(is_dir($folder)){
+            @rmdir($folder);
+        }
+    }
+    protected function movePlugin($folderPath)
+    {
+        $folder = $folderPath;
+        $hasphp = glob($folder . DS . '*.php');
+        while(!is_array($hasphp) || count($hasphp) < 1){
+            $farr = glob($folder . DS . '*', GLOB_ONLYDIR);
+            if(is_array($farr) && count($farr) > 0){
+                $folder = $farr[0];
+                $hasphp = glob($folder . DS . '*.php');
+            }
+            else{
+                break;
+            }
+        }
+        $pluginName = basename($folder);
+        $pluginPath = ROOT_PATH . DS . 'plugins' . DS . $pluginName;
+        if(!is_dir($pluginPath)){
+            mkdir($pluginPath, 0777, true);
+            $this->recurseCopy($folder, $pluginPath);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    protected function untoup($str)
+    {
+        $strArr = explode('-', $str);
+        if(is_array($strArr) && count($strArr) > 0){
+            $str = array_shift($strArr);
+            $strArr = array_map(function($v){
+                return ucfirst($v);
+            }, $strArr);
+            $str .= implode('', $strArr);
+        }
+        return $str;
+    }
+    protected function plantHook($hook, &$params = [])
+    {
+        $execArr = [];
+        $pluginsOpened = Catfish::get('plugins_opened');
+        if(!empty($pluginsOpened)){
+            $pluginsOpened = unserialize($pluginsOpened);
+            foreach($pluginsOpened as $key => $val){
+                $ufval = ucfirst($val);
+                $execArr[] = 'plugin\\' . $val . '\\' . $ufval;
+            }
+        }
+        $uftheme = ucfirst($this->template);
+        if(is_file(ROOT_PATH.'public' . DS . 'theme' . DS . $this->template . DS . $uftheme .'.php')){
+            $execArr[] = 'theme\\' . $this->template . '\\' . $uftheme;
+        }
+        if(count($execArr) > 0){
+            Catfish::addHook($hook, $execArr);
+            return Catfish::listen($hook, $params);
+        }
+        return false;
+    }
+    private function getext($itemArr, &$pluginItem, $theme = '_theme')
+    {
+        foreach($itemArr as $ikey => $ival){
+            $ival['alias'] = Catfish::lang($ival['alias']);
+            $ival['url'] = Catfish::url('admin/Index/plugin', ['name' => strtolower(preg_replace('/([A-Z])/', '-${1}', $ival['name'])), 'func' => strtolower(preg_replace('/([A-Z])/', '-${1}', $ival['function'])), 'plugin' => strtolower(preg_replace('/([A-Z])/', '-${1}', $ival['plugin'])), 'theme' => strtolower(preg_replace('/([A-Z])/', '-${1}', $theme)), 'alias' => urlencode($ival['alias'])]);
+            if($ival['way'] == 'top'){
+                unset($ival['way']);
+                array_unshift($pluginItem,$ival);
+            }
+            else{
+                unset($ival['way']);
+                $pluginItem[] = $ival;
+            }
+        }
     }
 }

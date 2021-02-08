@@ -172,7 +172,7 @@ class CatfishCMS
         $params = [
             'template' => $this->template
         ];
-        $this->themeHook('all', $params);
+        $this->plantHook('all', $params);
         $outfile = ROOT_PATH.$this->tempPath.$this->template.'/'.$template;
         if($template == '404.html' && !is_file($outfile)){
             $outfile = APP_PATH.'index/view/index/index.html';
@@ -513,7 +513,7 @@ class CatfishCMS
             'template' => $this->template,
             'yy' => $catfishcms
         ];
-        $this->themeHook('product', $params);
+        $this->plantHook('product', $params);
         Catfish::allot('yy', $params['yy']);
         return $template;
     }
@@ -653,7 +653,7 @@ class CatfishCMS
             'template' => $this->template,
             'yy' => $catfishcms
         ];
-        $this->themeHook('page', $params);
+        $this->plantHook('page', $params);
         Catfish::allot('yy', $params['yy']);
         return $template;
     }
@@ -794,7 +794,7 @@ class CatfishCMS
             'template' => $this->template,
             'yy' => $catfishcms
         ];
-        $this->themeHook('news', $params);
+        $this->plantHook('news', $params);
         Catfish::allot('yy', $params['yy']);
         return $template;
     }
@@ -840,7 +840,7 @@ class CatfishCMS
             'template' => $this->template,
             'yy' => $sy
         ];
-        $this->themeHook('search', $params);
+        $this->plantHook('search', $params);
         Catfish::allot('yy', $params['yy']);
         return '';
     }
@@ -887,7 +887,7 @@ class CatfishCMS
             'template' => $this->template,
             'yy' => $sy
         ];
-        $this->themeHook('word', $params);
+        $this->plantHook('word', $params);
         Catfish::allot('yy', $params['yy']);
         return '';
     }
@@ -980,7 +980,7 @@ class CatfishCMS
             'keyword' => $keyword,
             'description' => $description
         ];
-        $this->themeHook('productList', $params);
+        $this->plantHook('productList', $params);
         Catfish::allot('yy', $params['yy']);
         Catfish::allot('biaoti',$params['biaoti']);
         Catfish::allot('keyword',$params['keyword']);
@@ -1080,7 +1080,7 @@ class CatfishCMS
             'keyword' => $keyword,
             'description' => $description
         ];
-        $this->themeHook('newsList', $params);
+        $this->plantHook('newsList', $params);
         Catfish::allot('yy', $params['yy']);
         Catfish::allot('biaoti',$params['biaoti']);
         Catfish::allot('keyword',$params['keyword']);
@@ -1199,7 +1199,7 @@ class CatfishCMS
             'yy' => $sy,
             'shouye' => $shouyezhanshi
         ];
-        $this->themeHook('index', $params);
+        $this->plantHook('index', $params);
         Catfish::allot('yy', $params['yy']);
         Catfish::allot('shouye', $params['shouye']);
     }
@@ -2093,9 +2093,20 @@ class CatfishCMS
         $data_options = Catfish::autoload($this->time);
         foreach($data_options as $key => $val)
         {
-            if($val['name'] == 'copyright' || $val['name'] == 'statistics')
+            if($val['name'] == 'copyright')
             {
                 Catfish::allot($val['name'], unserialize($val['value']));
+            }
+            elseif($val['name'] == 'statistics'){
+                $statistics = unserialize($val['value']);
+                $params = [
+                    'statistics' => $statistics
+                ];
+                $this->plantHook('statistics', $params);
+                if(isset($params['statistics'])){
+                    $statistics = $params['statistics'];
+                }
+                Catfish::allot($val['name'], $statistics);
             }
             elseif($val['name'] == 'domain'){
                 $root = Catfish::domainAmend($val['value']);
@@ -2286,14 +2297,27 @@ class CatfishCMS
         }
         return $reArr;
     }
-    protected function themeHook($hook, &$params = [], $theme = '')
+    protected function plantHook($hook, &$params = [], $theme = '')
     {
-        if(empty($theme)){
+        if(empty($theme) && isset($this->template)){
             $theme = $this->template;
         }
         $uftheme = ucfirst($theme);
+        $execArr = [];
         if(is_file(ROOT_PATH.'public' . DS . 'theme' . DS . $theme . DS . $uftheme .'.php')){
-            return Catfish::execHook('theme\\' . $theme . '\\' . $uftheme, $hook, $params);
+            $execArr[] = 'theme\\' . $theme . '\\' . $uftheme;
+        }
+        $pluginsOpened = Catfish::get('plugins_opened');
+        if(!empty($pluginsOpened)){
+            $pluginsOpened = unserialize($pluginsOpened);
+            foreach($pluginsOpened as $key => $val){
+                $ufval = ucfirst($val);
+                $execArr[] = 'plugin\\' . $val . '\\' . $ufval;
+            }
+        }
+        if(count($execArr) > 0){
+            Catfish::addHook($hook, $execArr);
+            return Catfish::listen($hook, $params);
         }
         return false;
     }

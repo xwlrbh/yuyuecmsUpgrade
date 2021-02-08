@@ -2548,7 +2548,7 @@ class Index extends CatfishCMS
             ];
         }
         Catfish::allot('catfishItem', $catfishItem);
-        return $this->show(Catfish::lang('Home show'), 'websiterelated', 'homeshow');
+        return $this->show(Catfish::lang('Home show'), 'corporateinformation', 'homeshow');
     }
     public function alipay()
     {
@@ -2615,6 +2615,240 @@ class Index extends CatfishCMS
         }
         Catfish::allot('catfishItem', $catfishItem);
         return $this->show(Catfish::lang('Alipay'), 'websiterelated', 'alipay', true);
+    }
+    public function pluginlist()
+    {
+        $this->checkUser();
+        $prompt = '';
+        if(Catfish::isPost()){
+            $file = request()->file('file');
+            if($file->checkExt('zip') === true){
+                $tempdatadir = ROOT_PATH . 'data' . DS . 'plugin';
+                $this->delFolder($tempdatadir);
+                $info = $file->move($tempdatadir, false);
+                if($info){
+                    $pluginFile = $tempdatadir . DS . $info->getSaveName();
+                    $tempdir = ROOT_PATH . 'data' . DS . 'temp' . DS . 'plugin';
+                    if(!is_dir($tempdir)){
+                        mkdir($tempdir, 0777, true);
+                    }
+                    $this->delFolder($tempdir);
+                    if(is_file($pluginFile)){
+                        try{
+                            $zip = new \ZipArchive();
+                            if($zip->open($pluginFile, \ZipArchive::OVERWRITE || \ZIPARCHIVE::CREATE) === true){
+                                $zip->extractTo($tempdir);
+                                $zip->close();
+                                $this->movePlugin($tempdir);
+                            }
+                            else{
+                                $prompt = Catfish::lang('The uploaded zip file is not available');
+                            }
+                        }
+                        catch(\Exception $e){
+                            $prompt = Catfish::lang('Upload failed');
+                        }
+                        @unlink($pluginFile);
+                        $this->delFolder($tempdir);
+                    }
+                }else{
+                    $prompt = $file->getError();
+                }
+            }
+            else{
+                $prompt =  Catfish::lang('Only upload zip files');
+            }
+        }
+        Catfish::allot('prompt', $prompt);
+        $data = [];
+        $dir = glob(ROOT_PATH.'plugins/*',GLOB_ONLYDIR);
+        foreach($dir as $key => $val){
+            $pluginBaseName = basename($val);
+            $pluginLang = ROOT_PATH.'plugins'.DS.$pluginBaseName.DS.'lang'.DS.Catfish::detectLang().'.php';
+            if(is_file($pluginLang)){
+                Catfish::loadLang($pluginLang);
+            }
+            $pluginFile = ROOT_PATH.'plugins'.DS.$pluginBaseName.DS.ucfirst($pluginBaseName).'.php';
+            if(!is_file($pluginFile)){
+                continue;
+            }
+            $pluginContent = file_get_contents($pluginFile);
+            $pluginName = '';
+            if(preg_match("/(插件名|Plugin Name)\s*(：|:)(.*)/i", $pluginContent ,$matches))
+            {
+                if(isset($matches[3])){
+                    $pluginName = trim($matches[3]);
+                    if(!empty($pluginName)){
+                        $pluginName = Catfish::lang($pluginName);
+                    }
+                }
+            }
+            $pluginDesc = '';
+            if(preg_match("/(描述|Description)\s*(：|:)(.*)/i", $pluginContent ,$matches))
+            {
+                if(isset($matches[3])){
+                    $pluginDesc = trim($matches[3]);
+                    if(!empty($pluginDesc)){
+                        $pluginDesc = Catfish::lang($pluginDesc);
+                    }
+                }
+            }
+            $pluginAuth = '';
+            if(preg_match("/(作者|Author)\s*(：|:)(.*)/i", $pluginContent ,$matches))
+            {
+                if(isset($matches[3])){
+                    $pluginAuth = trim($matches[3]);
+                }
+            }
+            $pluginVers = '';
+            if(preg_match("/(版本|Version)\s*(：|:)(.*)/i", $pluginContent ,$matches))
+            {
+                if(isset($matches[3])){
+                    $pluginVers = trim($matches[3]);
+                }
+            }
+            $pluginUri = '';
+            if(preg_match("/(插件网址|插件網址|Plugin URI|Plugin URL)\s*(：|:)(.*)/i", $pluginContent ,$matches))
+            {
+                if(isset($matches[3])){
+                    $pluginUri = trim($matches[3]);
+                }
+            }
+            $data[] = [
+                'plugin' => $pluginBaseName,
+                'name' => $pluginName,
+                'description' => $pluginDesc,
+                'author' => $pluginAuth,
+                'version' => $pluginVers,
+                'pluginUrl' => $pluginUri
+            ];
+        }
+        $pluginsOpened = Catfish::get('plugins_opened');
+        if(empty($pluginsOpened)){
+            $pluginsOpened = [];
+        }
+        else{
+            $pluginsOpened = unserialize($pluginsOpened);
+        }
+        foreach($data as $dkey => $dval){
+            if(in_array($dval['plugin'], $pluginsOpened)){
+                $data[$dkey]['open'] = 1;
+            }
+            else{
+                $data[$dkey]['open'] = 0;
+            }
+        }
+        Catfish::allot('data', $data);
+        return $this->show(Catfish::lang('Plugin list'), 'websiterelated', 'pluginlist');
+    }
+    public function manaplugin()
+    {
+        if(Catfish::isPost())
+        {
+            $plugin = trim(Catfish::getPost('plugin'));
+            $chk = intval(Catfish::getPost('chk'));
+            if($chk > 0){
+                $chk = true;
+            }
+            else{
+                $chk = false;
+            }
+            $this->openClosePlugin($plugin, $chk);
+            echo 'ok';
+            exit();
+        }
+    }
+    public function delplugin()
+    {
+        if(Catfish::isPost())
+        {
+            $plugin = trim(Catfish::getPost('plugin'));
+            $pluginPath = ROOT_PATH.'plugins'.DS.$plugin;
+            if(is_dir($pluginPath)){
+                $this->openClosePlugin($plugin, false);
+                $this->deleteFolder($pluginPath);
+            }
+            echo 'ok';
+            exit();
+        }
+    }
+    public function plugin()
+    {
+        $this->checkUser();
+        $name = $this->untoup(Catfish::getParam('name'));
+        $func = $this->untoup(Catfish::getParam('func'));
+        $plugin = $this->untoup(Catfish::getParam('plugin'));
+        $theme = $this->untoup(Catfish::getParam('theme'));
+        $alias = urldecode(Catfish::getParam('alias'));
+        $theme = ($theme == '_theme') ? '' : $theme;
+        $params = [
+            'plugin' => $plugin,
+            'name' => $name,
+            'alias' => $alias,
+            'function' => $func,
+            'template' => $theme,
+        ];
+        $lang = Catfish::detectLang();
+        if(empty($theme)){
+            $langPath = ROOT_PATH.'plugins/'.$plugin.'/lang/'.$lang.'.php';
+        }
+        else{
+            $langPath = ROOT_PATH.'public/theme/'.$plugin.'/theme/lang/'.$lang.'.php';
+        }
+        if(is_file($langPath)){
+            Catfish::loadLang($langPath);
+        }
+        $ufplugin = ucfirst($plugin);
+        $html = '';
+        if(empty($theme)){
+            $pluginFile = ROOT_PATH.'plugins'.DS.$plugin.DS.ucfirst($ufplugin).'.php';
+        }
+        else{
+            $pluginFile = ROOT_PATH.'public' . DS . 'theme' . DS . $plugin . DS . ucfirst($ufplugin) .'.php';
+        }
+        if(is_file($pluginFile)){
+            $pluginContent = file_get_contents($pluginFile);
+            if(preg_match("/(权限|Authority)\s*(：|:)(.*)/i", $pluginContent ,$matches)){
+                if(isset($matches[3])){
+                    $authority = trim($matches[3]);
+                    if(!in_array(Catfish::getSession('user_type'), Catfish::department($authority))){
+                        $html = Catfish::lang('You have insufficient permissions');
+                    }
+                }
+            }
+        }
+        else{
+            $html = Catfish::lang('The plugin file is missing');
+        }
+        if(empty($html)){
+            if(Catfish::isPost()){
+                $post = Catfish::getPost();
+                if(isset($post['verification'])){
+                    unset($post['verification']);
+                }
+                if(empty($theme)){
+                    Catfish::execHook('plugin\\' . $plugin . '\\' . $ufplugin, $func . 'Post', $post);
+                }
+                else{
+                    Catfish::execHook('theme\\' . $plugin . '\\' . $ufplugin, $func . 'Post', $post);
+                }
+                if(isset($post['result'])){
+                    echo $post['result'];
+                    exit();
+                }
+            }
+            if(empty($theme)){
+                Catfish::execHook('plugin\\' . $plugin . '\\' . $ufplugin, $func, $params);
+            }
+            else{
+                Catfish::execHook('theme\\' . $plugin . '\\' . $ufplugin, $func, $params);
+            }
+            if(isset($params['html'])){
+                $html = $params['html'];
+            }
+        }
+        Catfish::allot('plugin', $html);
+        return $this->show($alias, 'qita', $name);
     }
     public function companyprofile()
     {
@@ -3880,11 +4114,15 @@ class Index extends CatfishCMS
         if(Catfish::isPost()){
             ini_set('max_execution_time', 0);
             ini_set('memory_limit', -1);
+            $package = ROOT_PATH . 'data' . DS . 'package';
+            if(is_dir($package)){
+                $this->delFolder($package);
+            }
             $file = request()->file('file');
             $validate = [
                 'ext' => 'zip'
             ];
-            $info = $file->validate($validate)->move(ROOT_PATH . 'data' . DS . 'package', false);
+            $info = $file->validate($validate)->move($package, false);
             if($info){
                 Catfish::set('upgradepackagefilename', $info->getSaveName());
                 echo 'ok';

@@ -148,4 +148,60 @@ class Index extends CatfishCMS
             exit();
         }
     }
+    public function plugin()
+    {
+        $this->checkUser();
+        $name = $this->untoup(Catfish::getParam('name'));
+        $func = $this->untoup(Catfish::getParam('func'));
+        $plugin = $this->untoup(Catfish::getParam('plugin'));
+        $theme = $this->untoup(Catfish::getParam('theme'));
+        $alias = urldecode(Catfish::getParam('alias'));
+        $theme = ($theme == '_theme') ? '' : $theme;
+        $params = [
+            'plugin' => $plugin,
+            'name' => $name,
+            'alias' => $alias,
+            'function' => $func,
+            'template' => $theme,
+        ];
+        $lang = Catfish::detectLang();
+        if(empty($theme)){
+            $langPath = ROOT_PATH.'plugins/'.$plugin.'/lang/'.$lang.'.php';
+        }
+        else{
+            $langPath = ROOT_PATH.'public/theme/'.$plugin.'/theme/lang/'.$lang.'.php';
+        }
+        if(is_file($langPath)){
+            Catfish::loadLang($langPath);
+        }
+        $ufplugin = ucfirst($plugin);
+        $html = '';
+        if(Catfish::isPost()){
+            $post = Catfish::getPost();
+            if(isset($post['verification'])){
+                unset($post['verification']);
+            }
+            if(empty($theme)){
+                Catfish::execHook('plugin\\' . $plugin . '\\' . $ufplugin, $func . 'Post', $post);
+            }
+            else{
+                Catfish::execHook('theme\\' . $plugin . '\\' . $ufplugin, $func . 'Post', $post);
+            }
+            if(isset($post['result'])){
+                echo $post['result'];
+                exit();
+            }
+        }
+        if(empty($theme)){
+            Catfish::execHook('plugin\\' . $plugin . '\\' . $ufplugin, $func, $params);
+        }
+        else{
+            Catfish::execHook('theme\\' . $plugin . '\\' . $ufplugin, $func, $params);
+        }
+        if(isset($params['html'])){
+            $html = $params['html'];
+        }
+        Catfish::allot('plugin', $html);
+        return $this->show($alias, $name);
+    }
 }

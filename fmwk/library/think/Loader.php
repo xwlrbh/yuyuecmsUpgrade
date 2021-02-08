@@ -309,6 +309,7 @@ class Loader
             'traits'   => LIB_PATH . 'traits' . DS,
             'catfishcms'   => LIB_PATH . 'catfish' . DS,
             'theme'   => ROOT_PATH . 'public' . DS . 'theme' . DS,
+            'plugin'   => ROOT_PATH . 'plugins' . DS,
         ]);
 
         // 加载类库映射文件

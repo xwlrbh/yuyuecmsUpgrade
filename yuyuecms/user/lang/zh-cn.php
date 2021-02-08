@@ -52,5 +52,8 @@ return [
     'Description' => '描述',
     'Collection time' => '收藏时间',
     'Operation' => '操作',
-    'Delete' => '删除'
+    'Delete' => '删除',
+    'Personal information' => '个人信息',
+    'Other' => '其他',
+    'My focus' => '我的关注',
 ];

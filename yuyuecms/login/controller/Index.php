@@ -37,7 +37,20 @@ class Index extends CatfishCMS
                     Catfish::error(Catfish::lang('Account has been disabled, please contact the administrator'));
                     return false;
                 }
-                $this->logined($user, $data);
+                $params = [
+                    'logined' => true,
+                    'user' => $data['user'],
+                    'password' => $data['pwd'],
+                    'result' => ''
+                ];
+                $this->plantHook('login', $params);
+                if($params['logined']){
+                    $this->logined($user, $data);
+                }
+                else{
+                    Catfish::error($params['result']);
+                    return false;
+                }
             }
         }
         if(Catfish::hasSession('user_id')){
@@ -92,8 +105,20 @@ class Index extends CatfishCMS
                     echo Catfish::lang('Account has been disabled, please contact the administrator');
                     exit();
                 }
-                $this->logined($user, $data);
-                echo 'ok';
+                $params = [
+                    'logined' => true,
+                    'user' => $data['user'],
+                    'password' => $data['pwd'],
+                    'result' => ''
+                ];
+                $this->plantHook('login', $params);
+                if($params['logined']){
+                    $this->logined($user, $data);
+                    echo 'ok';
+                }
+                else{
+                    echo $params['result'];
+                }
                 exit();
             }
         }

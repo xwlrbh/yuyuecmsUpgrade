@@ -10,6 +10,7 @@ namespace app\user\controller;
 use catfishcms\Catfish;
 class CatfishCMS
 {
+    protected $template = 'default';
     protected function checkUser()
     {
         if(!Catfish::hasSession('user_id') && Catfish::hasCookie('user_id')){
@@ -43,7 +44,6 @@ class CatfishCMS
         Catfish::allot('star', $star);
         Catfish::allot('user', Catfish::getSession('user'));
         Catfish::allot('tuichu', Catfish::url('login/Index/quit'));
-        Catfish::allot('verification', Catfish::verifyCode());
         Catfish::allot('yuyuecms', '<a href="'.base64_decode('aHR0cDovL3d3dy55dXl1ZS1jbXMuY29t').'" class="text-muted'.$dn.'" target="_blank">'.base64_decode('6bG86LeDQ01T').'</a>');
         return Catfish::output($template);
     }
@@ -55,6 +55,10 @@ class CatfishCMS
             if($val['name'] == 'copyright' || $val['name'] == 'statistics')
             {
                 Catfish::allot($val['name'], unserialize($val['value']));
+            }
+            elseif($val['name'] == 'template'){
+                $this->template = $val['value'];
+                Catfish::allot($val['name'], $val['value']);
             }
             elseif($val['name'] == 'domain'){
                 $root = Catfish::domainAmend($val['value']);
@@ -71,6 +75,34 @@ class CatfishCMS
                 Catfish::allot($val['name'], $val['value']);
             }
         }
+        $pluginsOpened = Catfish::get('plugins_opened');
+        $pluginItem = [];
+        if(!empty($pluginsOpened)){
+            $pluginsOpened = unserialize($pluginsOpened);
+            foreach($pluginsOpened as $key => $val){
+                $params = [
+                    'pluginName' => $val
+                ];
+                $this->userHook($val, 'addUserPlugin', $params);
+                if(isset($params['item'])){
+                    $this->getext($params['item'], $pluginItem);
+                }
+            }
+        }
+        $uftheme = ucfirst($this->template);
+        if(is_file(ROOT_PATH.'public' . DS . 'theme' . DS . $this->template . DS . $uftheme .'.php')){
+            $params = [
+                'pluginName' => ''
+            ];
+            $this->themeHook('addUserPlugin', $params, $this->template);
+            if(isset($params['item'])){
+                $this->getext($params['item'], $pluginItem, $this->template);
+            }
+        }
+        $hasPlugin = count($pluginItem);
+        Catfish::allot('hasPlugin', $hasPlugin);
+        Catfish::allot('pluginItem', $pluginItem);
+        Catfish::allot('verification', Catfish::verifyCode());
     }
     private function validatePost(&$rule, &$msg, &$data)
     {
@@ -116,5 +148,52 @@ class CatfishCMS
             'repeat' => Catfish::getPost('repeat'),
         ];
         return $this->validatePost($rule, $msg, $data);
+    }
+    protected function userHook($pluginName, $hook, &$params = [])
+    {
+        $ufpluginName = ucfirst($pluginName);
+        $pluginPath = ROOT_PATH.'plugins' . DS . $pluginName . DS . $ufpluginName .'.php';
+        if(is_file($pluginPath)){
+            return Catfish::execHook('plugin\\' . $pluginName . '\\' . $ufpluginName, $hook, $params);
+        }
+        return false;
+    }
+    protected function untoup($str)
+    {
+        $strArr = explode('-', $str);
+        if(is_array($strArr) && count($strArr) > 0){
+            $str = array_shift($strArr);
+            $strArr = array_map(function($v){
+                return ucfirst($v);
+            }, $strArr);
+            $str .= implode('', $strArr);
+        }
+        return $str;
+    }
+    private function getext($itemArr, &$pluginItem, $theme = '_theme')
+    {
+        foreach($itemArr as $ikey => $ival){
+            $ival['alias'] = Catfish::lang($ival['alias']);
+            $ival['url'] = Catfish::url('user/Index/plugin', ['name' => strtolower(preg_replace('/([A-Z])/', '-${1}', $ival['name'])), 'func' => strtolower(preg_replace('/([A-Z])/', '-${1}', $ival['function'])), 'plugin' => strtolower(preg_replace('/([A-Z])/', '-${1}', $ival['plugin'])), 'theme' => strtolower(preg_replace('/([A-Z])/', '-${1}', $theme)), 'alias' => urlencode($ival['alias'])]);
+            if($ival['way'] == 'top'){
+                unset($ival['way']);
+                array_unshift($pluginItem,$ival);
+            }
+            else{
+                unset($ival['way']);
+                $pluginItem[] = $ival;
+            }
+        }
+    }
+    protected function themeHook($hook, &$params = [], $theme = '')
+    {
+        if(empty($theme)){
+            $theme = $this->template;
+        }
+        $uftheme = ucfirst($theme);
+        if(is_file(ROOT_PATH.'public' . DS . 'theme' . DS . $theme . DS . $uftheme .'.php')){
+            return Catfish::execHook('theme\\' . $theme . '\\' . $uftheme, $hook, $params);
+        }
+        return false;
     }
 }

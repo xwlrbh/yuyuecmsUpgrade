@@ -201,10 +201,30 @@ class Catfish
         $department = [
             'admin' => ['founder','admin']
         ];
-        if(!is_null($re) && isset($department[$re])){
-            $department = $department[$re];
+        $reArr = [];
+        if(is_array($re)){
+            foreach($re as $key => $val){
+                $val = trim($val);
+                if(!empty($val) && isset($department[$val])){
+                    $reArr = array_merge($reArr, $department[$val]);
+                }
+            }
         }
-        return $department;
+        elseif(!is_null($re) && strpos($re, ',') !== false){
+            $retmp = explode(',', $re);
+            foreach($retmp as $key => $val){
+                $val = trim($val);
+                if(!empty($val) && isset($department[$val])){
+                    $reArr = array_merge($reArr, $department[$val]);
+                }
+            }
+        }
+        else{
+            if(!is_null($re) && isset($department[$re])){
+                $reArr = array_merge($reArr, $department[$re]);
+            }
+        }
+        return $reArr;
     }
     public static function url($url = '', $vars = '', $suffix = true, $domain = true)
     {
@@ -873,9 +893,9 @@ class Catfish
     }
     public static function filterJs($str)
     {
-        while(preg_match("/(<script)|(<style)|(<iframe)|(<frame)|(<a)|(<object)|(<frameset)|(<bgsound)|(<video)|(<source)|(<audio)|(<track)|(<marquee)/i",$str) || preg_match("/(?<!\w|\.|>)((onabort)|(onactivate)|(onafter)|(onbefore)|(onbegin)|(onblur)|(onbounce)|(oncellchange)|(onchange)|(onclick)|(oncont)|(oncopy)|(oncut)|(ondata)|(ondblclick)|(ondeactivate)|(ondrag)|(ondrop)|(onerror)|(onfilter)|(onfinish)|(onfocus)|(onhelp)|(onkey)|(onlayout)|(onlose)|(onload)|(onmouse)|(onmove)|(onpaste)|(onproperty)|(onready)|(onreset)|(onresize)|(onrow)|(onscroll)|(onselect)|(onstart)|(onstop)|(onseek)|(onsubmit)|(ontoggle)|(onunload))/i",$str))
+        while(preg_match("/(<script)|(<style)|(<iframe)|(<frame)|(<a)|(<object)|(<frameset)|(<bgsound)|(<video)|(<source)|(<audio)|(<track)|(<marquee)|(<embed)/i",$str) || preg_match("/(?<!\w|\.|>)((onabort)|(onactivate)|(onafter)|(onbefore)|(onbegin)|(onblur)|(onbounce)|(oncellchange)|(onchange)|(onclick)|(oncont)|(oncopy)|(oncut)|(ondata)|(ondblclick)|(ondeactivate)|(ondrag)|(ondrop)|(onerror)|(onfilter)|(onfinish)|(onfocus)|(onhelp)|(onkey)|(onlayout)|(onlose)|(onload)|(onmouse)|(onmove)|(onpaste)|(onpageshow)|(onproperty)|(onready)|(onreset)|(onresize)|(onrow)|(onscroll)|(onselect)|(onstart)|(onstop)|(onseek)|(onsubmit)|(ontoggle)|(onunload))/i",$str))
         {
-            $str = preg_replace(['/<script[\s\S]*?<\/script[\s]*>/i','/<style[\s\S]*?<\/style[\s]*>/i','/<iframe[\s\S]*?(<\/iframe|\/)[\s]*>/i','/<frame[\s\S]*?(<\/frame|\/)[\s]*>/i','/<object[\s\S]*?(<\/object|\/)[\s]*>/i','/<frameset[\s\S]*?(<\/frameset|\/)[\s]*>/i','/<bgsound[\s\S]*?(<\/bgsound|\/)[\s]*>/i','/<video[\s\S]*?(<\/video|\/)[\s]*>/i','/<source[\s\S]*?(<\/source|\/)[\s]*>/i','/<audio[\s\S]*?(<\/audio|\/)[\s]*>/i','/<track[\s\S]*?(<\/track|\/)[\s]*>/i','/<marquee[\s\S]*?(<\/marquee|\/)[\s]*>/i','/<a[\s\S]*?(<\/a|\/)[\s]*>/i','/ on[A-Za-z]+[\s]*=[\s]*[\'|"][\s\S]*?[\'|"]/i','/ on[A-Za-z]+[\s]*=[\s]*[^>]+/i'],'',$str);
+            $str = preg_replace(['/<script[\s\S]*?<\/script[\s]*>/i','/<style[\s\S]*?<\/style[\s]*>/i','/<iframe[\s\S]*?(<\/iframe|\/)[\s]*>/i','/<frame[\s\S]*?(<\/frame|\/)[\s]*>/i','/<object[\s\S]*?(<\/object|\/)[\s]*>/i','/<frameset[\s\S]*?(<\/frameset|\/)[\s]*>/i','/<bgsound[\s\S]*?(<\/bgsound|\/)[\s]*>/i','/<video[\s\S]*?(<\/video|\/)[\s]*>/i','/<source[\s\S]*?(<\/source|\/)[\s]*>/i','/<audio[\s\S]*?(<\/audio|\/)[\s]*>/i','/<track[\s\S]*?(<\/track|\/)[\s]*>/i','/<marquee[\s\S]*?(<\/marquee|\/)[\s]*>/i','/<embed[\s\S]*?(<\/embed|\/)?[\s]*>/i','/<a[\s\S]*?(<\/a|\/)[\s]*>/i','/ on[A-Za-z]+[\s]*=[\s]*[\'|"][\s\S]*?[\'|"]/i','/ on[A-Za-z]+[\s]*=[\s]*[^>]+/i'],'',$str);
         }
         $str = str_replace('<!--','&lt;!--',$str);
         return $str;
@@ -1071,5 +1091,99 @@ class Catfish
     public static function themeAssign($name, $value = '')
     {
         return self::allot('t_' . $name, $value);
+    }
+    public static function getParam($name = '')
+    {
+        if(empty($name)){
+            return Request::instance()->param();
+        }
+        else{
+            return Request::instance()->param($name);
+        }
+    }
+    public static function addPlugin(&$params, $name, $alias = '', $func = '', $way = 'append')
+    {
+        $calltrace = debug_backtrace();
+        $call = basename(dirname($calltrace[0]['file']));
+        if(is_array($name)){
+            foreach($name as $key => $val){
+                $params['item'][] = [
+                    'plugin' => $call,
+                    'name' => $val['name'],
+                    'alias' => $val['alias'],
+                    'function' => $val['function'],
+                    'way' => $way
+                ];
+            }
+        }
+        else{
+            $params['item'][] = [
+                'plugin' => $call,
+                'name' => $name,
+                'alias' => $alias,
+                'function' => $func,
+                'way' => $way
+            ];
+        }
+    }
+    public static function pluginOutput($templateFile)
+    {
+        $calltrace = debug_backtrace();
+        $call = basename(dirname($calltrace[0]['file']));
+        if(substr($templateFile, -5) != '.html'){
+            $templateFile .= '.html';
+        }
+        $templateFile = ltrim(ltrim($templateFile, '/'), '\\');
+        return self::output(ROOT_PATH . 'plugins/' . $call . '/' . $templateFile);
+    }
+    public static function pluginCss($cssFile)
+    {
+        $calltrace = debug_backtrace();
+        $call = basename(dirname($calltrace[0]['file']));
+        $recss = '';
+        if(is_array($cssFile)){
+            foreach($cssFile as $key => $val){
+                if(substr($val, -4) != '.css'){
+                    $val .= '.css';
+                }
+                $recss .= file_get_contents(ROOT_PATH . 'plugins/' . $call . '/' . $val);
+            }
+        }
+        else{
+            if(substr($cssFile, -4) != '.css'){
+                $cssFile .= '.css';
+            }
+            $recss .= file_get_contents(ROOT_PATH . 'plugins/' . $call . '/' . $cssFile);
+        }
+        return '<style>' . $recss . '</style>';
+    }
+    public static function pluginJs($jsFile)
+    {
+        $calltrace = debug_backtrace();
+        $call = basename(dirname($calltrace[0]['file']));
+        $rejs = '';
+        if(is_array($jsFile)){
+            foreach($jsFile as $key => $val){
+                if(substr($val, -3) != '.js'){
+                    $val .= '.js';
+                }
+                $rejs .= file_get_contents(ROOT_PATH . 'plugins/' . $call . '/' . $val);
+            }
+        }
+        else{
+            if(substr($jsFile, -3) != '.js'){
+                $jsFile .= '.js';
+            }
+            $rejs .= file_get_contents(ROOT_PATH . 'plugins/' . $call . '/' . $jsFile);
+        }
+        return '<script>' . $rejs . '</script>';
+    }
+    public static function pluginAssign($name, $value = '')
+    {
+        return self::allot('p_' . $name, $value);
+    }
+    public static function tagCache($name, $keys = null, $overlay = false)
+    {
+        return Cache::tag($name, $keys, $overlay);
     }
 }

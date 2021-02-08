@@ -160,11 +160,6 @@
                             {:lang('Self-labeling')}
                             </button>
                         </a>
-                        <a href="{:Url('admin/Index/homeshow')}">
-                            <button type="button" class="btn btn-default btn-block{eq name="option" value="homeshow"} btn-primary{/eq}">
-                            {:lang('Home show')}
-                            </button>
-                        </a>
                         {if condition="$openpay == 1"}
                         <a href="{:Url('admin/Index/alipay')}">
                             <button type="button" class="btn btn-default btn-block{eq name="option" value="alipay"} btn-primary{/eq}">
@@ -172,6 +167,11 @@
                             </button>
                         </a>
                         {/if}
+                        <a href="{:Url('admin/Index/pluginlist')}">
+                            <button type="button" class="btn btn-default btn-block{eq name="option" value="pluginlist"} btn-primary{/eq}">
+                            {:lang('Plugin list')}
+                            </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -193,6 +193,11 @@
                         <a href="{:Url('admin/Index/corporatehistory')}">
                             <button type="button" class="btn btn-default btn-block{eq name="option" value="corporatehistory"} btn-primary{/eq}">
                             {:lang('Corporate history')}
+                            </button>
+                        </a>
+                        <a href="{:Url('admin/Index/homeshow')}">
+                            <button type="button" class="btn btn-default btn-block{eq name="option" value="homeshow"} btn-primary{/eq}">
+                            {:lang('Home show')}
                             </button>
                         </a>
                     </div>
@@ -307,6 +312,46 @@
                     </div>
                 </div>
             </div>
+            {if condition="$hasPlugin > 0"}
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="heading_qt">
+                    <h4 class="panel-title">
+                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse_qt">
+                            <i class="icon-wrench"></i>&nbsp;&nbsp;{:lang('Other')}&nbsp;&nbsp;<span class="caret"></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_qt" class="panel-collapse collapse{eq name="backstageMenu" value="qita"} in{/eq}">
+                    <div class="list-group" style="margin-bottom: 0px;">
+                        {volist name="pluginItem" id="vo" offset="0" length="5"}
+                        <a href="{$vo.url}">
+                            <button type="button" class="btn btn-default btn-block{eq name="option" value="$vo.name"} btn-primary{/eq}">
+                            {$vo.alias}
+                            </button>
+                        </a>
+                        {/volist}
+                        {if condition="$numberOfPlugins > 5 "}
+                        <div class="btn-group btn-block dropup">
+                            <button type="button" class="btn btn-default btn-block" data-toggle="dropdown">
+                                {:lang('More')} <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                {volist name="pluginItem" id="vo" offset="5"}
+                                <li>
+                                    <a href="{$vo.url}">
+                                        <button type="button" class="btn btn-default btn-block{eq name="option" value="$vo.name"} btn-primary{/eq}">
+                                        {$vo.alias}
+                                        </button>
+                                    </a>
+                                </li>
+                                {/volist}
+                            </ul>
+                        </div>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+            {/if}
         </div>
         <div class="visible-xs-block">
             <a href="{:Url('index/Index/index')}">
