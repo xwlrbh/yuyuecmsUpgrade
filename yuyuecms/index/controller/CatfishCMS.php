@@ -158,7 +158,8 @@ class CatfishCMS
             'tuichu' => Catfish::url('login/Index/quit'),
             'sousuo' => Catfish::url('index/Index/search'),
             'yonghuzhongxin' => Catfish::url('user/Index/index'),
-            'liuyan' => Catfish::url('index/Index/liuyan')
+            'liuyan' => Catfish::url('index/Index/liuyan'),
+            'shouye' => Catfish::url('index/Index/index')
         ];
         $isMobile = 0;
         if(Catfish::isMobile()){
