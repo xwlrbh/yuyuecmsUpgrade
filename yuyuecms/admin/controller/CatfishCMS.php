@@ -195,7 +195,12 @@ class CatfishCMS
         $pluginItem = [];
         if(!empty($pluginsOpened)){
             $pluginsOpened = unserialize($pluginsOpened);
+            $lang = Catfish::detectLang();
             foreach($pluginsOpened as $key => $val){
+                $langPath = ROOT_PATH.'plugins' . DS . $val . DS . 'lang' . DS . $lang .'.php';
+                if(is_file($langPath)){
+                    Catfish::loadLang($langPath);
+                }
                 $params = [
                     'pluginName' => $val
                 ];
@@ -207,6 +212,11 @@ class CatfishCMS
         }
         $uftheme = ucfirst($this->template);
         if(is_file(ROOT_PATH.'public' . DS . 'theme' . DS . $this->template . DS . $uftheme .'.php')){
+            $lang = Catfish::detectLang();
+            $langPath = ROOT_PATH.'public' . DS . 'theme' . DS . $this->template . DS . 'lang' . DS . $lang .'.php';
+            if(is_file($langPath)){
+                Catfish::loadLang($langPath);
+            }
             $params = [
                 'pluginName' => ''
             ];

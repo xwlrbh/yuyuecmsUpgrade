@@ -3312,6 +3312,26 @@ class Index extends CatfishCMS
         Catfish::allot('catfishcms', $catfishcms);
         return $this->show(Catfish::lang('General users'), 'yonghu', 'general');
     }
+    public function searchuser()
+    {
+        $this->checkUser();
+        $user = Catfish::getGet('user');
+        $catfish = Catfish::db('users')
+            ->where('yonghu','like','%'.$user.'%')
+            ->where('id','>',1)
+            ->field('id,yonghu,nicheng,email,touxiang,createtime,status')
+            ->order('id desc')
+            ->paginate(20);
+        Catfish::allot('pages', $catfish->render());
+        $catfishcms = $catfish->items();
+        foreach($catfishcms as $key => $val){
+            if(!empty($val['touxiang']) && substr($val['touxiang'], 0, 5) == 'data/'){
+                $catfishcms[$key]['touxiang'] = Catfish::domain() . $val['touxiang'];
+            }
+        }
+        Catfish::allot('catfishcms', $catfishcms);
+        return $this->show(Catfish::lang('General users').' - '.Catfish::lang('Search results'), 'yonghu', 'general', false, 'general');
+    }
     public function laheiqiyong()
     {
         if(Catfish::isPost()){
