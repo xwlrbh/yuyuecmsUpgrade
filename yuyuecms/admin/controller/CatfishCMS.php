@@ -736,10 +736,14 @@ class CatfishCMS
             }
         }
         $pluginName = basename($folder);
-        $pluginPath = ROOT_PATH . DS . 'plugins' . DS . $pluginName;
+        $pluginDir = ROOT_PATH . DS . 'plugins';
+        $pluginPath = $pluginDir . DS . $pluginName;
         if(!is_dir($pluginPath)){
             mkdir($pluginPath, 0777, true);
             $this->recurseCopy($folder, $pluginPath);
+            if(!is_file($pluginDir . DS . 'index.html')){
+                Catfish::addIndex($pluginDir);
+            }
             return true;
         }
         else{
@@ -793,5 +797,18 @@ class CatfishCMS
                 $pluginItem[] = $ival;
             }
         }
+    }
+    protected function geticons()
+    {
+        $icons = glob(ROOT_PATH.'public/common/bootstrap-icons/*.svg');
+        foreach($icons as $key => $val){
+            $icon = basename($val);
+            $name =substr($icon, 0, -4);
+            $icons[$key] = [
+                'name' => $name,
+                'icon' => $icon
+            ];
+        }
+        return $icons;
     }
 }

@@ -138,7 +138,7 @@ class CatfishCMS
                 $caidan = ['caidan1' => []];
             }
             $show['caidan'] = $caidan;
-            Catfish::setCache('show_'.$cachstr,$show,$this->time);
+            Catfish::tagCache('show')->set('show_'.$cachstr,$show,$this->time);
         }
         if(!empty($show['navigation']['caidan1']) || !Catfish::hasAllot('daohang')){
             Catfish::allot('daohang', $show['navigation']['caidan1']);
@@ -1853,8 +1853,14 @@ class CatfishCMS
                 $order = 1;
                 foreach((array)$catfish as $key => $val)
                 {
-                    $catfishcms = Catfish::db('nav_cate')->where('cid',$val['id'])->where('status',1)->field('id,parent_id,label,target,href,link,icon,miaoshu,suolvetu')->order('listorder asc')->select();
+                    $catfishcms = Catfish::db('nav_cate')->where('cid',$val['id'])->where('status',1)->field('id,parent_id,label,target,href,link,icon,icons,miaoshu,suolvetu')->order('listorder asc')->select();
                     if(count($catfishcms) > 0){
+                        foreach($catfishcms as $ckey => $cval){
+                            if(!empty($cval['icons'])){
+                                $catfishcms[$ckey]['icon'] = $cval['icons'];
+                            }
+                            unset($catfishcms[$ckey]['icons']);
+                        }
                         $catfishcms = Catfish::tree($catfishcms);
                     }
                     $caidan['caidan'.$order] = $catfishcms;

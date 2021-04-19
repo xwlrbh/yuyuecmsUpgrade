@@ -58,9 +58,25 @@
             </select>
         </div>
         <div class="form-group">
-            <label>{:lang('Icon')}：</label>
-            <input type="text" class="form-control" name="tubiao">
-            <p class="help-block">{:lang('The icon can be filled in with the icon code. Please fill in the icon code according to the icon system used by the theme.')}</p>
+            <label>{:lang('Icon')}：&nbsp;<small>[<a href="#!" data-toggle="modal" data-target="#iconsModal">{:lang('Select icon')}</a>]</small></label>
+            <div id="iconselect" class="hidden">
+                <div>
+                    <div class="col-xs-5 col-md-3 text-center" style="border: solid 1px #e5e5e5;padding: 10px">
+                        <button type="button" id="closeicon" title="{:lang('Cancel')}" class="close pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <div id="selectedicon"></div>
+                    </div>
+                    <div class="col-xs-7 col-md-5">
+                        <label>{:lang('Adjust size')} (<span id="iconsize"></span>)</label>
+                        <input id="changeicon" type="range" min="3" max="150" step="1" value="32">
+                    </div>
+                </div>
+                <input name="icons" id="icons" type="hidden">
+                <div class="clearfix"></div>
+            </div>
+            <div id="iconinputdiv">
+                <input type="text" class="form-control" name="tubiao">
+                <p class="help-block">{:lang('The icon can be filled in with the icon code. Please fill in the icon code according to the icon system used by the theme.')}</p>
+            </div>
         </div>
         <div class="form-group">
             <label>{:lang('Status')}：</label>
@@ -148,6 +164,28 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="iconsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">{:lang('Select icon')}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row" id="iconlist">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="hidden" id="currenticon"></div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{:lang('Cancel')}</button>
+                <button type="button" class="btn btn-primary" id="iconok">{:lang('Ok')}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="hidden" id="currenticonempty">{:lang('You did not select any icons')}</div>
 <div class="hidden" id="buttonText">{:lang('Select Image')}</div>
 <div class="hidden" id="yijicaidan">{:lang('As a first-level menu')}</div>
 <script type="text/javascript" src="{$domain}public/common/uploadify/jquery.uploadify.js"></script>

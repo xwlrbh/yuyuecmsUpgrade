@@ -3077,11 +3077,13 @@ class Index extends CatfishCMS
                     'href' => $lianjie,
                     'link' => $zidingyi,
                     'icon' => str_replace('\'','"',Catfish::getPost('tubiao',false)),
+                    'icons' => Catfish::getPost('icons',false),
                     'status' => Catfish::getPost('zhuangtai'),
                     'miaoshu' => Catfish::getPost('miaoshu'),
                     'suolvetu' => Catfish::getPost('suolvetu')
                 ]);
                 Catfish::removeCache('caidan');
+                Catfish::clearCache('show');
                 echo 'ok';
                 exit();
             }
@@ -3126,6 +3128,7 @@ class Index extends CatfishCMS
         if(Catfish::isPost()){
             $this->order('nav_cate');
             Catfish::removeCache('caidan');
+            Catfish::clearCache('show');
         }
         $caidanfenlei = Catfish::getPost('caidanfenlei');
         $catfish = Catfish::db('navcat')
@@ -3175,11 +3178,13 @@ class Index extends CatfishCMS
                     'href' => $lianjie,
                     'link' => $zidingyi,
                     'icon' => str_replace('\'','"',Catfish::getPost('tubiao',false)),
+                    'icons' => Catfish::getPost('icons',false),
                     'status' => Catfish::getPost('zhuangtai'),
                     'miaoshu' => Catfish::getPost('miaoshu'),
                     'suolvetu' => Catfish::getPost('suolvetu')
                 ]);
                 Catfish::removeCache('caidan');
+                Catfish::clearCache('show');
                 echo 'ok';
                 exit();
             }
@@ -3238,17 +3243,19 @@ class Index extends CatfishCMS
                         'href' => $lianjie,
                         'link' => $zidingyi,
                         'icon' => str_replace('\'','"',Catfish::getPost('tubiao',false)),
+                        'icons' => Catfish::getPost('icons',false),
                         'status' => Catfish::getPost('zhuangtai'),
                         'miaoshu' => Catfish::getPost('miaoshu'),
                         'suolvetu' => Catfish::getPost('suolvetu')
                     ]);
                 Catfish::removeCache('caidan');
+                Catfish::clearCache('show');
                 echo 'ok';
                 exit();
             }
         }
         $catfishID = Catfish::getGet('catfish');
-        $cdzu = Catfish::db('nav_cate')->where('id',$catfishID)->field('id,cid,parent_id,label,target,href,link,icon,status,miaoshu,suolvetu')->find();
+        $cdzu = Catfish::db('nav_cate')->where('id',$catfishID)->field('id,cid,parent_id,label,target,href,link,icon,icons,status,miaoshu,suolvetu')->find();
         Catfish::allot('catfishItem', $cdzu);
         $catfishcms = Catfish::db('navcat')->field('id,nav_name')->order('active desc,listorder asc,id desc')->select();
         foreach($catfishcms as $key => $val){
@@ -3290,6 +3297,7 @@ class Index extends CatfishCMS
                     'parent_id' => $catfish['parent_id']
                 ]);
             Catfish::removeCache('caidan');
+            Catfish::clearCache('show');
             echo 'ok';
             exit();
         }
@@ -4273,5 +4281,14 @@ class Index extends CatfishCMS
             }
         }
         exit();
+    }
+    public function geticonlist()
+    {
+        if(Catfish::isPost()){
+            return json($this->geticons());
+        }
+        else{
+            return json([]);
+        }
     }
 }
