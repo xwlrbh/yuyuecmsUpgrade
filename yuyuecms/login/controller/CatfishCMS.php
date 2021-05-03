@@ -43,6 +43,10 @@ class CatfishCMS
             {
                 Catfish::allot($val['name'], unserialize($val['value']));
             }
+            elseif($val['name'] == 'template'){
+                $this->template = $val['value'];
+                Catfish::allot($val['name'], $val['value']);
+            }
             elseif($val['name'] == 'allowLogin'){
                 $this->allowLogin = $val['value'];
                 Catfish::allot($val['name'], $val['value']);

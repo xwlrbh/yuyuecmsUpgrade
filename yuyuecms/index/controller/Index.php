@@ -173,5 +173,6 @@ class Index extends CatfishCMS
             Catfish::success(Catfish::lang('Message success'));
             return true;
         }
+        return false;
     }
 }

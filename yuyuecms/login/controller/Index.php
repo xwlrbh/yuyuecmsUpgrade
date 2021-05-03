@@ -72,7 +72,18 @@ class Index extends CatfishCMS
         else{
             Catfish::allot('retpwd', 1);
         }
-        $view = Catfish::output();
+        $templatePath = ROOT_PATH.'public'.DS.'theme'.DS.$this->template.DS;
+        $mobileFile = $templatePath . 'mobile' . DS . 'denglu.html';
+        $templateFile = $templatePath . 'denglu.html';
+        if(Catfish::isMobile() && is_file($mobileFile)){
+            $view = Catfish::output($mobileFile);
+        }
+        elseif(is_file($templateFile)){
+            $view = Catfish::output($templateFile);
+        }
+        else{
+            $view = Catfish::output();
+        }
         return $view;
     }
     public function denglu()
@@ -190,7 +201,18 @@ class Index extends CatfishCMS
             Catfish::redirect('index/Index/error');
             exit();
         }
-        $view = Catfish::output();
+        $templatePath = ROOT_PATH.'public'.DS.'theme'.DS.$this->template.DS;
+        $mobileFile = $templatePath . 'mobile' . DS . 'zhuce.html';
+        $templateFile = $templatePath . 'zhuce.html';
+        if(Catfish::isMobile() && is_file($mobileFile)){
+            $view = Catfish::output($mobileFile);
+        }
+        elseif(is_file($templateFile)){
+            $view = Catfish::output($templateFile);
+        }
+        else{
+            $view = Catfish::output();
+        }
         return $view;
     }
     public function retpwd()
