@@ -1,4 +1,9 @@
 {include file="index/header" /}
+<link href="{$domain}public/common/uploadify/uploadify.css" type="text/css" rel="stylesheet">
+<link href="{$domain}public/common/confirm/jquery-confirm.css" type="text/css" rel="stylesheet">
+<div class="pull-right">
+    <div id="upload"></div>
+</div>
 {volist name="catfishThemes" id="vo" mod="3"}
 {eq name="mod" value="0"}<div class="clearfix"></div>{/eq}
 <div class="col-sm-6 col-md-4">
@@ -24,4 +29,8 @@
     </div>
 </div>
 {/volist}
+<div class="hidden" id="buttonText">{:lang('Upload theme')}</div>
+<script type="text/javascript" src="{$domain}public/common/uploadify/jquery.uploadify.js"></script>
+<script src="{$domain}public/common/confirm/jquery-confirm.js"></script>
+<script src="{$domain}public/common/js/themes.js"></script>
 {include file="index/footer" /}

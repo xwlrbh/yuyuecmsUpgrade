@@ -111,4 +111,5 @@ return [
     'Select icon' => '选择图标',
     'You did not select any icons' => '您没有选择任何图标',
     'Adjust size' => '调整大小',
+    'Upload theme' => '上传主题',
 ];
