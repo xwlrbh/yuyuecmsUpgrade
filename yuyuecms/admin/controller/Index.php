@@ -4340,4 +4340,17 @@ class Index extends CatfishCMS
         }
         exit();
     }
+    public function deltheme()
+    {
+        if(Catfish::isPost())
+        {
+            $theme = trim(Catfish::getPost('name'));
+            $themePath = ROOT_PATH.'public'.DS.'theme'.DS.$theme;
+            if(is_dir($themePath)){
+                $this->deleteFolder($themePath);
+            }
+            echo 'ok';
+            exit();
+        }
+    }
 }
