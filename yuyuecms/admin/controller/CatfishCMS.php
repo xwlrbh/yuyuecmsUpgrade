@@ -195,7 +195,7 @@ class CatfishCMS
         $pluginItem = [];
         if(!empty($pluginsOpened)){
             $pluginsOpened = unserialize($pluginsOpened);
-            $lang = Catfish::detectLang();
+            $lang = $this->getlang();
             foreach($pluginsOpened as $key => $val){
                 $langPath = ROOT_PATH.'plugins' . DS . $val . DS . 'lang' . DS . $lang .'.php';
                 if(is_file($langPath)){
@@ -212,7 +212,7 @@ class CatfishCMS
         }
         $uftheme = ucfirst($this->template);
         if(is_file(ROOT_PATH.'public' . DS . 'theme' . DS . $this->template . DS . $uftheme .'.php')){
-            $lang = Catfish::detectLang();
+            $lang = $this->getlang();
             $langPath = ROOT_PATH.'public' . DS . 'theme' . DS . $this->template . DS . 'lang' . DS . $lang .'.php';
             if(is_file($langPath)){
                 Catfish::loadLang($langPath);
@@ -590,7 +590,7 @@ class CatfishCMS
     }
     protected function postReady()
     {
-        Catfish::loadLang(APP_PATH.'common/lang/'.Catfish::detectLang().'.php');
+        Catfish::loadLang(APP_PATH.'common/lang/'.$this->getlang().'.php');
     }
     protected function recurseCopy($src,$dst){
         $dir=opendir($src);
@@ -836,5 +836,13 @@ class CatfishCMS
         else{
             return false;
         }
+    }
+    private function getlang()
+    {
+        $lang = Catfish::getConfig('fixbglang');
+        if(empty($lang)){
+            $lang = Catfish::detectLang();
+        }
+        return $lang;
     }
 }

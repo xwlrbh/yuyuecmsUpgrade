@@ -22,11 +22,15 @@ class CatfishCMS
         }
         if($loadoptions){
             $this->options();
-            $lang = Catfish::detectLang();
+            $lang = Catfish::getConfig('fixlang');
+            if(empty($lang)){
+                $lang = Catfish::detectLang();
+            }
             if(is_file(ROOT_PATH.'public/theme/'.$this->template.'/lang/'.$lang.'.php')){
                 Catfish::loadLang(ROOT_PATH.'public/theme/'.$this->template.'/lang/'.$lang.'.php');
             }
             Catfish::allot('lang', $lang);
+            Catfish::allot('shortlang', substr($lang, 0, 2));
             $iscn = 0;
             if(substr($lang, 0, 2) == 'zh'){
                 $iscn = 1;
