@@ -16,7 +16,7 @@ class Index extends CatfishCMS
         Catfish::allot('daohang', [
             [
                 'label' => Catfish::lang('Home'),
-                'href' => Catfish::url('index/Index/index'),
+                'href' => $this->geturl('index/Index/index'),
                 'icon' => '',
                 'active' => 0
             ]
@@ -33,13 +33,13 @@ class Index extends CatfishCMS
         Catfish::allot('daohang', [
             [
                 'label' => Catfish::lang('Home'),
-                'href' => Catfish::url('index/Index/index'),
+                'href' => $this->geturl('index/Index/index'),
                 'icon' => '',
                 'active' => 0
             ],
             [
                 'label' => Catfish::lang('News list'),
-                'href' => Catfish::url('index/Index/newslist'),
+                'href' => $this->geturl('index/Index/newslist'),
                 'icon' => '',
                 'active' => 0
             ]
@@ -54,13 +54,13 @@ class Index extends CatfishCMS
         Catfish::allot('daohang', [
             [
                 'label' => Catfish::lang('Home'),
-                'href' => Catfish::url('index/Index/index'),
+                'href' => $this->geturl('index/Index/index'),
                 'icon' => '',
                 'active' => 0
             ],
             [
                 'label' => Catfish::lang('Product list'),
-                'href' => Catfish::url('index/Index/productlist'),
+                'href' => $this->geturl('index/Index/productlist'),
                 'icon' => '',
                 'active' => 0
             ]
@@ -75,13 +75,13 @@ class Index extends CatfishCMS
         Catfish::allot('daohang', [
             [
                 'label' => Catfish::lang('Home'),
-                'href' => Catfish::url('index/Index/index'),
+                'href' => $this->geturl('index/Index/index'),
                 'icon' => '',
                 'active' => 0
             ],
             [
                 'label' => Catfish::lang('Search for'),
-                'href' => Catfish::url('index/Index/search').'?find='.Catfish::getGet('find'),
+                'href' => $this->geturl('index/Index/search').'?find='.Catfish::getGet('find'),
                 'icon' => '',
                 'active' => 0
             ]
@@ -97,13 +97,13 @@ class Index extends CatfishCMS
         Catfish::allot('daohang', [
             [
                 'label' => Catfish::lang('Home'),
-                'href' => Catfish::url('index/Index/index'),
+                'href' => $this->geturl('index/Index/index'),
                 'icon' => '',
                 'active' => 0
             ],
             [
                 'label' => Catfish::lang('List'),
-                'href' => Catfish::url('index/Index/word',['find'=>urlencode($find)]),
+                'href' => $this->geturl('index/Index/word',['find'=>urlencode($find)]),
                 'icon' => '',
                 'active' => 0
             ]

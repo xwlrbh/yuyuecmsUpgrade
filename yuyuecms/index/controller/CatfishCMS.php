@@ -22,10 +22,7 @@ class CatfishCMS
         }
         if($loadoptions){
             $this->options();
-            $lang = Catfish::getConfig('fixlang');
-            if(empty($lang)){
-                $lang = Catfish::detectLang();
-            }
+            $lang = Catfish::detectLang();
             if(is_file(ROOT_PATH.'public/theme/'.$this->template.'/lang/'.$lang.'.php')){
                 Catfish::loadLang(ROOT_PATH.'public/theme/'.$this->template.'/lang/'.$lang.'.php');
             }
@@ -71,7 +68,7 @@ class CatfishCMS
                     if(!is_null($list)){
                         $navigation[$key][] = [
                             'label' => $label,
-                            'href' => Catfish::url('index/Index/'.$list),
+                            'href' => $this->geturl('index/Index/'.$list),
                             'icon' => '',
                             'active' => 0
                         ];
@@ -79,7 +76,7 @@ class CatfishCMS
                     if($page == 'page'){
                         array_unshift($navigation[$key],[
                             'label' => Catfish::lang('Home'),
-                            'href' => Catfish::url('index/Index/index'),
+                            'href' => $this->geturl('index/Index/index'),
                             'icon' => '',
                             'active' => 0
                         ]);
@@ -105,10 +102,10 @@ class CatfishCMS
                 if(!is_null($link)){
                     array_push($navigation[$key],$link);
                 }
-                if(isset($navigation[$key][0]) && $navigation[$key][0]['href'] != Catfish::url('index/Index/index')){
+                if(isset($navigation[$key][0]) && $navigation[$key][0]['href'] != $this->geturl('index/Index/index')){
                     array_unshift($navigation[$key],[
                         'label' => Catfish::lang('Home'),
-                        'href' => Catfish::url('index/Index/index'),
+                        'href' => $this->geturl('index/Index/index'),
                         'icon' => '',
                         'active' => 0
                     ]);
@@ -157,13 +154,13 @@ class CatfishCMS
         $this->getselflabel($page);
         $this->getRecommend($page);
         $urlarr = [
-            'denglu' => Catfish::url('login/Index/index'),
-            'zhuce' => Catfish::url('login/Index/register'),
-            'tuichu' => Catfish::url('login/Index/quit'),
-            'sousuo' => Catfish::url('index/Index/search'),
-            'yonghuzhongxin' => Catfish::url('user/Index/index'),
-            'liuyan' => Catfish::url('index/Index/liuyan'),
-            'shouye' => Catfish::url('index/Index/index')
+            'denglu' => $this->geturl('login/Index/index'),
+            'zhuce' => $this->geturl('login/Index/register'),
+            'tuichu' => $this->geturl('login/Index/quit'),
+            'sousuo' => $this->geturl('index/Index/search'),
+            'yonghuzhongxin' => $this->geturl('user/Index/index'),
+            'liuyan' => $this->geturl('index/Index/liuyan'),
+            'shouye' => $this->geturl('index/Index/index')
         ];
         $isMobile = 0;
         if(Catfish::isMobile()){
@@ -407,7 +404,7 @@ class CatfishCMS
             $id = $catfishcms['id'];
             $link = [
                 'label' => $catfishcms['biaoti'],
-                'href' => Catfish::url('index/Index/product',['find'=>$find]),
+                'href' => $this->geturl('index/Index/product',['find'=>$find]),
                 'icon' => '',
                 'active' => 1
             ];
@@ -552,7 +549,7 @@ class CatfishCMS
         else{
             $link = [
                 'label' => $catfishcms['biaoti'],
-                'href' => Catfish::url('index/Index/page',['find'=>$find]),
+                'href' => $this->geturl('index/Index/page',['find'=>$find]),
                 'icon' => '',
                 'active' => 1
             ];
@@ -693,7 +690,7 @@ class CatfishCMS
             $id = $catfishcms['id'];
             $link = [
                 'label' => $catfishcms['biaoti'],
-                'href' => Catfish::url('index/Index/news',['find'=>$find]),
+                'href' => $this->geturl('index/Index/news',['find'=>$find]),
                 'icon' => '',
                 'active' => 1
             ];
@@ -1287,7 +1284,7 @@ class CatfishCMS
                 foreach($catfish as $key => $val){
                     $labelsub[$val['biaoqian']]['biaoti'] = $val['biaoti'];
                     if($val['cateid'] == 0){
-                        $labelsub[$val['biaoqian']]['gengduo'] = Catfish::url('index/Index/'.$val['aims'].'list');
+                        $labelsub[$val['biaoqian']]['gengduo'] = $this->geturl('index/Index/'.$val['aims'].'list');
                     }
                     else{
                         $alias = Catfish::db($val['aims'].'_cate')
@@ -1295,10 +1292,10 @@ class CatfishCMS
                             ->where('id',$val['cateid'])
                             ->find();
                         if(empty($alias['alias'])){
-                            $labelsub[$val['biaoqian']]['gengduo'] = Catfish::url('index/Index/'.$val['aims'].'list', 'find='.$val['cateid']);
+                            $labelsub[$val['biaoqian']]['gengduo'] = $this->geturl('index/Index/'.$val['aims'].'list', 'find='.$val['cateid']);
                         }
                         else{
-                            $labelsub[$val['biaoqian']]['gengduo'] = Catfish::url('index/Index/'.$val['aims'].'list', 'find='.$alias['alias']);
+                            $labelsub[$val['biaoqian']]['gengduo'] = $this->geturl('index/Index/'.$val['aims'].'list', 'find='.$alias['alias']);
                         }
                     }
                     $labelsub[$val['biaoqian']]['neirong'] = $this->getdata($val);
@@ -1539,7 +1536,7 @@ class CatfishCMS
             foreach($gjzarr as $val){
                 $catfishcms['guanjianzi'][] = [
                     'guanjianzi' => $val,
-                    'url' => Catfish::url('index/Index/word',['find' => urlencode($val)])
+                    'url' => $this->geturl('index/Index/word',['find' => urlencode($val)])
                 ];
             }
         }
@@ -1603,10 +1600,10 @@ class CatfishCMS
         $catfishcms['tongji']['tu'] = count($catfishcms['tu']);
         if(isset($catfishcms['alias'])){
             if(!empty($catfishcms['alias'])){
-                $catfishcms['url'] = Catfish::url('index/Index/'.$dz,['find'=>$catfishcms['alias']]);
+                $catfishcms['url'] = $this->geturl('index/Index/'.$dz,['find'=>$catfishcms['alias']]);
             }
             else{
-                $catfishcms['url'] = Catfish::url('index/Index/'.$dz,['find'=>$catfishcms['id']]);
+                $catfishcms['url'] = $this->geturl('index/Index/'.$dz,['find'=>$catfishcms['id']]);
             }
             unset($catfishcms['alias']);
         }
@@ -1621,7 +1618,7 @@ class CatfishCMS
                 foreach($gjzarr as $gval){
                     $catfishcms[$key]['guanjianzi'][] = [
                         'guanjianzi' => $gval,
-                        'url' => Catfish::url('index/Index/word',['find' => urlencode($gval)])
+                        'url' => $this->geturl('index/Index/word',['find' => urlencode($gval)])
                     ];
                 }
             }
@@ -1694,10 +1691,10 @@ class CatfishCMS
                 }
             }
             if(!empty($val['alias'])){
-                $catfishcms[$key]['url'] = Catfish::url('index/Index/'.$dz,['find'=>$val['alias']]);
+                $catfishcms[$key]['url'] = $this->geturl('index/Index/'.$dz,['find'=>$val['alias']]);
             }
             else{
-                $catfishcms[$key]['url'] = Catfish::url('index/Index/'.$dz,['find'=>$val['id']]);
+                $catfishcms[$key]['url'] = $this->geturl('index/Index/'.$dz,['find'=>$val['id']]);
             }
             if(isset($val['alias'])){
                 unset($catfishcms[$key]['alias']);
@@ -1892,13 +1889,13 @@ class CatfishCMS
                     if(!empty($catfishtmp['alias'])){
                         $tmparr[1] = $catfishtmp['alias'];
                     }
-                    $href = Catfish::url($tmparr[0],['find'=>$tmparr[1]]);
+                    $href = $this->geturl($tmparr[0],['find'=>$tmparr[1]]);
                     $menu[$key]['href'] = $href;
                     $this->chip($navigation,$mbx,$val,$href);
                     if($mbx == 2){
                         $mbx = 0;
                     }
-                    if($href == Catfish::url($path,['find'=>$alias])){
+                    if($href == $this->geturl($path,['find'=>$alias])){
                         $menu[$key]['active'] = 1;
                         $mbx = 1;
                         $sm = true;
@@ -1917,13 +1914,13 @@ class CatfishCMS
                     $this->sibling($submenu, $smp, $sm, $val, $href);
                 }
                 else{
-                    $href = Catfish::url($val['href']);
+                    $href = $this->geturl($val['href']);
                     $menu[$key]['href'] = $href;
                     $this->chip($navigation,$mbx,$val,$href);
                     if($mbx == 2){
                         $mbx = 0;
                     }
-                    if($href == Catfish::url($path) && empty($alias)){
+                    if($href == $this->geturl($path) && empty($alias)){
                         $menu[$key]['active'] = 1;
                         $mbx = 1;
                         $sm = true;
@@ -2122,7 +2119,7 @@ class CatfishCMS
             elseif($val['name'] == 'domain'){
                 $root = Catfish::domainAmend($val['value']);
                 Catfish::allot($val['name'], $root);
-                $dm = Catfish::url('/');
+                $dm = $this->geturl('/');
                 if(strpos($dm,'/index.php') !== false)
                 {
                     $root .= 'index.php/';
@@ -2208,7 +2205,7 @@ class CatfishCMS
         Catfish::allot('daohang', [
             [
                 'label' => Catfish::lang('Home'),
-                'href' => Catfish::url('index/Index/index'),
+                'href' => $this->geturl('index/Index/index'),
                 'icon' => '',
                 'active' => 0
             ],
@@ -2247,7 +2244,7 @@ class CatfishCMS
                 $url = $catfishcms['alias'];
             }
             if($catfishcms['parent_id'] == 0){
-                $re = [Catfish::url('index/Index/'.$tbl.'list',['find'=>$url])];
+                $re = [$this->geturl('index/Index/'.$tbl.'list',['find'=>$url])];
             }
             else{
                 $urlp = $catfishcms['parent_id'];
@@ -2255,7 +2252,7 @@ class CatfishCMS
                 if(!empty($catfishp['alias'])){
                     $urlp = $catfishp['alias'];
                 }
-                $re = [Catfish::url('index/Index/'.$tbl.'list',['find'=>$url]),Catfish::url('index/Index/'.$tbl.'list',['find'=>$urlp])];
+                $re = [$this->geturl('index/Index/'.$tbl.'list',['find'=>$url]),$this->geturl('index/Index/'.$tbl.'list',['find'=>$urlp])];
             }
             return $re;
         }
@@ -2331,5 +2328,19 @@ class CatfishCMS
             return Catfish::listen($hook, $params);
         }
         return false;
+    }
+    protected function geturl($url = '', $vars = '', $suffix = true, $domain = null)
+    {
+        $fixdomain = Catfish::getConfig('fixdomain');
+        if($fixdomain == true && is_null($domain)){
+            $u = rtrim(Catfish::get('domain'), '/') . Catfish::url($url, $vars, $suffix, false);
+        }
+        elseif(is_null($domain)){
+            $u = Catfish::url($url, $vars, $suffix);
+        }
+        else{
+            $u = Catfish::url($url, $vars, $suffix, $domain);
+        }
+        return $u;
     }
 }

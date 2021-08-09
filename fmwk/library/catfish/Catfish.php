@@ -834,8 +834,11 @@ class Catfish
     }
     public static function detectLang()
     {
-        Lang::setLangCookieVar('yuyuelang');
-        $lang = Lang::detect();
+        $lang = self::getConfig('fixlang');
+        if(empty($lang)){
+            Lang::setLangCookieVar('yuyuelang');
+            $lang = Lang::detect();
+        }
         if(stripos($lang, 'zh') !== false){
             $lang = 'zh-cn';
         }
