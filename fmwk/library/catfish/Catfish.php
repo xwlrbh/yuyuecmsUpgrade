@@ -839,8 +839,18 @@ class Catfish
             Lang::setLangCookieVar('yuyuelang');
             $lang = Lang::detect();
         }
-        if(stripos($lang, 'zh') !== false){
+        $langtwo = substr(strtolower(trim($lang)), 0, 2);
+        if($langtwo == 'zh'){
             $lang = 'zh-cn';
+        }
+        elseif($langtwo == 'en'){
+            $lang = 'en-us';
+        }
+        elseif($langtwo == 'ja'){
+            $lang = 'ja-jp';
+        }
+        else{
+            $lang = $langtwo . '-' . $langtwo;
         }
         self::setCookie('yuyuelang', $lang, 3600);
         return $lang;

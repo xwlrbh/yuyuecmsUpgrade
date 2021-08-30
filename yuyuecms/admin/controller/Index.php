@@ -3131,6 +3131,9 @@ class Index extends CatfishCMS
             Catfish::clearCache('show');
         }
         $caidanfenlei = Catfish::getPost('caidanfenlei');
+        if(empty($caidanfenlei) && Catfish::hasGet('fl')){
+            $caidanfenlei = Catfish::getGet('fl');
+        }
         $catfish = Catfish::db('navcat')
             ->field('id,nav_name')
             ->order('active desc,listorder asc,id desc')
@@ -3152,6 +3155,7 @@ class Index extends CatfishCMS
         }
         $catfishcms = Catfish::getSort('nav','id,parent_id,label,status,listorder','&#12288;',['cid',$cid],'listorder asc');
         Catfish::allot('catfishcms', $catfishcms);
+        Catfish::allot('caidanfenlei', $caidanfenlei);
         return $this->show(Catfish::lang('All menus'), 'caidan', 'managemenu');
     }
     public function addsubmenu()
@@ -3215,6 +3219,7 @@ class Index extends CatfishCMS
         Catfish::allot('product', Catfish::getSort('product','id,catename,parent_id','&#12288;'));
         $catfishpage = Catfish::db('page')->field('id,biaoti')->order('id desc')->select();
         Catfish::allot('page', $catfishpage);
+        Catfish::allot('caidanfenlei', Catfish::getGet('fl'));
         return $this->show(Catfish::lang('Add a submenu'), 'caidan', 'managemenu', true);
     }
     public function editingmenu()
@@ -3281,6 +3286,7 @@ class Index extends CatfishCMS
         Catfish::allot('product', Catfish::getSort('product','id,catename,parent_id','&#12288;'));
         $catfishpage = Catfish::db('page')->field('id,biaoti')->order('id desc')->select();
         Catfish::allot('page', $catfishpage);
+        Catfish::allot('caidanfenlei', Catfish::getGet('fl'));
         return $this->show(Catfish::lang('Modify menu'), 'caidan', 'managemenu', true);
     }
     public function managemenudel()

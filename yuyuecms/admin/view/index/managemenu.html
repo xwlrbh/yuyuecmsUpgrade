@@ -17,6 +17,7 @@
     <div>
         <p>
             <input type="hidden" name="paixu" value="paixu">
+            <input type="hidden" name="caidanfenlei" value="{$caidanfenlei}">
             <input type="hidden" name="verification" value="{$verification}">
             <button type="submit" class="btn btn-primary btn-sm">{:lang('Sort')}<span class="hidden">&nbsp;<img src="{$domain}public/common/images/zhixing_bai.gif" width="14" height="14"></span></button>
         </p>
@@ -46,9 +47,9 @@
                     {/if}
                 </td>
                 <td>
-                    <a href="{:Url('admin/Index/addsubmenu')}?catfish={$vo.id}">{:lang('Add a submenu')}</a>
+                    <a href="{:Url('admin/Index/addsubmenu')}?catfish={$vo.id}&fl={$caidanfenlei}">{:lang('Add a submenu')}</a>
                     &nbsp;|&nbsp;
-                    <a href="{:Url('admin/Index/editingmenu')}?catfish={$vo.id}">{:lang('Edit')}</a>
+                    <a href="{:Url('admin/Index/editingmenu')}?catfish={$vo.id}&fl={$caidanfenlei}">{:lang('Edit')}</a>
                     &nbsp;|&nbsp;
                     <a class="twitter" data-title="{:lang('Confirm to delete?')}" href="#!">{:lang('Delete')}</a>
                     <input type="hidden" value="{$vo.id}">

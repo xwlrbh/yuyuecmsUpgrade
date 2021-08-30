@@ -112,4 +112,5 @@ return [
     'You did not select any icons' => '您没有选择任何图标',
     'Adjust size' => '调整大小',
     'Upload theme' => '上传主题',
+    'Go back' => '返回',
 ];
