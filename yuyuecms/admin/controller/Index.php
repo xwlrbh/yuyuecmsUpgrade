@@ -2415,6 +2415,11 @@ class Index extends CatfishCMS
         }
         Catfish::allot('catfishcms', $catfishcms);
         Catfish::allot('pages', $catfish->render());
+        $page = Catfish::getGet('page');
+        if(empty($page)){
+            $page = 1;
+        }
+        Catfish::allot('page', $page);
         return $this->show(Catfish::lang('Self-labeling'), 'websiterelated', 'selflabeling');
     }
     public function selflabelingadd()
@@ -2442,6 +2447,11 @@ class Index extends CatfishCMS
                 exit();
             }
         }
+        $page = Catfish::getGet('pg');
+        if(empty($page)){
+            $page = 1;
+        }
+        Catfish::allot('page', $page);
         return $this->show(Catfish::lang('Self-labeling').' - '.Catfish::lang('Add a custom label'), 'websiterelated', 'selflabeling');
     }
     public function selflabelingchk()
@@ -2506,6 +2516,11 @@ class Index extends CatfishCMS
         }
         $catfishItem = Catfish::db('label')->where('id',Catfish::getGet('c'))->find();
         Catfish::allot('catfishItem', $catfishItem);
+        $page = Catfish::getGet('pg');
+        if(empty($page)){
+            $page = 1;
+        }
+        Catfish::allot('page', $page);
         return $this->show(Catfish::lang('Modify a custom label'), 'websiterelated', 'selflabeling');
     }
     public function homeshow()
@@ -2664,7 +2679,7 @@ class Index extends CatfishCMS
         $dir = glob(ROOT_PATH.'plugins/*',GLOB_ONLYDIR);
         foreach($dir as $key => $val){
             $pluginBaseName = basename($val);
-            $pluginLang = ROOT_PATH.'plugins'.DS.$pluginBaseName.DS.'lang'.DS.Catfish::detectLang().'.php';
+            $pluginLang = ROOT_PATH.'plugins'.DS.$pluginBaseName.DS.'lang'.DS.$this->getlang().'.php';
             if(is_file($pluginLang)){
                 Catfish::loadLang($pluginLang);
             }
@@ -2788,7 +2803,7 @@ class Index extends CatfishCMS
             'function' => $func,
             'template' => $theme,
         ];
-        $lang = Catfish::detectLang();
+        $lang = $this->getlang();
         if(empty($theme)){
             $langPath = ROOT_PATH.'plugins/'.$plugin.'/lang/'.$lang.'.php';
         }
@@ -3547,7 +3562,7 @@ class Index extends CatfishCMS
     public function themesetting()
     {
         $this->checkUser();
-        $lang = Catfish::detectLang();
+        $lang = $this->getlang();
         $langPath = ROOT_PATH.'public/theme/'.$this->template.'/theme/lang/'.$lang.'.php';
         if(is_file($langPath)){
             Catfish::loadLang($langPath);

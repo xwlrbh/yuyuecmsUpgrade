@@ -11,6 +11,7 @@ use catfishcms\Catfish;
 class CatfishCMS
 {
     protected $template = 'default';
+    protected $lang = 'zh-cn';
     protected function checkUser()
     {
         if(!Catfish::hasSession('user_id') && Catfish::hasCookie('user_id')){
@@ -191,13 +192,13 @@ class CatfishCMS
         }
         Catfish::allot('prompt', $differ);
         Catfish::allot('openpay', Catfish::get('openpay'));
+        $this->lang = $this->getlang();
         $pluginsOpened = Catfish::get('plugins_opened');
         $pluginItem = [];
         if(!empty($pluginsOpened)){
             $pluginsOpened = unserialize($pluginsOpened);
-            $lang = $this->getlang();
             foreach($pluginsOpened as $key => $val){
-                $langPath = ROOT_PATH.'plugins' . DS . $val . DS . 'lang' . DS . $lang .'.php';
+                $langPath = ROOT_PATH.'plugins' . DS . $val . DS . 'lang' . DS . $this->lang .'.php';
                 if(is_file($langPath)){
                     Catfish::loadLang($langPath);
                 }
@@ -212,8 +213,7 @@ class CatfishCMS
         }
         $uftheme = ucfirst($this->template);
         if(is_file(ROOT_PATH.'public' . DS . 'theme' . DS . $this->template . DS . $uftheme .'.php')){
-            $lang = $this->getlang();
-            $langPath = ROOT_PATH.'public' . DS . 'theme' . DS . $this->template . DS . 'lang' . DS . $lang .'.php';
+            $langPath = ROOT_PATH.'public' . DS . 'theme' . DS . $this->template . DS . 'lang' . DS . $this->lang .'.php';
             if(is_file($langPath)){
                 Catfish::loadLang($langPath);
             }
@@ -837,11 +837,14 @@ class CatfishCMS
             return false;
         }
     }
-    private function getlang()
+    protected function getlang()
     {
-        $lang = Catfish::getConfig('fixbglang');
-        if(empty($lang)){
-            $lang = Catfish::detectLang();
+        $lang = Catfish::detectLang(true);
+        if(is_file(APP_PATH.'admin/lang/'.$lang.'.php')){
+            Catfish::loadLang(APP_PATH.'admin/lang/'.$lang.'.php');
+        }
+        if(is_file(APP_PATH.'common/lang/'.$lang.'.php')){
+            Catfish::loadLang(APP_PATH.'common/lang/'.$lang.'.php');
         }
         return $lang;
     }

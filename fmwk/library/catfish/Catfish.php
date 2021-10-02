@@ -832,10 +832,22 @@ class Catfish
     {
         Lang::load($file, $range);
     }
-    public static function detectLang()
+    public static function detectLang($isbg = false)
     {
-        $lang = self::getConfig('fixlang');
-        if(empty($lang)){
+        $isconfig = false;
+        if($isbg){
+            $lang = strtolower(trim(self::getConfig('fixbglang')));
+            if(!empty($lang)){
+                $isconfig = true;
+            }
+        }
+        else{
+            $lang = strtolower(trim(self::getConfig('fixlang')));
+            if(!empty($lang)){
+                $isconfig = true;
+            }
+        }
+        if(!$isconfig){
             Lang::setLangCookieVar('yuyuelang');
             $lang = Lang::detect();
         }
@@ -852,7 +864,12 @@ class Catfish
         else{
             $lang = $langtwo . '-' . $langtwo;
         }
-        self::setCookie('yuyuelang', $lang, 3600);
+        if(!$isconfig){
+            self::setCookie('yuyuelang', $lang, 3600);
+        }
+        else{
+            self::deleteCookie('yuyuelang');
+        }
         return $lang;
     }
     public static function version()
