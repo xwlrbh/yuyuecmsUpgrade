@@ -1,6 +1,6 @@
 {include file="index/header" /}
 <link href="{$domain}public/common/confirm/jquery-confirm.css" type="text/css" rel="stylesheet">
-<div><a class="btn btn-default" href="{:Url('admin/Index/addslideshow')}" role="button">{:lang('Add a slide')}</a></div><br>
+<div><a class="btn btn-default" href="{:Url('admin/Index/addslideshow')}?pg={$page}" role="button">{:lang('Add a slide')}</a></div><br>
 <div class="col-md-12">
     <form class="form-inline" method="post" action="">
         <div>
@@ -43,7 +43,7 @@
                         </td>
                         <td>
                             <input class="hidden" value="{$vo.status}">
-                            <a href="{:Url('admin/Index/editingslide')}?catfish={$vo.slideid}">{:lang('Edit')}</a>
+                            <a href="{:Url('admin/Index/editingslide')}?catfish={$vo.slideid}&pg={$page}">{:lang('Edit')}</a>
                             &nbsp;|&nbsp;
                             <a class="twitter" data-title="{:lang('Confirm to delete?')}" href="#!">{:lang('Delete')}</a>
                             &nbsp;|&nbsp;

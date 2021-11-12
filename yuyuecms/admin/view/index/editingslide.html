@@ -3,6 +3,7 @@
 <link href="{$domain}public/common/uploadify/uploadify.css" type="text/css" rel="stylesheet">
 <div class="col-md-12">
     <form method="post" action="" id="slideForm">
+        <div class="pull-right"><a class="btn btn-default btn-xs" href="{:Url('admin/Index/slideshow')}?page={$page}">{:lang('Go back')}</a></div>
         <div class="form-group">
             <label>{:lang('Slide grouping')}：&nbsp;<b><span class="text-danger">*</span></b></label>
             <select class="form-control" name="slidegrouping" id="slidegrouping" autofocus>

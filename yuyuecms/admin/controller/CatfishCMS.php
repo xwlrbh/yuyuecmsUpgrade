@@ -464,11 +464,11 @@ class CatfishCMS
     protected function selflabelingPost()
     {
         $rule = [
-            'biaoqian' => 'require|alphaNum'
+            'biaoqian' => 'require|alphaDash'
         ];
         $msg = [
             'biaoqian.require' => Catfish::lang('Label name must be filled in'),
-            'biaoqian.alphaNum' => Catfish::lang('Label names can only use letters and numbers')
+            'biaoqian.alphaDash' => Catfish::lang('Label names can only be composed of letters, numbers and underscores or connecting lines')
         ];
         $data = [
             'biaoqian' => trim(Catfish::getPost('biaoqian'))

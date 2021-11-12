@@ -2163,6 +2163,11 @@ class Index extends CatfishCMS
         Catfish::allot('catfishslide', Catfish::json($catfishslide));
         Catfish::allot('slideshowWidth', 820);
         Catfish::allot('slideshowHeight', 390);
+        $page = Catfish::getGet('pg');
+        if(empty($page)){
+            $page = 1;
+        }
+        Catfish::allot('page', $page);
         return $this->show(Catfish::lang('Add a slide'), 'websiterelated', 'slideshow', true);
     }
     public function slideshow()
@@ -2178,6 +2183,11 @@ class Index extends CatfishCMS
             ->paginate(20);
         Catfish::allot('data', $data->items());
         Catfish::allot('pages', $data->render());
+        $page = Catfish::getGet('page');
+        if(empty($page)){
+            $page = 1;
+        }
+        Catfish::allot('page', $page);
         return $this->show(Catfish::lang('Slides'), 'websiterelated', 'slideshow');
     }
     public function yincangqiyong()
@@ -2261,6 +2271,11 @@ class Index extends CatfishCMS
         $catfish = Catfish::db('slide_cate_relationships')->where('slideid',$catfishID)->field('cateid')->find();
         $catfishItem['cateid'] = $catfish['cateid'];
         Catfish::allot('catfishItem', $catfishItem);
+        $page = Catfish::getGet('pg');
+        if(empty($page)){
+            $page = 1;
+        }
+        Catfish::allot('page', $page);
         return $this->show(Catfish::lang('Editing slide'), 'websiterelated', 'slideshow', true);
     }
     public function addlinks()
@@ -2396,7 +2411,7 @@ class Index extends CatfishCMS
     public function selflabeling()
     {
         $this->checkUser();
-        $catfish = Catfish::db('label')->field('id,biaoqian,outpos,content,remarks')->paginate(20);
+        $catfish = Catfish::db('label')->field('id,biaoqian,outpos,content,remarks')->order('biaoqian asc')->paginate(20);
         $catfishcms = $catfish->items();
         $catfisheff = [
             'all' => Catfish::lang('Full website effective'),
