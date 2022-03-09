@@ -468,13 +468,19 @@ class CatfishCMS
         }
         $catfishcms['hou'] = $catfishdown;
         $catfishcms['yuedu']++;
+        $cachezongjilu = 'index_chanpin_'.$catfishcms['id'].'_zongjilu';
+        $zongjilu = Catfish::getCache($cachezongjilu);
         $catfishcomment = Catfish::view('product_comments','id,createtime as pinglunshijian,content as pinglunneirong,parent_id')
             ->view('users','nicheng,touxiang','users.id=product_comments.uid')
             ->where('product_comments.stid','=',$catfishcms['id'])
             ->where('product_comments.parent_id','=',0)
             ->where('product_comments.status','=',1)
             ->order('product_comments.createtime desc')
-            ->paginate($this->everyPageShows);
+            ->paginate($this->everyPageShows, $zongjilu);
+        if($zongjilu === false){
+            $zongjilu = $catfishcomment->total();
+            Catfish::setCache($cachezongjilu,$zongjilu,$this->time);
+        }
         $catfishcms['pinglun'] = $catfishcomment->items();
         foreach($catfishcms['pinglun'] as $key => $val){
             if(!empty($val['touxiang']) && substr($val['touxiang'], 0, 5) == 'data/'){
@@ -489,12 +495,17 @@ class CatfishCMS
             $idStr .= empty($idStr) ? $val['id'] : ',' . $val['id'];
         }
         if(!empty($idStr)){
-            $catfishsubcomment = Catfish::view('product_comments','id,createtime as pinglunshijian,content as pinglunneirong,parent_id')
-                ->view('users','nicheng,touxiang','users.id=product_comments.uid')
-                ->where('product_comments.topid','in',$idStr)
-                ->where('product_comments.status','=',1)
-                ->order('product_comments.id asc')
-                ->select();
+            $cachename = 'index_chanpin_two_' . md5($idStr);
+            $catfishsubcomment = Catfish::getCache($cachename);
+            if($catfishsubcomment === false){
+                $catfishsubcomment = Catfish::view('product_comments','id,createtime as pinglunshijian,content as pinglunneirong,parent_id')
+                    ->view('users','nicheng,touxiang','users.id=product_comments.uid')
+                    ->where('product_comments.topid','in',$idStr)
+                    ->where('product_comments.status','=',1)
+                    ->order('product_comments.id asc')
+                    ->select();
+                Catfish::setCache($cachename,$catfishsubcomment,$this->time);
+            }
             if(is_array($catfishsubcomment) && count($catfishsubcomment) > 0){
                 $idArr = explode(',', $idStr);
                 foreach($catfishsubcomment as $ckey => $cval){
@@ -608,13 +619,19 @@ class CatfishCMS
         }
         $catfishcms['hou'] = $catfishdown;
         $catfishcms['yuedu']++;
+        $cachezongjilu = 'index_danye_'.$catfishcms['id'].'_zongjilu';
+        $zongjilu = Catfish::getCache($cachezongjilu);
         $catfishcomment = Catfish::view('page_comments','id,createtime as pinglunshijian,content as pinglunneirong,parent_id')
             ->view('users','nicheng,touxiang','users.id=page_comments.uid')
             ->where('page_comments.stid','=',$catfishcms['id'])
             ->where('page_comments.parent_id','=',0)
             ->where('page_comments.status','=',1)
             ->order('page_comments.createtime desc')
-            ->paginate($this->everyPageShows);
+            ->paginate($this->everyPageShows, $zongjilu);
+        if($zongjilu === false){
+            $zongjilu = $catfishcomment->total();
+            Catfish::setCache($cachezongjilu,$zongjilu,$this->time);
+        }
         $catfishcms['pinglun'] = $catfishcomment->items();
         foreach($catfishcms['pinglun'] as $key => $val){
             if(!empty($val['touxiang']) && substr($val['touxiang'], 0, 5) == 'data/'){
@@ -629,12 +646,17 @@ class CatfishCMS
             $idStr .= empty($idStr) ? $val['id'] : ',' . $val['id'];
         }
         if(!empty($idStr)){
-            $catfishsubcomment = Catfish::view('page_comments','id,createtime as pinglunshijian,content as pinglunneirong,parent_id')
-                ->view('users','nicheng,touxiang','users.id=page_comments.uid')
-                ->where('page_comments.topid','in',$idStr)
-                ->where('page_comments.status','=',1)
-                ->order('page_comments.id asc')
-                ->select();
+            $cachename = 'index_danye_two_' . md5($idStr);
+            $catfishsubcomment = Catfish::getCache($cachename);
+            if($catfishsubcomment === false){
+                $catfishsubcomment = Catfish::view('page_comments','id,createtime as pinglunshijian,content as pinglunneirong,parent_id')
+                    ->view('users','nicheng,touxiang','users.id=page_comments.uid')
+                    ->where('page_comments.topid','in',$idStr)
+                    ->where('page_comments.status','=',1)
+                    ->order('page_comments.id asc')
+                    ->select();
+                Catfish::setCache($cachename,$catfishsubcomment,$this->time);
+            }
             if(is_array($catfishsubcomment) && count($catfishsubcomment) > 0){
                 $idArr = explode(',', $idStr);
                 foreach($catfishsubcomment as $ckey => $cval){
@@ -749,13 +771,19 @@ class CatfishCMS
         }
         $catfishcms['hou'] = $catfishdown;
         $catfishcms['yuedu']++;
+        $cachezongjilu = 'index_xinwen_'.$catfishcms['id'].'_zongjilu';
+        $zongjilu = Catfish::getCache($cachezongjilu);
         $catfishcomment = Catfish::view('news_comments','id,createtime as pinglunshijian,content as pinglunneirong,parent_id')
             ->view('users','nicheng,touxiang','users.id=news_comments.uid')
             ->where('news_comments.stid','=',$catfishcms['id'])
             ->where('news_comments.parent_id','=',0)
             ->where('news_comments.status','=',1)
             ->order('news_comments.createtime desc')
-            ->paginate($this->everyPageShows);
+            ->paginate($this->everyPageShows, $zongjilu);
+        if($zongjilu === false){
+            $zongjilu = $catfishcomment->total();
+            Catfish::setCache($cachezongjilu,$zongjilu,$this->time);
+        }
         $catfishcms['pinglun'] = $catfishcomment->items();
         foreach($catfishcms['pinglun'] as $key => $val){
             if(!empty($val['touxiang']) && substr($val['touxiang'], 0, 5) == 'data/'){
@@ -770,12 +798,17 @@ class CatfishCMS
             $idStr .= empty($idStr) ? $val['id'] : ',' . $val['id'];
         }
         if(!empty($idStr)){
-            $catfishsubcomment = Catfish::view('news_comments','id,createtime as pinglunshijian,content as pinglunneirong,parent_id')
-                ->view('users','nicheng,touxiang','users.id=news_comments.uid')
-                ->where('news_comments.topid','in',$idStr)
-                ->where('news_comments.status','=',1)
-                ->order('news_comments.id asc')
-                ->select();
+            $cachename = 'index_xinwen_two_' . md5($idStr);
+            $catfishsubcomment = Catfish::getCache($cachename);
+            if($catfishsubcomment === false){
+                $catfishsubcomment = Catfish::view('news_comments','id,createtime as pinglunshijian,content as pinglunneirong,parent_id')
+                    ->view('users','nicheng,touxiang','users.id=news_comments.uid')
+                    ->where('news_comments.topid','in',$idStr)
+                    ->where('news_comments.status','=',1)
+                    ->order('news_comments.id asc')
+                    ->select();
+                Catfish::setCache($cachename,$catfishsubcomment,$this->time);
+            }
             if(is_array($catfishsubcomment) && count($catfishsubcomment) > 0){
                 $idArr = explode(',', $idStr);
                 foreach($catfishsubcomment as $ckey => $cval){
@@ -927,6 +960,8 @@ class CatfishCMS
                 else{
                     $product_cate = Catfish::db('product_cate')->where('id',$find)->field('id,catename,guanjianzi,description,template,tu')->find();
                 }
+                $cachezongjilu = 'index_chanpinliebiao_find_'.md5($field.'_'.$find.'_'.$order).'_zongjilu';
+                $zongjilu = Catfish::getCache($cachezongjilu);
                 $catfish = Catfish::view('product_cate_relationships','stid id')
                     ->view('product',$field,'product.id=product_cate_relationships.stid')
                     ->view('product_cate','catename','product_cate.id=product_cate_relationships.cateid')
@@ -936,7 +971,11 @@ class CatfishCMS
                     ->where('product.review','=',1)
                     ->where('product_cate.id|product_cate.parent_id','=',$find)
                     ->order('product.istop desc,'.$order)
-                    ->paginate($ps);
+                    ->paginate($ps, $zongjilu);
+                if($zongjilu === false){
+                    $zongjilu = $catfish->total();
+                    Catfish::setCache($cachezongjilu,$zongjilu,$this->time);
+                }
             }
             else{
                 $order = $this->getorder($chanpinliebiao['method']);
@@ -950,12 +989,18 @@ class CatfishCMS
                         'tu' => ''
                     ];
                 }
+                $cachezongjilu = 'index_chanpinliebiao_'.md5($field.'_'.$order).'_zongjilu';
+                $zongjilu = Catfish::getCache($cachezongjilu);
                 $catfish = Catfish::view('product','id,'.$field)
                     ->view('users','nicheng','users.id=product.uid')
                     ->where('product.status','=',1)
                     ->where('product.review','=',1)
                     ->order('product.istop desc,'.$order)
-                    ->paginate($ps);
+                    ->paginate($ps, $zongjilu);
+                if($zongjilu === false){
+                    $zongjilu = $catfish->total();
+                    Catfish::setCache($cachezongjilu,$zongjilu,$this->time);
+                }
             }
             $catfishcms[$chanpinliebiao['biaoqian']] = $this->convert($catfish->items(),'product');
             $catfishcms['pages'] = $catfish->render();
@@ -1027,6 +1072,8 @@ class CatfishCMS
                 else{
                     $news_cate = Catfish::db('news_cate')->where('id',$find)->field('id,catename,guanjianzi,description,template,tu')->find();
                 }
+                $cachezongjilu = 'index_xinwenliebiao_find_'.md5($field.'_'.$find.'_'.$order).'_zongjilu';
+                $zongjilu = Catfish::getCache($cachezongjilu);
                 $catfish = Catfish::view('news_cate_relationships','stid id')
                     ->view('news',$field,'news.id=news_cate_relationships.stid')
                     ->view('news_cate','catename','news_cate.id=news_cate_relationships.cateid')
@@ -1036,7 +1083,11 @@ class CatfishCMS
                     ->where('news.review','=',1)
                     ->where('news_cate.id|news_cate.parent_id','=',$find)
                     ->order('news.istop desc,'.$order)
-                    ->paginate($ps);
+                    ->paginate($ps, $zongjilu);
+                if($zongjilu === false){
+                    $zongjilu = $catfish->total();
+                    Catfish::setCache($cachezongjilu,$zongjilu,$this->time);
+                }
             }
             else{
                 $order = $this->getorder($xinwenliebiao['method']);
@@ -1050,12 +1101,18 @@ class CatfishCMS
                         'tu' => ''
                     ];
                 }
+                $cachezongjilu = 'index_xinwenliebiao_'.md5($field.'_'.$order).'_zongjilu';
+                $zongjilu = Catfish::getCache($cachezongjilu);
                 $catfish = Catfish::view('news','id,'.$field)
                     ->view('users','nicheng','users.id=news.uid')
                     ->where('news.status','=',1)
                     ->where('news.review','=',1)
                     ->order('news.istop desc,'.$order)
-                    ->paginate($ps);
+                    ->paginate($ps, $zongjilu);
+                if($zongjilu === false){
+                    $zongjilu = $catfish->total();
+                    Catfish::setCache($cachezongjilu,$zongjilu,$this->time);
+                }
             }
             $catfishcms[$xinwenliebiao['biaoqian']] = $this->convert($catfish->items(),'news');
             $catfishcms['pages'] = $catfish->render();
@@ -1131,19 +1188,31 @@ class CatfishCMS
                     ->order('istop desc,'.$order)
                     ->buildSql();
                 $field = 'catfish.id,catfish.guanjianzi,catfish.laiyuan,catfish.fabushijian,catfish.alias,catfish.zhengwen,catfish.biaoti,catfish.zhaiyao,catfish.gengxinshijian,catfish.pinglunshu,catfish.suolvetu,catfish.shipin,catfish.zutu,catfish.wenjianzu,catfish.yuedu,catfish.zan,catfish.istop,catfish.symbol';
+                $cachezongjilu = 'index_shouye_all_'.md5($subQuery.'_'.$field).'_zongjilu';
+                $zongjilu = Catfish::getCache($cachezongjilu);
                 $catfish = Catfish::table($subQuery.' catfish')
                     ->join('users','users.id=catfish.uid')
                     ->field($field.',users.nicheng')
-                    ->paginate($ps);
+                    ->paginate($ps, $zongjilu);
+                if($zongjilu === false){
+                    $zongjilu = $catfish->total();
+                    Catfish::setCache($cachezongjilu,$zongjilu,$this->time);
+                }
             }
             elseif($shouye['homeout'] == 'news'){
                 $order = $this->getorder($shouye['method'],'news.');
+                $cachezongjilu = 'index_shouye_news_'.md5($field.'_'.$order).'_zongjilu';
+                $zongjilu = Catfish::getCache($cachezongjilu);
                 $catfish = Catfish::view('news',$field)
                     ->view('users','nicheng','users.id=news.uid')
                     ->where('news.status','=',1)
                     ->where('news.review','=',1)
                     ->order('news.istop desc,'.$order)
-                    ->paginate($ps);
+                    ->paginate($ps, $zongjilu);
+                if($zongjilu === false){
+                    $zongjilu = $catfish->total();
+                    Catfish::setCache($cachezongjilu,$zongjilu,$this->time);
+                }
             }
             elseif($shouye['homeout'] == 'product'){
                 $order = $this->getorder($shouye['method'],'product.');
@@ -1161,12 +1230,18 @@ class CatfishCMS
                         $order = 'product.xianjia asc';
                         break;
                 }
+                $cachezongjilu = 'index_shouye_product_'.md5($field.'_'.$order).'_zongjilu';
+                $zongjilu = Catfish::getCache($cachezongjilu);
                 $catfish = Catfish::view('product',$field.',yuanjia,xianjia')
                     ->view('users','nicheng','users.id=product.uid')
                     ->where('product.status','=',1)
                     ->where('product.review','=',1)
                     ->order('product.istop desc,'.$order)
-                    ->paginate($ps);
+                    ->paginate($ps, $zongjilu);
+                if($zongjilu === false){
+                    $zongjilu = $catfish->total();
+                    Catfish::setCache($cachezongjilu,$zongjilu,$this->time);
+                }
             }
             $tn = $shouye['homeout'];
             if($tn == 'all'){

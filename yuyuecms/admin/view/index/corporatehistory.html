@@ -1,6 +1,6 @@
 {include file="index/header" /}
 <link href="{$domain}public/common/confirm/jquery-confirm.css" type="text/css" rel="stylesheet">
-<div><a class="btn btn-default" href="{:Url('admin/Index/corporatehistoryadd')}" role="button">{:lang('Add history')}</a></div><br>
+<div><a class="btn btn-default" href="{:Url('admin/Index/corporatehistoryadd')}?pg={$page}" role="button">{:lang('Add history')}</a></div><br>
 <div class="table-responsive">
     <table class="table table-bordered">
         <thead>
@@ -18,7 +18,7 @@
             <td>{$vo.xiangqing}</td>
             <td>{$vo.shijian}</td>
             <td>
-                <a href="{:Url('admin/Index/corporatehistoryedit')}?catfish={$vo.id}">{:lang('Edit')}</a>
+                <a href="{:Url('admin/Index/corporatehistoryedit')}?catfish={$vo.id}&pg={$page}">{:lang('Edit')}</a>
                 &nbsp;|&nbsp;
                 <a class="twitter" data-title="{:lang('Confirm to delete?')}" href="#!">{:lang('Delete')}</a>
                 <input type="hidden" value="{$vo.id}">

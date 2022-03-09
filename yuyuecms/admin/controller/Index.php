@@ -2916,6 +2916,11 @@ class Index extends CatfishCMS
         }
         Catfish::allot('catfishcms', $catfishitems);
         Catfish::allot('pages', $catfish->render());
+        $page = Catfish::getGet('page');
+        if(empty($page)){
+            $page = 1;
+        }
+        Catfish::allot('page', $page);
         return $this->show(Catfish::lang('Corporate history'), 'corporateinformation', 'corporatehistory');
     }
     public function corporatehistoryadd()
@@ -2942,6 +2947,11 @@ class Index extends CatfishCMS
                 Catfish::removeCache('lishi');
             }
         }
+        $page = Catfish::getGet('pg');
+        if(empty($page)){
+            $page = 1;
+        }
+        Catfish::allot('page', $page);
         return $this->show(Catfish::lang('Add history'), 'corporateinformation', 'corporatehistory', true);
     }
     public function corporatehistoryedit()
@@ -2976,6 +2986,11 @@ class Index extends CatfishCMS
             $catfishItem['shijian'] = '';
         }
         Catfish::allot('catfishItem', $catfishItem);
+        $page = Catfish::getGet('pg');
+        if(empty($page)){
+            $page = 1;
+        }
+        Catfish::allot('page', $page);
         return $this->show(Catfish::lang('Add history'), 'corporateinformation', 'corporatehistory', true);
     }
     public function corporatehistorydel()
