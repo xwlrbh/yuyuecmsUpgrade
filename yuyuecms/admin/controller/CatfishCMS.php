@@ -12,6 +12,7 @@ class CatfishCMS
 {
     protected $template = 'default';
     protected $lang = 'zh-cn';
+    protected $time = 1200;
     protected function checkUser()
     {
         if(!Catfish::hasSession('user_id') && Catfish::hasCookie('user_id')){
