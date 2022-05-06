@@ -4191,7 +4191,7 @@ class Index extends CatfishCMS
     {
         $file = request()->file('file');
         $validate = [
-            'ext' => 'jpg,png,gif,jpeg'
+            'ext' => 'jpg,png,gif,jpeg,webp'
         ];
         $file->validate($validate);
         $info = $file->move(ROOT_PATH . 'data' . DS . 'uploads');
@@ -4206,7 +4206,7 @@ class Index extends CatfishCMS
         if(Catfish::isPost()){
             $file = request()->file('file');
             $validate = [
-                'ext' => 'jpg,png,gif,jpeg'
+                'ext' => 'jpg,png,gif,jpeg,webp'
             ];
             $file->validate($validate);
             $info = $file->move(ROOT_PATH . 'data' . DS . 'uploads');

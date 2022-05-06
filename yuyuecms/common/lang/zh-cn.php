@@ -114,4 +114,5 @@ return [
     'Upload theme' => '上传主题',
     'Go back' => '返回',
     'Label names can only be composed of letters, numbers and underscores or connecting lines' => '标签名只能使用字母,数字和下划线或连接线组成',
+    'Picture format converter' => '图片格式转换器',
 ];
